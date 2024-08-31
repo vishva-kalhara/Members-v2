@@ -6,6 +6,7 @@ package views.forms;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.Color;
+import views.layouts.AppLayout;
 
 /**
  *
@@ -161,6 +162,8 @@ public class FmLogin extends javax.swing.JFrame {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
 
+        this.dispose();
+        new AppLayout().setVisible(true);
 //        try {
 //
 //            String email = new Spark("Email", txtEmail.getText())

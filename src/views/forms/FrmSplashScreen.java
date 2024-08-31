@@ -27,7 +27,7 @@ public class FrmSplashScreen extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(10);
                     dispose();
                     new FmLogin().setVisible(true);
                 } catch (InterruptedException ex) {
