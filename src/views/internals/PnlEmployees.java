@@ -7,6 +7,8 @@ package views.internals;
 import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.Insets;
 import javax.swing.BorderFactory;
+import views.dialogs.DlgEmployee;
+import views.layouts.AppLayout;
 
 /**
  *
@@ -32,8 +34,8 @@ public class PnlEmployees extends javax.swing.JPanel {
         txtSearch.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search");
         txtSearch.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         
-        javax.swing.JScrollPane scrollPane = (javax.swing.JScrollPane) tblEmployees.getParent().getParent();
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblEmployees.getParent().getParent();
+        scroll.setBorder(BorderFactory.createEmptyBorder());
     }
 
     /**
@@ -59,6 +61,7 @@ public class PnlEmployees extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(1160, 900));
         setMinimumSize(new java.awt.Dimension(1160, 900));
         setPreferredSize(new java.awt.Dimension(1160, 900));
+        setRequestFocusEnabled(false);
         setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -68,6 +71,11 @@ public class PnlEmployees extends javax.swing.JPanel {
         btnNew.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnNew.setForeground(new java.awt.Color(255, 255, 255));
         btnNew.setText("New Employee");
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
 
         cboStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All Employees", "Active Employees", "Disabled Employees", "Deleted Employees" }));
 
@@ -84,7 +92,7 @@ public class PnlEmployees extends javax.swing.JPanel {
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cboStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 346, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,11 +147,15 @@ public class PnlEmployees extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 705, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         add(jPanel2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        new DlgEmployee(AppLayout.appLayout, true).setVisible(true);
+    }//GEN-LAST:event_btnNewActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
