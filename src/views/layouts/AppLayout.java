@@ -16,10 +16,10 @@ import views.internals.PnlEmployees;
  * @author vishv
  */
 public class AppLayout extends javax.swing.JFrame {
-    
+
     public static AppLayout appLayout;
     public JButton selectedButton;
-    
+
     public enum Pages {
         DASHBOARD, SUBSCRIPTIONS, MEMBERS, PACKAGES, EMPLOYEES, REPORTS, SETTINGS
     }
@@ -29,18 +29,18 @@ public class AppLayout extends javax.swing.JFrame {
      */
     public AppLayout() {
         initComponents();
-        
+
         appLayout = this;
         this.selectedButton = btnDashboard;
-        
-        changeForm(Pages.DASHBOARD);
-        
+
         setDesign();
-        
-        
+
     }
 
     private void setDesign() {
+
+        changeForm(Pages.DASHBOARD);
+
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
@@ -55,8 +55,8 @@ public class AppLayout extends javax.swing.JFrame {
         btnReports.putClientProperty("JButton.buttonType", "borderless");
         btnSettings.putClientProperty("JButton.buttonType", "borderless");
     }
-    
-            private void showForm(JPanel form) {
+
+    private void showForm(JPanel form) {
         pnlPlaceholder.removeAll();
         pnlPlaceholder.add(form, java.awt.BorderLayout.CENTER);
         pnlPlaceholder.repaint();
@@ -64,12 +64,12 @@ public class AppLayout extends javax.swing.JFrame {
     }
 
     private void changeSideBarButtons(JButton newButton) {
-        selectedButton.setBackground(new Color(249,249,249));
+        selectedButton.setBackground(new Color(249, 249, 249));
         selectedButton.setForeground(new Color(38, 38, 38));
 
-        newButton.setBackground(new Color(5,81,45));
+        newButton.setBackground(new Color(5, 81, 45));
         newButton.setForeground(new Color(255, 255, 255));
-        
+
         selectedButton = newButton;
         selectedButton.grabFocus();
     }
@@ -140,25 +140,21 @@ public class AppLayout extends javax.swing.JFrame {
 
         btnSubscriptions.setBackground(new java.awt.Color(249, 249, 249));
         btnSubscriptions.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        btnSubscriptions.setForeground(new java.awt.Color(102, 102, 102));
         btnSubscriptions.setText("Subscriptions");
         btnSubscriptions.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 
         btnMembers.setBackground(new java.awt.Color(249, 249, 249));
         btnMembers.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        btnMembers.setForeground(new java.awt.Color(102, 102, 102));
         btnMembers.setText("Members");
         btnMembers.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 
         btnPackages.setBackground(new java.awt.Color(249, 249, 249));
         btnPackages.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        btnPackages.setForeground(new java.awt.Color(102, 102, 102));
         btnPackages.setText("Packages");
         btnPackages.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 
         btnEmployees.setBackground(new java.awt.Color(249, 249, 249));
         btnEmployees.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        btnEmployees.setForeground(new java.awt.Color(102, 102, 102));
         btnEmployees.setText("Employees");
         btnEmployees.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
         btnEmployees.addActionListener(new java.awt.event.ActionListener() {
@@ -194,7 +190,7 @@ public class AppLayout extends javax.swing.JFrame {
                 .addComponent(btnPackages, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(279, Short.MAX_VALUE))
+                .addContainerGap(270, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -203,13 +199,11 @@ public class AppLayout extends javax.swing.JFrame {
 
         btnSettings.setBackground(new java.awt.Color(249, 249, 249));
         btnSettings.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        btnSettings.setForeground(new java.awt.Color(102, 102, 102));
         btnSettings.setText("Settings");
         btnSettings.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 
         btnReports.setBackground(new java.awt.Color(249, 249, 249));
         btnReports.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        btnReports.setForeground(new java.awt.Color(102, 102, 102));
         btnReports.setText("Reports");
         btnReports.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 
@@ -231,7 +225,7 @@ public class AppLayout extends javax.swing.JFrame {
                 .addComponent(btnReports, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addGap(35, 35, 35))
         );
 
         jPanel3.add(jPanel5, java.awt.BorderLayout.PAGE_END);
@@ -260,6 +254,9 @@ public class AppLayout extends javax.swing.JFrame {
         jPanel2.add(jPanel3, java.awt.BorderLayout.WEST);
 
         pnlPlaceholder.setBackground(new java.awt.Color(255, 255, 255));
+        pnlPlaceholder.setMaximumSize(new java.awt.Dimension(1160, 900));
+        pnlPlaceholder.setMinimumSize(new java.awt.Dimension(1160, 900));
+        pnlPlaceholder.setPreferredSize(new java.awt.Dimension(1160, 900));
         pnlPlaceholder.setLayout(new java.awt.BorderLayout());
         jPanel2.add(pnlPlaceholder, java.awt.BorderLayout.CENTER);
 
