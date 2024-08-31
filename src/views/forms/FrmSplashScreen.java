@@ -53,7 +53,7 @@ public class FrmSplashScreen extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/img/splash_img.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/img/splash_img_new.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
