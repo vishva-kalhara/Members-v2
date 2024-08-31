@@ -6,7 +6,9 @@ package views.dialogs;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.Spark;
+import com.wishva.SparkException;
 import java.awt.Color;
+import views.layouts.AppLayout;
 
 /**
  *
@@ -358,7 +360,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setPreferredSize(new java.awt.Dimension(695, 130));
 
-        btnSubmit.setBackground(new java.awt.Color(5, 81, 45));
+        btnSubmit.setBackground(new java.awt.Color(22, 163, 74));
         btnSubmit.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnSubmit.setForeground(new java.awt.Color(255, 255, 255));
         btnSubmit.setText("Add Employee");
@@ -444,7 +446,16 @@ public class DlgEmployee extends javax.swing.JDialog {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
         
-
+        try {
+            
+            new Spark("First Name", txtFName.getText())
+                    .required();
+            
+        } catch (SparkException e) {
+            this.setVisible(false);
+            new DlgError(AppLayout.appLayout, true, e.title, e.getMessage()).setVisible(true);
+            this.setVisible(true);
+        }
                 
     }//GEN-LAST:event_btnSubmitActionPerformed
 

@@ -67,7 +67,7 @@ public class AppLayout extends javax.swing.JFrame {
         selectedButton.setBackground(new Color(249, 249, 249));
         selectedButton.setForeground(new Color(38, 38, 38));
 
-        newButton.setBackground(new Color(5, 81, 45));
+        newButton.setBackground(new Color(22,163,74));
         newButton.setForeground(new Color(255, 255, 255));
 
         selectedButton = newButton;
@@ -115,7 +115,6 @@ public class AppLayout extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1440, 900));
         setMinimumSize(new java.awt.Dimension(1440, 900));
-        setPreferredSize(new java.awt.Dimension(1440, 900));
         setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -127,7 +126,7 @@ public class AppLayout extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(249, 249, 249));
 
-        btnDashboard.setBackground(new java.awt.Color(5, 81, 45));
+        btnDashboard.setBackground(new java.awt.Color(22, 163, 74));
         btnDashboard.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnDashboard.setForeground(new java.awt.Color(255, 255, 255));
         btnDashboard.setText("Dashboard");

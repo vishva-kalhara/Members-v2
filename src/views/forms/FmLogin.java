@@ -75,7 +75,7 @@ public class FmLogin extends javax.swing.JFrame {
         txtPassword.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         txtPassword.setText("123456789");
 
-        btnSubmit.setBackground(new java.awt.Color(5, 81, 45));
+        btnSubmit.setBackground(new java.awt.Color(22, 163, 74));
         btnSubmit.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         btnSubmit.setForeground(new java.awt.Color(255, 255, 255));
         btnSubmit.setText("Sign In");

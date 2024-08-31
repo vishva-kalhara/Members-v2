@@ -67,7 +67,7 @@ public class PnlEmployees extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(1160, 100));
 
-        btnNew.setBackground(new java.awt.Color(5, 81, 45));
+        btnNew.setBackground(new java.awt.Color(22, 163, 74));
         btnNew.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnNew.setForeground(new java.awt.Color(255, 255, 255));
         btnNew.setText("New Employee");
