@@ -22,7 +22,7 @@ public class AppConnection {
         if (connection == null) {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                DriverManager.getConnection("jdbc:mysql://localhost:3306/members", "root", "wishva!23");
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/members", "root", "Wishva!23");
 
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -30,7 +30,7 @@ public class AppConnection {
         }
     }
 
-    private static ResultSet execute(String query) {
+    public static ResultSet execute(String query) {
         if (connection == null) {
             setUpConnection();
         }
