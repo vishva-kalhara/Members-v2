@@ -452,9 +452,9 @@ public class DlgEmployee extends javax.swing.JDialog {
                     .required();
             
         } catch (SparkException e) {
-            this.setVisible(false);
+//            this.setVisible(false);
             new DlgError(AppLayout.appLayout, true, e.title, e.getMessage()).setVisible(true);
-            this.setVisible(true);
+//            this.setVisible(true);
         }
                 
     }//GEN-LAST:event_btnSubmitActionPerformed
