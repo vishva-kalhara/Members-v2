@@ -67,7 +67,7 @@ public class AppLayout extends javax.swing.JFrame {
         selectedButton.setBackground(new Color(249, 249, 249));
         selectedButton.setForeground(new Color(38, 38, 38));
 
-        newButton.setBackground(new Color(22,163,74));
+        newButton.setBackground(new Color(77,119,255));
         newButton.setForeground(new Color(255, 255, 255));
 
         selectedButton = newButton;
@@ -126,7 +126,7 @@ public class AppLayout extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(249, 249, 249));
 
-        btnDashboard.setBackground(new java.awt.Color(22, 163, 74));
+        btnDashboard.setBackground(new java.awt.Color(77, 119, 255));
         btnDashboard.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnDashboard.setForeground(new java.awt.Color(255, 255, 255));
         btnDashboard.setText("Dashboard");

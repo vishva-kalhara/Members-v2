@@ -12,16 +12,21 @@ import views.dialogs.DlgEmployee;
 import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import utils.DBData;
+import views.forms.FmLogin;
 
 /**
  *
  * @author vishv
  */
 public class PnlEmployees extends javax.swing.JPanel {
+
+    HashMap<String, Integer> statusMap = new HashMap<>();
 
     /**
      * Creates new form PnlEmployees
@@ -31,12 +36,33 @@ public class PnlEmployees extends javax.swing.JPanel {
 
         setDesign();
 
-        loadTableData();
+        fetchData();
+
+        scrollPane.setViewportView(new PnlFetching());
+        scrollPane.repaint();
+        scrollPane.revalidate();
+
+//        loadTableData("");
     }
 
-    private void loadTableData() {
+    private void fetchData() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                statusMap = DBData.getSubTableData("statuses", "Employees", cboStatus);
+                loadTableData("");
+            }
+        });
+        thread.start();
+    }
 
-        ResultSet rs = AppConnection.execute("SELECT * FROM employees");
+    private void loadTableData(String contraints) {
+
+        ResultSet rs = AppConnection.execute("SELECT * FROM employees "
+                + "INNER JOIN gender ON employees.gender_id = gender.id "
+                //                + "INNER JOIN user_roles ON employees.user_roles_id = user_roles.id "
+                + "INNER JOIN statuses ON employees.statuses_id = statuses.id "
+                + contraints);
 
         DefaultTableModel model = (DefaultTableModel) tblEmployees.getModel();
         model.setRowCount(0);
@@ -48,9 +74,10 @@ public class PnlEmployees extends javax.swing.JPanel {
                 data.add(rs.getString("id"));
                 data.add(rs.getString("first_name"));
                 data.add(rs.getString("last_name"));
-                data.add(rs.getString("gender_id"));
+                data.add(rs.getString("gender.value"));
                 data.add(rs.getString("mobile1"));
-                data.add(rs.getString("statuses_id"));
+//                data.add(rs.getString("user_roles.value"));
+                data.add(rs.getString("statuses.value"));
 
                 model.addRow(data);
             }
@@ -62,12 +89,16 @@ public class PnlEmployees extends javax.swing.JPanel {
             scrollPane.setViewportView(new PnlNoData());
             scrollPane.repaint();
             scrollPane.revalidate();
+        } else {
+            scrollPane.setViewportView(tblEmployees);
+            scrollPane.repaint();
+            scrollPane.revalidate();
         }
     }
 
     private void setDesign() {
         txtSearch.putClientProperty("JTextField.padding", new Insets(7, 8, 7, 10));
-        txtSearch.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search");
+        txtSearch.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search by name");
         txtSearch.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -76,6 +107,38 @@ public class PnlEmployees extends javax.swing.JPanel {
 
         javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblEmployees.getParent().getParent();
         scroll.setBorder(BorderFactory.createEmptyBorder());
+    }
+    
+    private void filterTable(){
+        if (txtSearch.getText().isBlank() && cboStatus.getSelectedIndex() == 0) {
+            loadTableData("");
+            return;
+        }
+
+        StringBuilder constraints = new StringBuilder(" WHERE ");
+
+        boolean isStatusSelected = cboStatus.getSelectedIndex() != 0;
+        boolean isSearchTextPresent = !txtSearch.getText().isBlank();
+
+        if (isStatusSelected) {
+            constraints.append("`statuses_id` = '")
+                    .append(statusMap.get(String.valueOf(cboStatus.getSelectedItem())))
+                    .append("'");
+        }
+
+        if (isSearchTextPresent) {
+            if (isStatusSelected) {
+                constraints.append(" AND ");
+            }
+            constraints.append("`first_name` LIKE '%")
+                    .append(txtSearch.getText())
+                    .append("%' OR `last_name` LIKE '%")
+                    .append(txtSearch.getText())
+                    .append("%'");
+        }
+
+        System.out.println(constraints.toString());
+        loadTableData(constraints.toString());
     }
 
     /**
@@ -93,6 +156,8 @@ public class PnlEmployees extends javax.swing.JPanel {
         cboStatus = new javax.swing.JComboBox<>();
         btnPrint = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        btnClearFilters = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
         tblEmployees = new javax.swing.JTable();
@@ -107,7 +172,7 @@ public class PnlEmployees extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(1160, 100));
 
-        btnNew.setBackground(new java.awt.Color(22, 163, 74));
+        btnNew.setBackground(new java.awt.Color(77, 119, 255));
         btnNew.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnNew.setForeground(new java.awt.Color(255, 255, 255));
         btnNew.setText("New Employee");
@@ -117,11 +182,36 @@ public class PnlEmployees extends javax.swing.JPanel {
             }
         });
 
-        cboStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All Employees", "Active Employees", "Disabled Employees", "Deleted Employees" }));
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        cboStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Loading" }));
+        cboStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboStatusActionPerformed(evt);
+            }
+        });
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/printer_20.png"))); // NOI18N
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/save.png"))); // NOI18N
+
+        btnClearFilters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/filter-x.png"))); // NOI18N
+        btnClearFilters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearFiltersActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/search.png"))); // NOI18N
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -132,7 +222,11 @@ public class PnlEmployees extends javax.swing.JPanel {
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cboStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnClearFilters, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
                 .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -149,7 +243,9 @@ public class PnlEmployees extends javax.swing.JPanel {
                     .addComponent(btnNew, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPrint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE))
+                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                    .addComponent(btnClearFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(19, 19, 19))
         );
 
@@ -165,12 +261,17 @@ public class PnlEmployees extends javax.swing.JPanel {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "First Name", "Last Name", "Gender", "Mobile-1", "Status"
+                "Id", "First Name", "Last Name", "Gender", "Mobile 1", "Status"
             }
         ));
+        tblEmployees.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEmployeesMouseClicked(evt);
+            }
+        });
         scrollPane.setViewportView(tblEmployees);
         if (tblEmployees.getColumnModel().getColumnCount() > 0) {
-            tblEmployees.getColumnModel().getColumn(0).setMaxWidth(60);
+            tblEmployees.getColumnModel().getColumn(0).setMaxWidth(75);
         }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -197,11 +298,39 @@ public class PnlEmployees extends javax.swing.JPanel {
         new DlgEmployee(AppLayout.appLayout, true).setVisible(true);
     }//GEN-LAST:event_btnNewActionPerformed
 
+    private void tblEmployeesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmployeesMouseClicked
+
+        new DlgEmployee(AppLayout.appLayout, true).setVisible(true);
+    }//GEN-LAST:event_tblEmployeesMouseClicked
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+
+       filterTable();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        
+        filterTable();
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void cboStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboStatusActionPerformed
+        filterTable();
+    }//GEN-LAST:event_cboStatusActionPerformed
+
+    private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
+        
+        txtSearch.setText("");
+        cboStatus.setSelectedIndex(0);
+        filterTable();
+    }//GEN-LAST:event_btnClearFiltersActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClearFilters;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cboStatus;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

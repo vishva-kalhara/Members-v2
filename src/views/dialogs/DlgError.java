@@ -6,7 +6,6 @@ package views.dialogs;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.Color;
-import javax.swing.border.Border;
 
 /**
  *

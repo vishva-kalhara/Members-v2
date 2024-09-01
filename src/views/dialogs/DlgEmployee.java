@@ -44,6 +44,29 @@ public class DlgEmployee extends javax.swing.JDialog {
         txtPassword.setEnabled(false);
         cboRole.setEnabled(false);
     }
+
+    /**
+     * Creates new form DlgEmployee
+     *
+     * @param parent
+     * @param modal
+     */
+    public DlgEmployee(java.awt.Frame parent, boolean modal, Employee employee) {
+        super(parent, modal);
+        initComponents();
+
+        setDesign();
+
+        this.gendersMap = DBData.getSubTableData("gender", cboGender);
+        this.userRolesMap = DBData.getSubTableData("user_roles", cboRole);
+        this.statusesMap = DBData.getSubTableData("statuses", cboStatus);
+
+        txtUsername.setEnabled(false);
+        txtPassword.setEnabled(false);
+        cboRole.setEnabled(false);
+        
+        
+    }
     
     private void setDesign() {
 
@@ -382,7 +405,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setPreferredSize(new java.awt.Dimension(695, 130));
 
-        btnSubmit.setBackground(new java.awt.Color(22, 163, 74));
+        btnSubmit.setBackground(new java.awt.Color(77, 119, 255));
         btnSubmit.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnSubmit.setForeground(new java.awt.Color(255, 255, 255));
         btnSubmit.setText("Add Employee");

@@ -59,19 +59,27 @@ public class DBData {
         return map;
     }
 
-    public HashMap<String, Integer> getSubTableData(String tableName, String constraints) {
+    public static HashMap<String, Integer> getSubTableData(String tableName, String suffix, JComboBox target) {
 
         HashMap<String, Integer> map = new HashMap();
+        
+        Vector<String> data = new Vector();
+        data.add("All " + suffix);
+        
 
-        ResultSet rs = AppConnection.execute("SELECT * FROM `" + tableName + "` WHERE " + constraints);
+        ResultSet rs = AppConnection.execute("SELECT * FROM `" + tableName + "`");
         try {
 
             while (rs.next()) {
-                map.put(rs.getString("value"), rs.getInt("id"));
+                map.put(rs.getString("value") + " " + suffix, rs.getInt("id"));
+                data.add(rs.getString("value") + " " + suffix);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        DefaultComboBoxModel model = new DefaultComboBoxModel(data);
+        target.setModel(model);
 
         return map;
     }
