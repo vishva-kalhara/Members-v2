@@ -285,6 +285,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtFName">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="John"/>
+                  </Properties>
                 </Component>
                 <Component class="javax.swing.JComboBox" name="cboGender">
                   <Properties>
@@ -322,6 +325,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtLName">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Doe"/>
+                  </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel5">
                   <Properties>
@@ -336,6 +342,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtMobile1">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="0766801657"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                   </Properties>
                 </Component>
@@ -365,6 +372,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtAddress">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="UK"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                   </Properties>
                 </Component>
@@ -510,6 +518,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JPasswordField" name="txtPassword">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="123456789"/>
+                  </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="checkCredentials">
                   <Properties>

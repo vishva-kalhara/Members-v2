@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import views.dialogs.DlgError;
+import views.layouts.AppLayout;
 
 /**
  *
@@ -43,7 +46,11 @@ public class AppConnection {
                 return null;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (!e.getSQLState().equals("45000")) {
+
+                e.printStackTrace();
+            } else 
+                new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
             return null;
         }
     }

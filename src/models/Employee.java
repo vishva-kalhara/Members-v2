@@ -11,6 +11,20 @@ package models;
 public class Employee {
 
     /**
+     * @return the NIC
+     */
+    public String getNIC() {
+        return NIC;
+    }
+
+    /**
+     * @param NIC the NIC to set
+     */
+    public void setNIC(String NIC) {
+        this.NIC = NIC;
+    }
+
+    /**
      * @return the genderId
      */
     public int getGenderId() {
@@ -139,7 +153,7 @@ public class Employee {
     /**
      * @return the fName
      */
-    public String geFfName() {
+    public String getFName() {
         return fName;
     }
 
@@ -153,14 +167,14 @@ public class Employee {
     /**
      * @return the lName
      */
-    public String geLlName() {
+    public String getLName() {
         return lName;
     }
 
     /**
      * @param lName the lName to set
      */
-    public void seLlName(String lName) {
+    public void setLName(String lName) {
         this.lName = lName;
     }
     
@@ -172,6 +186,7 @@ public class Employee {
     private String address1;
     private String fName;
     private String lName;
+    private String NIC;
     private int genderId;
     private int statusId;
     private int roleId;

@@ -7,8 +7,15 @@ package views.internals;
 import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.Insets;
 import javax.swing.BorderFactory;
+import utils.AppConnection;
 import views.dialogs.DlgEmployee;
 import views.layouts.AppLayout;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,19 +28,52 @@ public class PnlEmployees extends javax.swing.JPanel {
      */
     public PnlEmployees() {
         initComponents();
-        
+
         setDesign();
-        
-        scrollPane.setViewportView(new PnlNoData());        
-        scrollPane.repaint();
-        scrollPane.revalidate();
+
+        loadTableData();
     }
-    
-    private void setDesign(){
+
+    private void loadTableData() {
+
+        ResultSet rs = AppConnection.execute("SELECT * FROM employees");
+
+        DefaultTableModel model = (DefaultTableModel) tblEmployees.getModel();
+        model.setRowCount(0);
+
+        try {
+
+            while (rs.next()) {
+                Vector<Object> data = new Vector();
+                data.add(rs.getString("id"));
+                data.add(rs.getString("first_name"));
+                data.add(rs.getString("last_name"));
+                data.add(rs.getString("gender_id"));
+                data.add(rs.getString("mobile1"));
+                data.add(rs.getString("statuses_id"));
+
+                model.addRow(data);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (tblEmployees.getModel().getRowCount() == 0) {
+            scrollPane.setViewportView(new PnlNoData());
+            scrollPane.repaint();
+            scrollPane.revalidate();
+        }
+    }
+
+    private void setDesign() {
         txtSearch.putClientProperty("JTextField.padding", new Insets(7, 8, 7, 10));
         txtSearch.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search");
         txtSearch.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
-        
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tblEmployees.setDefaultRenderer(Object.class, centerRenderer);
+
         javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblEmployees.getParent().getParent();
         scroll.setBorder(BorderFactory.createEmptyBorder());
     }

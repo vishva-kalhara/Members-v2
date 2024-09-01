@@ -7,6 +7,7 @@ package views.dialogs;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.Spark;
 import com.wishva.SparkException;
+import controllers.EmployeeController;
 import java.awt.Color;
 import java.util.HashMap;
 import models.Employee;
@@ -18,7 +19,7 @@ import views.layouts.AppLayout;
  * @author vishv
  */
 public class DlgEmployee extends javax.swing.JDialog {
-    
+
     HashMap<String, Integer> gendersMap = new HashMap<>();
     HashMap<String, Integer> userRolesMap = new HashMap<>();
     HashMap<String, Integer> statusesMap = new HashMap<>();
@@ -34,7 +35,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         initComponents();
 
         setDesign();
-        
+
         this.gendersMap = DBData.getSubTableData("gender", cboGender);
         this.userRolesMap = DBData.getSubTableData("user_roles", cboRole);
         this.statusesMap = DBData.getSubTableData("statuses", cboStatus);
@@ -43,7 +44,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         txtPassword.setEnabled(false);
         cboRole.setEnabled(false);
     }
-
+    
     private void setDesign() {
 
         cboGender.grabFocus();
@@ -169,6 +170,8 @@ public class DlgEmployee extends javax.swing.JDialog {
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
         jLabel2.setText("Gender:");
 
+        txtFName.setText("John");
+
         cboGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Male" }));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
@@ -179,10 +182,13 @@ public class DlgEmployee extends javax.swing.JDialog {
         jLabel4.setForeground(new java.awt.Color(102, 102, 102));
         jLabel4.setText("Last Name:");
 
+        txtLName.setText("Doe");
+
         jLabel5.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(102, 102, 102));
         jLabel5.setText("Mobile:");
 
+        txtMobile1.setText("0766801657");
         txtMobile1.setToolTipText("");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
@@ -193,6 +199,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         jLabel7.setForeground(new java.awt.Color(102, 102, 102));
         jLabel7.setText("Address:");
 
+        txtAddress.setText("UK");
         txtAddress.setToolTipText("");
 
         jLabel8.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
@@ -307,6 +314,8 @@ public class DlgEmployee extends javax.swing.JDialog {
         jLabel11.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(102, 102, 102));
         jLabel11.setText("Password:");
+
+        txtPassword.setText("123456789");
 
         checkCredentials.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         checkCredentials.setText("System Login Credentials");
@@ -463,12 +472,70 @@ public class DlgEmployee extends javax.swing.JDialog {
 
         try {
 
+            if (cboGender.getSelectedIndex() == 0) {
+                throw new SparkException("Select a gender!");
+            }
+
             employee.setFName(new Spark("First Name", txtFName.getText())
-                .required()
-                .endString());
+                    .required()
+                    .endString());
+            employee.setLName(new Spark("Last Name", txtLName.getText())
+                    .required()
+                    .endString());
+            employee.setNIC(new Spark("NIC", txtNIC.getText())
+                    .required()
+                    .minLength(10)
+                    .endString());
+            employee.setMobile1(new Spark("Mobile-1", txtMobile1.getText())
+                    .required()
+                    .minLength(10, "Required 10 characters for mobile-1")
+                    .maxLength(10)
+                    .regex("^07[01235678]{1}[0-9]{7}$")
+                    .endString());
+            employee.setMobile2(new Spark("Mobile-2", txtMobile2.getText())
+                    .minLength(10, "Required 10 characters for mobile-2")
+                    .maxLength(10)
+                    .regex("^07[01235678]{1}[0-9]{7}$")
+                    .endString());
+            employee.setAddress1(new Spark("Address", txtAddress.getText())
+                    .required()
+                    .maxLength(100)
+                    .endString());
+
+            if (cboStatus.getSelectedIndex() == 0) {
+                throw new SparkException("Select a status!");
+            }
+
+            employee.setGenderId(gendersMap.get(String.valueOf(cboGender.getSelectedItem())));
+            employee.setStatusId(statusesMap.get(String.valueOf(cboStatus.getSelectedItem())));
+
+            if (checkCredentials.isSelected()) {
+                employee.setUsername(new Spark("Username", txtUsername.getText())
+                        .required()
+                        .minLength(5)
+                        .maxLength(25)
+                        .endString());
+                employee.setPassword(new Spark("Password", txtPassword.getPassword())
+                        .required()
+                        .minLength(8)
+                        .maxLength(15)
+                        .endString());
+
+                if (cboRole.getSelectedIndex() == 0) {
+                    throw new SparkException("Select the Access Role!");
+                }
+
+                employee.setRoleId(userRolesMap.get(String.valueOf(cboRole.getSelectedItem())));
+            }
+
+            new EmployeeController().createEmployee(employee);
+            
+            AppLayout.appLayout.changeForm(AppLayout.Pages.EMPLOYEES);
 
         } catch (SparkException e) {
             new DlgError(AppLayout.appLayout, true, e.title, e.getMessage()).setVisible(true);
+        } catch (Exception e) {
+            new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
 

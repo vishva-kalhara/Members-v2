@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
  */
 public class DBData {
 
+    
     public HashMap<String, Integer> getSubTableData(String tableName) {
 
         HashMap<String, Integer> map = new HashMap();
@@ -74,4 +75,5 @@ public class DBData {
 
         return map;
     }
+    
 }
