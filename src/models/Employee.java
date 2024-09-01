@@ -11,6 +11,48 @@ package models;
 public class Employee {
 
     /**
+     * @return the genderValue
+     */
+    public String getGenderValue() {
+        return genderValue;
+    }
+
+    /**
+     * @param genderValue the genderValue to set
+     */
+    public void setGenderValue(String genderValue) {
+        this.genderValue = genderValue;
+    }
+
+    /**
+     * @return the statusValue
+     */
+    public String getStatusValue() {
+        return statusValue;
+    }
+
+    /**
+     * @param statusValue the statusValue to set
+     */
+    public void setStatusValue(String statusValue) {
+        this.statusValue = statusValue;
+    }
+
+    /**
+     * @return the roleValue
+     */
+    public String getRoleValue() {
+        return roleValue;
+    }
+
+    /**
+     * @param roleValue the roleValue to set
+     */
+    public void setRoleValue(String roleValue) {
+        this.roleValue = roleValue;
+    }
+
+    /**
      * @return the NIC
      */
     public String getNIC() {
@@ -190,4 +232,7 @@ public class Employee {
     private int genderId;
     private int statusId;
     private int roleId;
+    private String genderValue;
+    private String statusValue;
+    private String roleValue;
 }

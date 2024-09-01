@@ -122,7 +122,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="jPanel2">
+        <Container class="javax.swing.JPanel" name="pnlData">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="cc" red="cc" type="rgb"/>
@@ -216,7 +216,7 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
@@ -267,7 +267,7 @@
                               <Component id="txtAddress" pref="48" max="32767" attributes="0"/>
                               <Component id="cboStatus" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="46" max="32767" attributes="0"/>
+                          <EmptySpace pref="37" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -285,9 +285,6 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtFName">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="John"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JComboBox" name="cboGender">
                   <Properties>
@@ -325,9 +322,6 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtLName">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Doe"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel5">
                   <Properties>
@@ -342,7 +336,6 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtMobile1">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="0766801657"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                   </Properties>
                 </Component>
@@ -518,9 +511,6 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JPasswordField" name="txtPassword">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="123456789"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="checkCredentials">
                   <Properties>
@@ -531,6 +521,7 @@
                   </Properties>
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="checkCredentialsStateChanged"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkCredentialsActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel9">
@@ -581,7 +572,9 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                       <Component id="btnReset" min="-2" pref="54" max="-2" attributes="0"/>
-                      <EmptySpace pref="388" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnAllowEdit" min="-2" pref="54" max="-2" attributes="0"/>
+                      <EmptySpace pref="328" max="32767" attributes="0"/>
                       <Component id="btnSubmit" min="-2" pref="178" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                   </Group>
@@ -594,6 +587,7 @@
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="btnReset" pref="54" max="32767" attributes="0"/>
                           <Component id="btnSubmit" max="32767" attributes="0"/>
+                          <Component id="btnAllowEdit" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
@@ -620,6 +614,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnReset">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="fa" green="fa" red="fa" type="rgb"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/assets/icons/remove-formatting.png"/>
                 </Property>
@@ -627,6 +624,16 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnResetActionPerformed"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnAllowEdit">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="fa" green="fa" red="fa" type="rgb"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/assets/icons/pen-line.png"/>
+                </Property>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>

@@ -17,6 +17,7 @@ import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import models.Employee;
 import utils.DBData;
 import views.forms.FmLogin;
 
@@ -108,8 +109,8 @@ public class PnlEmployees extends javax.swing.JPanel {
         javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblEmployees.getParent().getParent();
         scroll.setBorder(BorderFactory.createEmptyBorder());
     }
-    
-    private void filterTable(){
+
+    private void filterTable() {
         if (txtSearch.getText().isBlank() && cboStatus.getSelectedIndex() == 0) {
             loadTableData("");
             return;
@@ -263,7 +264,16 @@ public class PnlEmployees extends javax.swing.JPanel {
             new String [] {
                 "Id", "First Name", "Last Name", "Gender", "Mobile 1", "Status"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblEmployees.getTableHeader().setReorderingAllowed(false);
         tblEmployees.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblEmployeesMouseClicked(evt);
@@ -300,16 +310,31 @@ public class PnlEmployees extends javax.swing.JPanel {
 
     private void tblEmployeesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmployeesMouseClicked
 
-        new DlgEmployee(AppLayout.appLayout, true).setVisible(true);
+        if (evt.getClickCount() != 2) {
+            return;
+        }
+        
+        int selectedRow = tblEmployees.getSelectedRow();
+        
+
+        Employee employee = new Employee();
+        employee.setId(String.valueOf(tblEmployees.getValueAt(selectedRow, 0)));
+        employee.setFName(String.valueOf(tblEmployees.getValueAt(selectedRow, 1)));
+        employee.setLName(String.valueOf(tblEmployees.getValueAt(selectedRow, 2)));
+        employee.setGenderValue(String.valueOf(tblEmployees.getValueAt(selectedRow, 3)));
+        employee.setMobile1(String.valueOf(tblEmployees.getValueAt(selectedRow, 4)));
+        employee.setStatusValue(String.valueOf(tblEmployees.getValueAt(selectedRow, 5)));
+        
+        new DlgEmployee(AppLayout.appLayout, true, employee).setVisible(true);
     }//GEN-LAST:event_tblEmployeesMouseClicked
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
 
-       filterTable();
+        filterTable();
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        
+
         filterTable();
     }//GEN-LAST:event_txtSearchActionPerformed
 
@@ -318,7 +343,7 @@ public class PnlEmployees extends javax.swing.JPanel {
     }//GEN-LAST:event_cboStatusActionPerformed
 
     private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
-        
+
         txtSearch.setText("");
         cboStatus.setSelectedIndex(0);
         filterTable();

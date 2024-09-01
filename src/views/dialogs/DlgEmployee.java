@@ -10,9 +10,13 @@ import com.wishva.SparkException;
 import controllers.EmployeeController;
 import java.awt.Color;
 import java.util.HashMap;
+import javax.swing.JTextField;
 import models.Employee;
+import utils.AppConnection;
 import utils.DBData;
 import views.layouts.AppLayout;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -57,17 +61,69 @@ public class DlgEmployee extends javax.swing.JDialog {
 
         setDesign();
 
-        this.gendersMap = DBData.getSubTableData("gender", cboGender);
-        this.userRolesMap = DBData.getSubTableData("user_roles", cboRole);
-        this.statusesMap = DBData.getSubTableData("statuses", cboStatus);
+        lazyLoadFields(employee.getId());
 
-        txtUsername.setEnabled(false);
-        txtPassword.setEnabled(false);
-        cboRole.setEnabled(false);
-        
-        
+        cboGender.setSelectedItem(employee.getGenderValue());
+        cboGender.setEnabled(false);
+        txtFName.setText(employee.getFName());
+        txtFName.setEnabled(false);
+        txtLName.setText(employee.getLName());
+        txtLName.setEnabled(false);
+        txtMobile1.setText(employee.getMobile1());
+        txtMobile1.setEnabled(false);
+
+        this.statusesMap = DBData.getSubTableData("statuses", cboStatus);
+        cboStatus.setSelectedItem(employee.getStatusValue());
+        cboStatus.setEnabled(false);
+        this.userRolesMap = DBData.getSubTableData("user_roles", cboRole);
+
+        lblHeading.setText("Employee Details");
+        btnSubmit.setText("Save Changes");
     }
-    
+
+    private void lazyLoadFields(String empId) {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                System.out.println("SELECT "
+                        + "`nic`, `mobile2`, `address1`, `username`, `password`, `user_roles_id` "
+                        + "FROM `employees` WHERE id = '" + empId + "'");
+                ResultSet rs = AppConnection.execute("SELECT "
+                        + "`nic`, `mobile2`, `address1`, `username`, `password`, `user_roles_id` "
+                        + "FROM `employees` WHERE id = '" + empId + "'");
+
+                try {
+
+                    rs.next();
+                    txtNIC.setEnabled(false);
+                    txtNIC.setText(rs.getString("nic"));
+                    txtMobile2.setText(rs.getString("mobile2"));
+                    txtAddress.setText(rs.getString("address1"));
+
+                    txtMobile2.setEnabled(false);
+                    txtAddress.setEnabled(false);
+
+                    if (!rs.getString("user_roles_id").equals("null")) {
+                        ResultSet rsRole = AppConnection.execute("SELECT value FROM user_roles WHERE id = " + rs.getInt("user_roles_id"));
+                        rsRole.next();
+
+                        checkCredentials.setSelected(true);
+                        txtUsername.setText(rs.getString("username"));
+                        txtPassword.setText(rs.getString("password"));
+
+                        cboRole.setSelectedItem(rsRole.getString("value"));
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    dispose();
+                }
+            }
+        }).start();
+    }
+
     private void setDesign() {
 
         cboGender.grabFocus();
@@ -104,7 +160,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();
         lblHeading = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        pnlData = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtFName = new javax.swing.JTextField();
@@ -133,6 +189,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         jPanel4 = new javax.swing.JPanel();
         btnSubmit = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
+        btnAllowEdit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(706, 732));
@@ -181,9 +238,9 @@ public class DlgEmployee extends javax.swing.JDialog {
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.NORTH);
 
-        jPanel2.setBackground(new java.awt.Color(204, 204, 255));
-        jPanel2.setPreferredSize(new java.awt.Dimension(0, 0));
-        jPanel2.setLayout(new java.awt.BorderLayout());
+        pnlData.setBackground(new java.awt.Color(204, 204, 255));
+        pnlData.setPreferredSize(new java.awt.Dimension(0, 0));
+        pnlData.setLayout(new java.awt.BorderLayout());
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setMaximumSize(new java.awt.Dimension(0, 0));
@@ -192,8 +249,6 @@ public class DlgEmployee extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
         jLabel2.setText("Gender:");
-
-        txtFName.setText("John");
 
         cboGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Male" }));
 
@@ -205,13 +260,10 @@ public class DlgEmployee extends javax.swing.JDialog {
         jLabel4.setForeground(new java.awt.Color(102, 102, 102));
         jLabel4.setText("Last Name:");
 
-        txtLName.setText("Doe");
-
         jLabel5.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(102, 102, 102));
         jLabel5.setText("Mobile:");
 
-        txtMobile1.setText("0766801657");
         txtMobile1.setToolTipText("");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
@@ -282,7 +334,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addGap(19, 19, 19)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel6)
@@ -320,10 +372,10 @@ public class DlgEmployee extends javax.swing.JDialog {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
                     .addComponent(cboStatus))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
-        jPanel2.add(jPanel5, java.awt.BorderLayout.CENTER);
+        pnlData.add(jPanel5, java.awt.BorderLayout.CENTER);
 
         jPanel6.setBackground(new java.awt.Color(250, 250, 250));
         jPanel6.setPreferredSize(new java.awt.Dimension(695, 190));
@@ -338,13 +390,16 @@ public class DlgEmployee extends javax.swing.JDialog {
         jLabel11.setForeground(new java.awt.Color(102, 102, 102));
         jLabel11.setText("Password:");
 
-        txtPassword.setText("123456789");
-
         checkCredentials.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         checkCredentials.setText("System Login Credentials");
         checkCredentials.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 checkCredentialsStateChanged(evt);
+            }
+        });
+        checkCredentials.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkCredentialsActionPerformed(evt);
             }
         });
 
@@ -398,9 +453,9 @@ public class DlgEmployee extends javax.swing.JDialog {
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
-        jPanel2.add(jPanel6, java.awt.BorderLayout.PAGE_END);
+        pnlData.add(jPanel6, java.awt.BorderLayout.PAGE_END);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
+        jPanel1.add(pnlData, java.awt.BorderLayout.CENTER);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setPreferredSize(new java.awt.Dimension(695, 130));
@@ -415,12 +470,16 @@ public class DlgEmployee extends javax.swing.JDialog {
             }
         });
 
+        btnReset.setBackground(new java.awt.Color(250, 250, 250));
         btnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/remove-formatting.png"))); // NOI18N
         btnReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnResetActionPerformed(evt);
             }
         });
+
+        btnAllowEdit.setBackground(new java.awt.Color(250, 250, 250));
+        btnAllowEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/pen-line.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -429,7 +488,9 @@ public class DlgEmployee extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGap(43, 43, 43)
                 .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 388, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAllowEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 328, Short.MAX_VALUE)
                 .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43))
         );
@@ -439,7 +500,8 @@ public class DlgEmployee extends javax.swing.JDialog {
                 .addContainerGap(41, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btnReset, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
-                    .addComponent(btnSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAllowEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(35, 35, 35))
         );
 
@@ -467,10 +529,7 @@ public class DlgEmployee extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void checkCredentialsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkCredentialsStateChanged
-        boolean state = checkCredentials.isSelected();
-        txtUsername.setEnabled(state);
-        txtPassword.setEnabled(state);
-        cboRole.setEnabled(state);
+
 
     }//GEN-LAST:event_checkCredentialsStateChanged
 
@@ -552,7 +611,7 @@ public class DlgEmployee extends javax.swing.JDialog {
             }
 
             new EmployeeController().createEmployee(employee);
-            
+
             AppLayout.appLayout.changeForm(AppLayout.Pages.EMPLOYEES);
 
         } catch (SparkException e) {
@@ -562,7 +621,15 @@ public class DlgEmployee extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
 
+    private void checkCredentialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkCredentialsActionPerformed
+        boolean state = checkCredentials.isSelected();
+        txtUsername.setEnabled(state);
+        txtPassword.setEnabled(state);
+        cboRole.setEnabled(state);
+    }//GEN-LAST:event_checkCredentialsActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAllowEdit;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSubmit;
@@ -582,12 +649,12 @@ public class DlgEmployee extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JLabel lblHeading;
+    private javax.swing.JPanel pnlData;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtFName;
     private javax.swing.JTextField txtLName;
