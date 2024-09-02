@@ -43,6 +43,9 @@ public class EmployeeController {
                 + "'"+ employee.getNIC() +"'"
                 + vals
                 + ");");
+    }
+    
+    public void updateEmployee(Employee employee){
         
         
     }

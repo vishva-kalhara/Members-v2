@@ -71,6 +71,8 @@ public class DlgEmployee extends javax.swing.JDialog {
 
         lazyLoadFields(employee.getId());
 
+        this.gendersMap = DBData.getSubTableData("gender", cboGender);
+
         cboGender.setSelectedItem(employee.getGenderValue());
         cboGender.setEnabled(false);
         txtFName.setText(employee.getFName());
@@ -87,6 +89,8 @@ public class DlgEmployee extends javax.swing.JDialog {
 
         lblHeading.setText("Employee Details");
         btnSubmit.setText("Save Changes");
+
+        btnSubmit.setEnabled(false);
     }
 
     private void lazyLoadFields(String empId) {
@@ -95,9 +99,6 @@ public class DlgEmployee extends javax.swing.JDialog {
             @Override
             public void run() {
 
-                System.out.println("SELECT "
-                        + "`nic`, `mobile2`, `address1`, `username`, `password`, `user_roles_id` "
-                        + "FROM `employees` WHERE id = '" + empId + "'");
                 ResultSet rs = AppConnection.execute("SELECT "
                         + "`nic`, `mobile2`, `address1`, `username`, `password`, `user_roles_id` "
                         + "FROM `employees` WHERE id = '" + empId + "'");
@@ -107,13 +108,17 @@ public class DlgEmployee extends javax.swing.JDialog {
                     rs.next();
                     txtNIC.setEnabled(false);
                     txtNIC.setText(rs.getString("nic"));
-                    txtMobile2.setText(rs.getString("mobile2"));
+
+                    if (!rs.getString("mobile2").equals("null")) {
+                        txtMobile2.setText(rs.getString("mobile2"));
+                    }
+
                     txtAddress.setText(rs.getString("address1"));
 
                     txtMobile2.setEnabled(false);
                     txtAddress.setEnabled(false);
 
-                    if (!rs.getString("user_roles_id").equals("null")) {
+                    if (rs.getString("user_roles_id") != (null)) {
                         ResultSet rsRole = AppConnection.execute("SELECT value FROM user_roles WHERE id = " + rs.getInt("user_roles_id"));
                         rsRole.next();
 
@@ -552,10 +557,20 @@ public class DlgEmployee extends javax.swing.JDialog {
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
 
-        cboGender.setSelectedIndex(0);
+
+        if (cboGender.isEnabled()) {
+            cboGender.setSelectedIndex(0);
+        }
+
         txtFName.setText("");
         txtLName.setText("");
-        txtNIC.setText("");
+
+        if (txtNIC.isEnabled()) {
+            txtNIC.setText("");
+        }
+        
+        checkCredentials.setSelected(false);
+
         txtMobile1.setText("");
         txtMobile2.setText("");
         txtAddress.setText("");
@@ -591,11 +606,15 @@ public class DlgEmployee extends javax.swing.JDialog {
                     .maxLength(10)
                     .regex("^07[01235678]{1}[0-9]{7}$")
                     .endString());
-            employee.setMobile2(new Spark("Mobile-2", txtMobile2.getText())
-                    .minLength(10, "Required 10 characters for mobile-2")
-                    .maxLength(10)
-                    .regex("^07[01235678]{1}[0-9]{7}$")
-                    .endString());
+
+            if (!txtMobile2.getText().isBlank()) {
+                employee.setMobile2(new Spark("Mobile-2", txtMobile2.getText())
+                        .minLength(10, "Required 10 characters for mobile-2")
+                        .maxLength(10)
+                        .regex("^07[01235678]{1}[0-9]{7}$")
+                        .endString());
+            }
+
             employee.setAddress1(new Spark("Address", txtAddress.getText())
                     .required()
                     .maxLength(100)
@@ -627,13 +646,19 @@ public class DlgEmployee extends javax.swing.JDialog {
                 employee.setRoleId(userRolesMap.get(String.valueOf(cboRole.getSelectedItem())));
             }
 
-            new EmployeeController().createEmployee(employee);
+            if (type == DialogTypes.CREATE) {
+                new EmployeeController().createEmployee(employee);
+            } else {
+
+                new EmployeeController().updateEmployee(employee);
+            }
 
             AppLayout.appLayout.changeForm(LayoutPages.EMPLOYEES);
 
         } catch (SparkException e) {
             new DlgError(AppLayout.appLayout, true, e.title, e.getMessage()).setVisible(true);
         } catch (Exception e) {
+            e.printStackTrace();
             new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
@@ -650,6 +675,7 @@ public class DlgEmployee extends javax.swing.JDialog {
 
     private void btnAllowEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllowEditActionPerformed
 
+        btnSubmit.setEnabled(true);
         txtFName.setEnabled(true);
         txtLName.setEnabled(true);
         txtMobile1.setEnabled(true);
