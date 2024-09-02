@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.Spark;
 import com.wishva.SparkException;
 import controllers.EmployeeController;
+import enums.DialogActions;
 import enums.DialogTypes;
 import enums.LayoutPages;
 import java.awt.Color;
@@ -19,6 +20,7 @@ import utils.DBData;
 import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JDialog;
 
 /**
  *
@@ -31,6 +33,7 @@ public class DlgEmployee extends javax.swing.JDialog {
     HashMap<String, Integer> statusesMap = new HashMap<>();
 
     private DialogTypes type;
+    private String empId;
 
     /**
      * Creates new form DlgEmployee
@@ -68,6 +71,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         setDesign();
 
         this.type = DialogTypes.UPDATE;
+        this.empId = employee.getId();
 
         lazyLoadFields(employee.getId());
 
@@ -109,7 +113,7 @@ public class DlgEmployee extends javax.swing.JDialog {
                     txtNIC.setEnabled(false);
                     txtNIC.setText(rs.getString("nic"));
 
-                    if (!rs.getString("mobile2").equals("null")) {
+                    if (rs.getString("mobile2") != null) {
                         txtMobile2.setText(rs.getString("mobile2"));
                     }
 
@@ -557,7 +561,12 @@ public class DlgEmployee extends javax.swing.JDialog {
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
 
+        DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be cleared!");
+        dlg.setVisible(true);
 
+        if(dlg.getAction() != DialogActions.CONFIRM)
+            return;
+        
         if (cboGender.isEnabled()) {
             cboGender.setSelectedIndex(0);
         }
@@ -568,7 +577,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         if (txtNIC.isEnabled()) {
             txtNIC.setText("");
         }
-        
+
         checkCredentials.setSelected(false);
 
         txtMobile1.setText("");
@@ -649,7 +658,10 @@ public class DlgEmployee extends javax.swing.JDialog {
             if (type == DialogTypes.CREATE) {
                 new EmployeeController().createEmployee(employee);
             } else {
-
+                employee.setId(this.empId);
+                if(!checkCredentials.isSelected())
+                    employee.setRoleId(0);
+                
                 new EmployeeController().updateEmployee(employee);
             }
 
@@ -674,6 +686,12 @@ public class DlgEmployee extends javax.swing.JDialog {
     }//GEN-LAST:event_checkCredentialsActionPerformed
 
     private void btnAllowEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllowEditActionPerformed
+
+        DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be enabled!");
+        dlg.setVisible(true);
+
+        if(dlg.getAction() != DialogActions.CONFIRM)
+            return;
 
         btnSubmit.setEnabled(true);
         txtFName.setEnabled(true);

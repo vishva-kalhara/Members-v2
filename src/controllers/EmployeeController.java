@@ -12,16 +12,20 @@ import utils.AppConnection;
  * @author vishv
  */
 public class EmployeeController {
-    
-    public void createEmployee(Employee employee){
-        
+
+    public void createEmployee(Employee employee) {
+
         String fields = "";
         String vals = "";
-        if(employee.getUsername() != null){
+        if (employee.getUsername() != null) {
             fields = ",`user_roles_id`, `username`, `password`";
-            vals = ",'" + employee.getRoleId() +"', '"+ employee.getUsername() +"', '"+ employee.getPassword() +"'";
+            vals = ",'" + employee.getRoleId() + "', '" + employee.getUsername() + "', '" + employee.getPassword() + "'";
         }
-        
+
+        if (employee.getMobile2() == null) {
+            employee.setMobile2("");
+        }
+
         AppConnection.execute("INSERT INTO `employees` ("
                 + "`mobile1`, "
                 + "`mobile2`, "
@@ -33,20 +37,43 @@ public class EmployeeController {
                 + "`nic`"
                 + fields
                 + ") VALUES ("
-                + "'"+ employee.getMobile1()+"',"
-                + "'"+ employee.getMobile2()+"',"
-                + "'"+ employee.getAddress1() +"',"
-                + "'"+ employee.getFName()+"',"
-                + "'"+ employee.getLName()+"',"
-                + "'"+ employee.getGenderId()+"',"
-                + "'"+ employee.getStatusId()+"',"
-                + "'"+ employee.getNIC() +"'"
+                + "'" + employee.getMobile1() + "',"
+                + "'" + employee.getMobile2() + "',"
+                + "'" + employee.getAddress1() + "',"
+                + "'" + employee.getFName() + "',"
+                + "'" + employee.getLName() + "',"
+                + "'" + employee.getGenderId() + "',"
+                + "'" + employee.getStatusId() + "',"
+                + "'" + employee.getNIC() + "'"
                 + vals
                 + ");");
     }
-    
-    public void updateEmployee(Employee employee){
-        
-        
+
+    public void updateEmployee(Employee employee) {
+
+        String vals;
+        if (employee.getRoleId() != 0) {
+            vals = " `username` = '" + employee.getUsername() + "', "
+                    + "`password` = '" + employee.getPassword() + "', "
+                    + "`user_roles_id` = '" + employee.getRoleId() + "' ";
+        } else {
+            vals = " `username` = '', "
+                    + "`password` = '', "
+                    + "`user_roles_id` = NULL ";
+        }
+
+        if (employee.getMobile2() == null) {
+            employee.setMobile2("");
+        }
+
+        AppConnection.execute("UPDATE `employees` SET "
+                + "`first_name` = '" + employee.getFName() + "', "
+                + "`last_name` = '" + employee.getLName() + "', "
+                + "`address1` = '" + employee.getAddress1() + "', "
+                + "`statuses_id` = '" + employee.getStatusId() + "', "
+                + "`mobile1` = '" + employee.getMobile1() + "', "
+                + "`mobile2` = '" + employee.getMobile2() + "', "
+                + vals
+                + "WHERE `id` = '" + employee.getId() + "'");
     }
 }
