@@ -32,6 +32,7 @@ public class AppConnection {
         }
     }
 
+    @Deprecated
     public static ResultSet execute(String query) {
         if (connection == null) {
             setUpConnection();
@@ -48,10 +49,28 @@ public class AppConnection {
             if (!e.getSQLState().equals("45000")) {
 
                 e.printStackTrace();
-            } else 
+            } else {
                 new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
+            }
             return null;
         }
+    }
+
+    public static ResultSet fetch(String query) {
+        try {
+            return connection.createStatement().executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
+            return null;
+        }
+    }
+
+    public static boolean mutate(String query) throws SQLException {
+
+        int result = connection.createStatement().executeUpdate(query);
+
+        return result == 1;
     }
 
 }

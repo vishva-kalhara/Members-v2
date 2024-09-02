@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import java.sql.SQLException;
 import models.Employee;
 import utils.AppConnection;
 
@@ -13,7 +14,7 @@ import utils.AppConnection;
  */
 public class EmployeeController {
 
-    public void createEmployee(Employee employee) {
+    public boolean createEmployee(Employee employee) throws SQLException {
 
         String fields = "";
         String vals = "";
@@ -26,7 +27,7 @@ public class EmployeeController {
             employee.setMobile2("");
         }
 
-        AppConnection.execute("INSERT INTO `employees` ("
+        return AppConnection.mutate("INSERT INTO `employees` ("
                 + "`mobile1`, "
                 + "`mobile2`, "
                 + "`address1`, "
@@ -49,7 +50,7 @@ public class EmployeeController {
                 + ");");
     }
 
-    public void updateEmployee(Employee employee) {
+    public boolean updateEmployee(Employee employee)throws SQLException {
 
         String vals;
         if (employee.getRoleId() != 0) {
@@ -66,7 +67,7 @@ public class EmployeeController {
             employee.setMobile2("");
         }
 
-        AppConnection.execute("UPDATE `employees` SET "
+        return AppConnection.mutate("UPDATE `employees` SET "
                 + "`first_name` = '" + employee.getFName() + "', "
                 + "`last_name` = '" + employee.getLName() + "', "
                 + "`address1` = '" + employee.getAddress1() + "', "

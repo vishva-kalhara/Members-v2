@@ -102,7 +102,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtEmail">
           <Properties>
-            <Property name="text" type="java.lang.String" value="wishva@gmail.com"/>
+            <Property name="text" type="java.lang.String" value="super"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtPassword">

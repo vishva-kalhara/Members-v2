@@ -19,6 +19,8 @@ import utils.DBData;
 import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.SwingUtilities;
+import raven.toast.Notifications;
 
 /**
  *
@@ -100,11 +102,13 @@ public class DlgEmployee extends javax.swing.JDialog {
 
             @Override
             public void run() {
-
                 ResultSet rs = AppConnection.execute("SELECT "
                         + "`nic`, `mobile2`, `address1`, `username`, `password`, `user_roles_id` "
                         + "FROM `employees` WHERE id = '" + empId + "'");
 
+//                SwingUtilities.invokeLater(new Runnable() {
+//                    @Override
+//                    public void run() {
                 try {
 
                     rs.next();
@@ -128,6 +132,7 @@ public class DlgEmployee extends javax.swing.JDialog {
                         txtUsername.setText(rs.getString("username"));
                         txtPassword.setText(rs.getString("password"));
 
+                        System.out.println(rsRole.getString("value"));
                         cboRole.setSelectedItem(rsRole.getString("value"));
                     }
 
@@ -140,6 +145,9 @@ public class DlgEmployee extends javax.swing.JDialog {
                     e.printStackTrace();
                     dispose();
                 }
+//                    }
+//                });
+
             }
         }).start();
     }
@@ -562,9 +570,10 @@ public class DlgEmployee extends javax.swing.JDialog {
         DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be cleared!");
         dlg.setVisible(true);
 
-        if(dlg.getAction() != DialogActions.CONFIRM)
+        if (dlg.getAction() != DialogActions.CONFIRM) {
             return;
-        
+        }
+
         if (cboGender.isEnabled()) {
             cboGender.setSelectedIndex(0);
         }
@@ -589,89 +598,103 @@ public class DlgEmployee extends javax.swing.JDialog {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
 
-        Employee employee = new Employee();
-
         try {
 
-            if (cboGender.getSelectedIndex() == 0) {
-                throw new SparkException("Select a gender!");
-            }
-
-            employee.setFName(new Spark("First Name", txtFName.getText())
-                    .required()
-                    .endString());
-            employee.setLName(new Spark("Last Name", txtLName.getText())
-                    .required()
-                    .endString());
-            employee.setNIC(new Spark("NIC", txtNIC.getText())
-                    .required()
-                    .minLength(10)
-                    .endString());
-            employee.setMobile1(new Spark("Mobile-1", txtMobile1.getText())
-                    .required()
-                    .minLength(10, "Required 10 characters for mobile-1")
-                    .maxLength(10)
-                    .regex("^07[01235678]{1}[0-9]{7}$")
-                    .endString());
-
-            if (!txtMobile2.getText().isBlank()) {
-                employee.setMobile2(new Spark("Mobile-2", txtMobile2.getText())
-                        .minLength(10, "Required 10 characters for mobile-2")
-                        .maxLength(10)
-                        .regex("^07[01235678]{1}[0-9]{7}$")
-                        .endString());
-            }
-
-            employee.setAddress1(new Spark("Address", txtAddress.getText())
-                    .required()
-                    .maxLength(100)
-                    .endString());
-
-            if (cboStatus.getSelectedIndex() == 0) {
-                throw new SparkException("Select a status!");
-            }
-
-            employee.setGenderId(gendersMap.get(String.valueOf(cboGender.getSelectedItem())));
-            employee.setStatusId(statusesMap.get(String.valueOf(cboStatus.getSelectedItem())));
-
-            if (checkCredentials.isSelected()) {
-                employee.setUsername(new Spark("Username", txtUsername.getText())
-                        .required()
-                        .minLength(5)
-                        .maxLength(25)
-                        .endString());
-                employee.setPassword(new Spark("Password", txtPassword.getPassword())
-                        .required()
-                        .minLength(8)
-                        .maxLength(15)
-                        .endString());
-
-                if (cboRole.getSelectedIndex() == 0) {
-                    throw new SparkException("Select the Access Role!");
-                }
-
-                employee.setRoleId(userRolesMap.get(String.valueOf(cboRole.getSelectedItem())));
-            }
+            Employee employee = createEmployeeFromForm();
 
             if (type == DialogTypes.CREATE) {
+
                 new EmployeeController().createEmployee(employee);
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Employee created success!");
             } else {
-                employee.setId(this.empId);
-                if(!checkCredentials.isSelected())
-                    employee.setRoleId(0);
-                
+
                 new EmployeeController().updateEmployee(employee);
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Employee details updated success!");
             }
+            
+            this.dispose();
 
             AppLayout.appLayout.changeForm(LayoutPages.EMPLOYEES);
 
-        } catch (SparkException e) {
-            new DlgError(AppLayout.appLayout, true, e.title, e.getMessage()).setVisible(true);
+        } catch (SparkException | SQLException e) {
+            new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
             new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private Employee createEmployeeFromForm() throws SparkException {
+
+        Employee employee = new Employee();
+
+        if (cboGender.getSelectedIndex() == 0) {
+            throw new SparkException("Select a gender!");
+        }
+
+        employee.setFName(new Spark("First Name", txtFName.getText())
+                .required()
+                .endString());
+        employee.setLName(new Spark("Last Name", txtLName.getText())
+                .required()
+                .endString());
+        employee.setNIC(new Spark("NIC", txtNIC.getText())
+                .required()
+                .minLength(10)
+                .endString());
+        employee.setMobile1(new Spark("Mobile-1", txtMobile1.getText())
+                .required()
+                .minLength(10, "Required 10 characters for mobile-1")
+                .maxLength(10)
+                .regex("^07[01235678]{1}[0-9]{7}$")
+                .endString());
+
+        if (!txtMobile2.getText().isBlank()) {
+            employee.setMobile2(new Spark("Mobile-2", txtMobile2.getText())
+                    .minLength(10, "Required 10 characters for mobile-2")
+                    .maxLength(10)
+                    .regex("^07[01235678]{1}[0-9]{7}$")
+                    .endString());
+        }
+
+        employee.setAddress1(new Spark("Address", txtAddress.getText())
+                .required()
+                .maxLength(100)
+                .endString());
+
+        if (cboStatus.getSelectedIndex() == 0) {
+            throw new SparkException("Select a status!");
+        }
+
+        employee.setGenderId(gendersMap.get(String.valueOf(cboGender.getSelectedItem())));
+        employee.setStatusId(statusesMap.get(String.valueOf(cboStatus.getSelectedItem())));
+
+        if (checkCredentials.isSelected()) {
+            employee.setUsername(new Spark("Username", txtUsername.getText())
+                    .required()
+                    .minLength(5)
+                    .maxLength(25)
+                    .endString());
+            employee.setPassword(new Spark("Password", txtPassword.getPassword())
+                    .required()
+                    .minLength(8)
+                    .maxLength(15)
+                    .endString());
+
+            if (cboRole.getSelectedIndex() == 0) {
+                throw new SparkException("Select the Access Role!");
+            }
+
+            employee.setRoleId(userRolesMap.get(String.valueOf(cboRole.getSelectedItem())));
+        }
+
+        employee.setId(this.empId);
+        if (!checkCredentials.isSelected()) {
+            employee.setRoleId(0);
+        }
+
+        return employee;
+    }
 
     private void checkCredentialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkCredentialsActionPerformed
 //        if (this.type == DialogTypes.CREATE) {
@@ -688,8 +711,9 @@ public class DlgEmployee extends javax.swing.JDialog {
         DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be enabled!");
         dlg.setVisible(true);
 
-        if(dlg.getAction() != DialogActions.CONFIRM)
+        if (dlg.getAction() != DialogActions.CONFIRM) {
             return;
+        }
 
         btnSubmit.setEnabled(true);
         txtFName.setEnabled(true);

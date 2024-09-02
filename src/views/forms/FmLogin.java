@@ -13,7 +13,6 @@ import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import models.Employee;
 import views.dialogs.DlgError;
 
 /**
@@ -78,7 +77,7 @@ public class FmLogin extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Sign in to the application.");
 
-        txtEmail.setText("wishva@gmail.com");
+        txtEmail.setText("super");
 
         txtPassword.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         txtPassword.setText("123456789");
@@ -192,6 +191,7 @@ public class FmLogin extends javax.swing.JFrame {
                     employeeData.put("id", rs.getString("id"));
                     employeeData.put("fName", rs.getString("first_name"));
                     employeeData.put("lName", rs.getString("last_name"));
+                    employeeData.put("role_id", rs.getString("user_roles_id"));
                     
                     new AppLayout(employeeData).setVisible(true);
                     this.dispose();
@@ -213,41 +213,6 @@ public class FmLogin extends javax.swing.JFrame {
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FmLogin().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;

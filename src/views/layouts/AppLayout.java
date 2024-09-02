@@ -10,8 +10,10 @@ import java.awt.Color;
 import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import raven.toast.Notifications;
 import views.internals.PnlDashboard;
 import views.internals.PnlEmployees;
+import views.internals.PnlNoAccess;
 import views.internals.PnlPackages;
 
 /**
@@ -22,6 +24,8 @@ public class AppLayout extends javax.swing.JFrame {
 
     public static AppLayout appLayout;
     public JButton selectedButton;
+    
+    HashMap<String, String> employeeData = new HashMap();
 
     /**
      * Creates new form AppLayout
@@ -32,9 +36,13 @@ public class AppLayout extends javax.swing.JFrame {
 
         appLayout = this;
         this.selectedButton = btnDashboard;
+        
+        this.employeeData = employeeData;
 
         setDesign();
-
+        
+        Notifications.getInstance().setJFrame(this);
+        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Hello " + employeeData.get("fName"));
     }
 
     private void setDesign() {
@@ -75,6 +83,13 @@ public class AppLayout extends javax.swing.JFrame {
     }
 
     public void changeForm(LayoutPages form) {
+        
+//        if(Integer.parseInt(employeeData.get("role_id")) == 1){
+//            
+//            showForm(new PnlNoAccess());
+//            return;
+//        }
+        
         switch (form) {
             case DASHBOARD:
                 changeSideBarButtons(btnDashboard);
