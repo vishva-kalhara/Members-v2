@@ -13,14 +13,12 @@ import enums.DialogTypes;
 import enums.LayoutPages;
 import java.awt.Color;
 import java.util.HashMap;
-import javax.swing.JTextField;
 import models.Employee;
 import utils.AppConnection;
 import utils.DBData;
 import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JDialog;
 
 /**
  *

@@ -5,8 +5,16 @@
 package views.forms;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.wishva.Spark;
+import com.wishva.SparkException;
 import java.awt.Color;
+import utils.AppConnection;
 import views.layouts.AppLayout;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import models.Employee;
+import views.dialogs.DlgError;
 
 /**
  *
@@ -23,7 +31,7 @@ public class FmLogin extends javax.swing.JFrame {
     }
     
     private void setDesign() {
-        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(255,255,255));
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(255, 255, 255));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
@@ -33,7 +41,7 @@ public class FmLogin extends javax.swing.JFrame {
         txtEmail.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Email");
         txtPassword.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Password");
-
+        
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
         btnClose.putClientProperty("JButton.buttonType", "borderless");
     }
@@ -161,34 +169,45 @@ public class FmLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-
-        this.dispose();
-        new AppLayout().setVisible(true);
-//        try {
-//
-//            String email = new Spark("Email", txtEmail.getText())
-//            .required()
-//            .email()
-//            .endString();
-//            String password = new Spark("Password", txtPassword.getPassword())
-//            .required()
-//            .minLength(8)
-//            .endString();
-//
-//            ResultSet rs = AppConnection.execute("SELECT * FROM employee WHERE `email` = '" + email + "' AND `password` = '" + password + "'");
-//            if(rs.next()){
-//                new AppLayout(rs.getString("first_name"), rs.getString("last_name")).setVisible(true);
-//                this.dispose();
-//            } else {
-//                throw new SparkException("Invalid Username or Password!");
-//            }
-//
-//        } catch (SparkException e) {
-//            //            JOptionPane.showMessageDialog(this, e.getMessage(), e.title, JOptionPane.WARNING_MESSAGE);
-//            new DlgError(this, true, e.getMessage(), e.title).setVisible(true);
-//        } catch (SQLException e) {
-//            new DlgError(this, true, e.getMessage()).setVisible(true);
-//        }
+        
+        try {
+            
+            String username = new Spark("Email", txtEmail.getText())
+                    .required()
+                    .endString();
+            String password = new Spark("Password", txtPassword.getPassword())
+                    .required()
+                    .minLength(8)
+                    .endString();
+            
+            ResultSet rs = AppConnection.execute("SELECT * FROM employees WHERE `username` = '" + username + "' AND `password` = '" + password + "'");
+            if (rs.next()) {
+                
+                if (!rs.getString("statuses_id").equals("1")) {
+                    new DlgError(this, true, "Unauthorized!", "You have no longer access to use the system.").setVisible(true);
+                } else {
+                    
+                    HashMap<String, String> employeeData = new HashMap();
+                    
+                    employeeData.put("id", rs.getString("id"));
+                    employeeData.put("fName", rs.getString("first_name"));
+                    employeeData.put("lName", rs.getString("last_name"));
+                    
+                    new AppLayout(employeeData).setVisible(true);
+                    this.dispose();
+                }
+            } else {
+                new DlgError(this, true, "Unauthorized!", "Username or password is incorrect.").setVisible(true);
+            }
+            
+        } catch (SparkException e) {
+            //            JOptionPane.showMessageDialog(this, e.getMessage(), e.title, JOptionPane.WARNING_MESSAGE);
+            new DlgError(this, true, e.getMessage(), e.title).setVisible(true);
+        } catch (SQLException e) {
+            new DlgError(this, true, e.getMessage()).setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed

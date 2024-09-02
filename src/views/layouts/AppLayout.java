@@ -7,10 +7,12 @@ package views.layouts;
 import com.formdev.flatlaf.FlatClientProperties;
 import enums.LayoutPages;
 import java.awt.Color;
+import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import views.internals.PnlDashboard;
 import views.internals.PnlEmployees;
+import views.internals.PnlPackages;
 
 /**
  *
@@ -23,8 +25,9 @@ public class AppLayout extends javax.swing.JFrame {
 
     /**
      * Creates new form AppLayout
+     * @param employeeData
      */
-    public AppLayout() {
+    public AppLayout(HashMap<String, String> employeeData) {
         initComponents();
 
         appLayout = this;
@@ -76,6 +79,10 @@ public class AppLayout extends javax.swing.JFrame {
             case DASHBOARD:
                 changeSideBarButtons(btnDashboard);
                 showForm(new PnlDashboard());
+                break;
+            case PACKAGES:
+                changeSideBarButtons(btnPackages);
+                showForm(new PnlPackages());
                 break;
             case EMPLOYEES:
                 changeSideBarButtons(btnEmployees);
@@ -148,6 +155,11 @@ public class AppLayout extends javax.swing.JFrame {
         btnPackages.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnPackages.setText("Packages");
         btnPackages.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        btnPackages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPackagesActionPerformed(evt);
+            }
+        });
 
         btnEmployees.setBackground(new java.awt.Color(249, 249, 249));
         btnEmployees.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
@@ -278,6 +290,10 @@ public class AppLayout extends javax.swing.JFrame {
     private void btnEmployeesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmployeesActionPerformed
         changeForm(LayoutPages.EMPLOYEES);
     }//GEN-LAST:event_btnEmployeesActionPerformed
+
+    private void btnPackagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPackagesActionPerformed
+        changeForm(LayoutPages.PACKAGES);
+    }//GEN-LAST:event_btnPackagesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDashboard;
