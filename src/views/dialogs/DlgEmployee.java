@@ -8,6 +8,8 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.Spark;
 import com.wishva.SparkException;
 import controllers.EmployeeController;
+import enums.DialogTypes;
+import enums.LayoutPages;
 import java.awt.Color;
 import java.util.HashMap;
 import javax.swing.JTextField;
@@ -28,6 +30,8 @@ public class DlgEmployee extends javax.swing.JDialog {
     HashMap<String, Integer> userRolesMap = new HashMap<>();
     HashMap<String, Integer> statusesMap = new HashMap<>();
 
+    private DialogTypes type;
+
     /**
      * Creates new form DlgEmployee
      *
@@ -39,6 +43,8 @@ public class DlgEmployee extends javax.swing.JDialog {
         initComponents();
 
         setDesign();
+
+        this.type = DialogTypes.CREATE;
 
         this.gendersMap = DBData.getSubTableData("gender", cboGender);
         this.userRolesMap = DBData.getSubTableData("user_roles", cboRole);
@@ -60,6 +66,8 @@ public class DlgEmployee extends javax.swing.JDialog {
         initComponents();
 
         setDesign();
+
+        this.type = DialogTypes.UPDATE;
 
         lazyLoadFields(employee.getId());
 
@@ -115,6 +123,11 @@ public class DlgEmployee extends javax.swing.JDialog {
 
                         cboRole.setSelectedItem(rsRole.getString("value"));
                     }
+
+                    checkCredentials.setEnabled(false);
+                    txtUsername.setEnabled(false);
+                    txtPassword.setEnabled(false);
+                    cboRole.setEnabled(false);
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -274,7 +287,6 @@ public class DlgEmployee extends javax.swing.JDialog {
         jLabel7.setForeground(new java.awt.Color(102, 102, 102));
         jLabel7.setText("Address:");
 
-        txtAddress.setText("UK");
         txtAddress.setToolTipText("");
 
         jLabel8.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
@@ -480,6 +492,11 @@ public class DlgEmployee extends javax.swing.JDialog {
 
         btnAllowEdit.setBackground(new java.awt.Color(250, 250, 250));
         btnAllowEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/pen-line.png"))); // NOI18N
+        btnAllowEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAllowEditActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -612,7 +629,7 @@ public class DlgEmployee extends javax.swing.JDialog {
 
             new EmployeeController().createEmployee(employee);
 
-            AppLayout.appLayout.changeForm(AppLayout.Pages.EMPLOYEES);
+            AppLayout.appLayout.changeForm(LayoutPages.EMPLOYEES);
 
         } catch (SparkException e) {
             new DlgError(AppLayout.appLayout, true, e.title, e.getMessage()).setVisible(true);
@@ -622,11 +639,32 @@ public class DlgEmployee extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void checkCredentialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkCredentialsActionPerformed
+//        if (this.type == DialogTypes.CREATE) {
+
         boolean state = checkCredentials.isSelected();
         txtUsername.setEnabled(state);
         txtPassword.setEnabled(state);
         cboRole.setEnabled(state);
+//        }
     }//GEN-LAST:event_checkCredentialsActionPerformed
+
+    private void btnAllowEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllowEditActionPerformed
+
+        txtFName.setEnabled(true);
+        txtLName.setEnabled(true);
+        txtMobile1.setEnabled(true);
+        txtMobile2.setEnabled(true);
+        txtAddress.setEnabled(true);
+        cboStatus.setEnabled(true);
+        checkCredentials.setEnabled(true);
+
+        if (checkCredentials.isSelected()) {
+
+            txtUsername.setEnabled(true);
+            txtPassword.setEnabled(true);
+            cboRole.setEnabled(true);
+        }
+    }//GEN-LAST:event_btnAllowEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAllowEdit;

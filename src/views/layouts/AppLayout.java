@@ -5,6 +5,7 @@
 package views.layouts;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import enums.LayoutPages;
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -19,10 +20,6 @@ public class AppLayout extends javax.swing.JFrame {
 
     public static AppLayout appLayout;
     public JButton selectedButton;
-
-    public enum Pages {
-        DASHBOARD, SUBSCRIPTIONS, MEMBERS, PACKAGES, EMPLOYEES, REPORTS, SETTINGS
-    }
 
     /**
      * Creates new form AppLayout
@@ -39,7 +36,7 @@ public class AppLayout extends javax.swing.JFrame {
 
     private void setDesign() {
 
-        changeForm(Pages.DASHBOARD);
+        changeForm(LayoutPages.DASHBOARD);
 
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));
@@ -74,7 +71,7 @@ public class AppLayout extends javax.swing.JFrame {
         selectedButton.grabFocus();
     }
 
-    public void changeForm(AppLayout.Pages form) {
+    public void changeForm(LayoutPages form) {
         switch (form) {
             case DASHBOARD:
                 changeSideBarButtons(btnDashboard);
@@ -275,11 +272,11 @@ public class AppLayout extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
-        changeForm(Pages.DASHBOARD);
+        changeForm(LayoutPages.DASHBOARD);
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnEmployeesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmployeesActionPerformed
-        changeForm(Pages.EMPLOYEES);
+        changeForm(LayoutPages.EMPLOYEES);
     }//GEN-LAST:event_btnEmployeesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

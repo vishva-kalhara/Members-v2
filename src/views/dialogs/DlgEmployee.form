@@ -365,7 +365,6 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtAddress">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="UK"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                   </Properties>
                 </Component>
@@ -634,6 +633,9 @@
                   <Image iconType="3" name="/assets/icons/pen-line.png"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAllowEditActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
