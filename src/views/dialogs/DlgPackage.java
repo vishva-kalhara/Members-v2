@@ -43,6 +43,7 @@ public class DlgPackage extends javax.swing.JDialog {
         setDesign();
 
         this.type = DialogTypes.CREATE;
+        lblPrice.setText("Price ("+ AppLayout.appData.getCurrencyValue() +") :");
 
         this.statusMap = DBData.getSubTableData("statuses", cboStatus);
     }
@@ -63,6 +64,7 @@ public class DlgPackage extends javax.swing.JDialog {
         setDesign();
 
         this.type = DialogTypes.UPDATE;
+        lblPrice.setText("Price ("+ AppLayout.appData.getCurrencyValue() +") :");
 
         this.statusMap = DBData.getSubTableData("statuses", cboStatus);
 
@@ -131,7 +133,7 @@ public class DlgPackage extends javax.swing.JDialog {
         txtTitle = new javax.swing.JTextField();
         cboStatus = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblPrice = new javax.swing.JLabel();
         txtValidity = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtPrice = new javax.swing.JTextField();
@@ -246,9 +248,9 @@ public class DlgPackage extends javax.swing.JDialog {
         jLabel3.setForeground(new java.awt.Color(102, 102, 102));
         jLabel3.setText("Validity (in days):");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel4.setText("Price:");
+        lblPrice.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        lblPrice.setForeground(new java.awt.Color(102, 102, 102));
+        lblPrice.setText("Price:");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(102, 102, 102));
@@ -265,7 +267,7 @@ public class DlgPackage extends javax.swing.JDialog {
                         .addComponent(txtPrice, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(txtTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
-                    .addComponent(jLabel4))
+                    .addComponent(lblPrice))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -284,7 +286,7 @@ public class DlgPackage extends javax.swing.JDialog {
                 .addGap(19, 19, 19)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(lblPrice)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -432,13 +434,13 @@ public class DlgPackage extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> cboStatus;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel lblHeading;
+    private javax.swing.JLabel lblPrice;
     private javax.swing.JTextField txtPrice;
     private javax.swing.JTextField txtTitle;
     private javax.swing.JTextField txtValidity;

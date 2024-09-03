@@ -105,6 +105,7 @@ public class DlgError extends javax.swing.JDialog {
         btnClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
         setMaximumSize(new java.awt.Dimension(413, 102));
         setMinimumSize(new java.awt.Dimension(413, 102));
         setResizable(false);

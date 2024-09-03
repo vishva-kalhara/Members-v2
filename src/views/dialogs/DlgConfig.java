@@ -5,16 +5,27 @@
 package views.dialogs;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.wishva.Spark;
+import com.wishva.SparkException;
+import controllers.ApplicationController;
 import enums.DialogActions;
 import java.awt.Color;
+import java.util.HashMap;
+import models.Application;
+import utils.DBData;
+import views.layouts.AppLayout;
+import java.sql.SQLException;
+import utils.AppConnection;
 
 /**
  *
  * @author vishv
  */
 public class DlgConfig extends javax.swing.JDialog {
-    
+
     private DialogActions action = DialogActions.CANCEL;
+
+    private HashMap<String, Integer> currencyMap;
 
     /**
      * Creates new form DlgConfig
@@ -25,8 +36,10 @@ public class DlgConfig extends javax.swing.JDialog {
     public DlgConfig(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         setDesign();
+
+        currencyMap = DBData.getSubTableData("available_currencies", cboCurrency);
     }
 
     private void setDesign() {
@@ -46,8 +59,8 @@ public class DlgConfig extends javax.swing.JDialog {
         txtMobile.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtAddress.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
     }
-    
-    public boolean isCompleted(){
+
+    public boolean isCompleted() {
         return this.action == DialogActions.CONFIRM;
     }
 
@@ -236,8 +249,43 @@ public class DlgConfig extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnCompleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompleteActionPerformed
-        this.action = DialogActions.CONFIRM;
-        this.dispose();
+        try {
+
+            Application appData = new Application();
+
+            appData.setShopName(new Spark("Shop Name", txtName.getText())
+                    .required()
+                    .endString());
+
+            appData.setShopMobile(new Spark("Mobile", txtMobile.getText())
+                    .required()
+                    .minLength(10)
+                    .maxLength(10)
+                    .regex("07[01235678]{1}[0-9]{7}", "Invalid mobile number.")
+                    .endString());
+
+            appData.setShopAddress(new Spark("Address", txtAddress.getText())
+                    .required()
+                    .endString());
+
+            if (cboCurrency.getSelectedIndex() == 0) {
+                throw new SparkException("Select a currency.");
+            }
+            appData.setCurrencyId(currencyMap.get(String.valueOf(cboCurrency.getSelectedItem())));
+
+            if (!new ApplicationController().createAppConfig(appData)) {
+                return;
+            }
+
+            this.action = DialogActions.CONFIRM;
+            this.dispose();
+
+        } catch (SparkException e) {
+            new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            new DlgError(AppLayout.appLayout, true, "Unhandled Error", e.getMessage()).setVisible(true);
+        }
     }//GEN-LAST:event_btnCompleteActionPerformed
 
 
