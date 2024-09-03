@@ -92,5 +92,51 @@ BEGIN
 END$$
 
 DELIMITER ;
+```
 
+```
+DROP TRIGGER IF EXISTS `before_insert_app_data`;
+
+DELIMITER $$
+
+CREATE TRIGGER `before_insert_app_data`
+BEFORE INSERT ON `members`.`app_data`
+FOR EACH ROW
+BEGIN
+
+	DECLARE count INT;
+    
+    SELECT COUNT(*) INTO count FROM `members`.`app_data`;
+    
+    IF count > 0 THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Please contact the vendor.';
+	END IF;
+
+END$$
+
+DELIMITER ;
+```
+
+```
+DROP TRIGGER IF EXISTS `before_insert_member`;
+
+DELIMITER $$
+
+CREATE TRIGGER `before_insert_member`
+BEFORE INSERT ON `members`.`members`
+FOR EACH ROW
+BEGIN
+
+	DECLARE total INT;
+    
+    SELECT COUNT(*) INTO total FROM `members`.`members`;
+    
+    SET NEW.id = CONCAT('mbr-', total + 1);
+    SET NEW.created_at = NOW();
+    SET NEW.card_id = CONCAT('mbr-', total + 1);
+
+END$$
+
+DELIMITER ;
 ```

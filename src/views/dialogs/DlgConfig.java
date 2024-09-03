@@ -261,7 +261,7 @@ public class DlgConfig extends javax.swing.JDialog {
                     .required()
                     .minLength(10)
                     .maxLength(10)
-                    .regex("07[01235678]{1}[0-9]{7}", "Invalid mobile number.")
+                    .regex("^07[01235678]{1}[0-9]{7}$", "Invalid mobile number.")
                     .endString());
 
             appData.setShopAddress(new Spark("Address", txtAddress.getText())
