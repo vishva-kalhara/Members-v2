@@ -10,9 +10,14 @@ import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
+import utils.AppConnection;
 import utils.DBData;
 import views.dialogs.DlgPackage;
 import views.layouts.AppLayout;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,18 +26,21 @@ import views.layouts.AppLayout;
 public class PnlPackages extends javax.swing.JPanel {
 
     HashMap<String, Integer> statusMap = new HashMap();
-    
+
     /**
      * Creates new form PnlPackages
      */
     public PnlPackages() {
         initComponents();
-        
+
         setDesign();
-        
+
         scrollPane.setViewportView(new PnlFetching());
-        
-        this.statusMap = DBData.getSubTableData("statuses", "Packages",cboStatus);
+        scrollPane.repaint();
+        scrollPane.revalidate();
+        lazyLoad();
+
+        this.statusMap = DBData.getSubTableData("statuses", "Packages", cboStatus);
     }
 
     private void setDesign() {
@@ -48,8 +56,94 @@ public class PnlPackages extends javax.swing.JPanel {
         scroll.setBorder(BorderFactory.createEmptyBorder());
     }
 
+    private void lazyLoad() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fetchTableData("");
+            }
+        }).start();
+    }
+
+    private void fetchTableData(String constraints) {
+
+        btnClearFilters.setEnabled(false);
+        btnPrint.setEnabled(false);
+        btnSave.setEnabled(false);
+
+        try {
+            
+            DefaultTableModel model = (DefaultTableModel) tblPacakges.getModel();
+            model.setRowCount(0);
+
+            ResultSet rs = AppConnection.fetch("SELECT * FROM packages "
+                    + "INNER JOIN `statuses` ON `packages`.`statuses_id` = `statuses`.`id` " + constraints);
+
+            while (rs.next()) {
+                Vector<String> data = new Vector();
+                data.add(rs.getString("id"));
+                data.add(rs.getString("title"));
+                data.add(rs.getString("validity"));
+                data.add(rs.getString("price"));
+                data.add(rs.getString("statuses.value"));
+
+                ResultSet rsTotal = AppConnection.fetch("SELECT COUNT(*) as total FROM subscriptions WHERE `packages_id` = '" + rs.getString("id") + "'");
+                rsTotal.next();
+
+                data.add(rsTotal.getString("total"));
+
+                model.addRow(data);
+            }
+
+            tblPacakges.setModel(model);
+
+            if (model.getRowCount() != 0) {
+                scrollPane.setViewportView(tblPacakges);
+                btnPrint.setEnabled(true);
+                btnSave.setEnabled(true);
+            } else {
+                scrollPane.setViewportView(new PnlNoData());
+            }
+            scrollPane.repaint();
+            scrollPane.revalidate();
+            btnClearFilters.setEnabled(true);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void filterTable() {
 
+        boolean isStatusSelected = cboStatus.getSelectedIndex() != 0;
+        boolean isSearchPresent = !txtSearch.getText().isBlank();
+
+        if (!isSearchPresent && !isStatusSelected) {
+
+            fetchTableData("");
+            return;
+        }
+
+        StringBuilder constraints = new StringBuilder(" WHERE ");
+
+        if (isStatusSelected) {
+            constraints.append("statuses_id = '")
+                    .append(statusMap.get(String.valueOf(cboStatus.getSelectedItem())))
+                    .append("'");
+        }
+
+        if (isSearchPresent) {
+            if (isStatusSelected) {
+                constraints.append(" AND ");
+            }
+
+            constraints.append(" `title` LIKE '%")
+                    .append(txtSearch.getText())
+                    .append("%'");
+        }
+        
+        fetchTableData(String.valueOf(constraints));
     }
 
     /**
@@ -68,7 +162,6 @@ public class PnlPackages extends javax.swing.JPanel {
         btnPrint = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnClearFilters = new javax.swing.JButton();
-        btnSearch = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
         tblPacakges = new javax.swing.JTable();
@@ -115,13 +208,6 @@ public class PnlPackages extends javax.swing.JPanel {
             }
         });
 
-        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/search.png"))); // NOI18N
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -132,10 +218,8 @@ public class PnlPackages extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cboStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnClearFilters, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 286, Short.MAX_VALUE)
                 .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -153,8 +237,7 @@ public class PnlPackages extends javax.swing.JPanel {
                     .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPrint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
-                    .addComponent(btnClearFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnClearFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(19, 19, 19))
         );
 
@@ -232,11 +315,6 @@ public class PnlPackages extends javax.swing.JPanel {
         filterTable();
     }//GEN-LAST:event_btnClearFiltersActionPerformed
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-
-        filterTable();
-    }//GEN-LAST:event_btnSearchActionPerformed
-
     private void tblPacakgesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPacakgesMouseClicked
 
         if (evt.getClickCount() != 2) {
@@ -251,7 +329,6 @@ public class PnlPackages extends javax.swing.JPanel {
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cboStatus;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
