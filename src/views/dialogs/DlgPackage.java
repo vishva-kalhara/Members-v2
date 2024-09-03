@@ -7,10 +7,15 @@ package views.dialogs;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.Spark;
 import com.wishva.SparkException;
+import controllers.PackageController;
 import enums.DialogActions;
+import enums.DialogTypes;
 import enums.LayoutPages;
 import java.awt.Color;
+import java.sql.SQLException;
 import java.util.HashMap;
+import models.PaymentPlan;
+import raven.toast.Notifications;
 import utils.DBData;
 import views.layouts.AppLayout;
 
@@ -21,9 +26,12 @@ import views.layouts.AppLayout;
 public class DlgPackage extends javax.swing.JDialog {
     
     HashMap<String, Integer> statusMap = new HashMap();
+    
+    private DialogTypes type;
 
     /**
      * Creates new form DlgPackage
+     *
      * @param parent
      * @param modal
      */
@@ -33,26 +41,28 @@ public class DlgPackage extends javax.swing.JDialog {
         
         setDesign();
         
-        this.statusMap = DBData.getSubTableData("statuses", "Packages",cboStatus);
+        this.type = DialogTypes.CREATE;
+        
+        this.statusMap = DBData.getSubTableData("statuses", cboStatus);
     }
     
     private void setDesign() {
         
         txtTitle.grabFocus();
         
-        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(255,255,255));
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(255, 255, 255));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
         
         txtTitle.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
-        txtPrice.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtValidity.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
+        txtPrice.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         
         btnClose.putClientProperty("JButton.buttonType", "borderless");
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
-
+        
     }
 
     /**
@@ -78,9 +88,9 @@ public class DlgPackage extends javax.swing.JDialog {
         cboStatus = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtPrice = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         txtValidity = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtPrice = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -208,7 +218,7 @@ public class DlgPackage extends javax.swing.JDialog {
                 .addGap(33, 33, 33)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(txtValidity, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtPrice, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(txtTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
                     .addComponent(jLabel4))
@@ -221,7 +231,7 @@ public class DlgPackage extends javax.swing.JDialog {
                             .addComponent(cboStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtValidity, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -232,7 +242,7 @@ public class DlgPackage extends javax.swing.JDialog {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtValidity, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
@@ -240,7 +250,7 @@ public class DlgPackage extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
                                     .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtValidity, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(54, 54, 54)))
@@ -273,42 +283,84 @@ public class DlgPackage extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-
-
+        
         try {
-
             
-
+            PaymentPlan plan = createPackageFromForm();
+            
+            if(this.type == DialogTypes.CREATE){
+                new PackageController().createPackage(plan);
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Package created success!");
+            }
+            
+            this.dispose();
             AppLayout.appLayout.changeForm(LayoutPages.PACKAGES);
-            new Spark("", txtTitle.getText())
-                    .required();
-
-        } catch (SparkException e) {
-            new DlgError(AppLayout.appLayout, true, e.title, e.getMessage()).setVisible(true);
+            
+        } catch (SparkException | SQLException e) {
+            new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
             new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
+    
+    private PaymentPlan createPackageFromForm() throws SparkException {
+        
+        PaymentPlan plan = new PaymentPlan();
+        
+        plan.setTitle(new Spark("Title", txtTitle.getText())
+                .required()
+                .endString());
+        
+        int validity;
+        try {
+            validity = Integer.parseInt(txtValidity.getText());
+        } catch (NumberFormatException e) {
+            throw new SparkException("Package Validity must be a whole number.");
+        }
+        if (validity < 0) {
+            throw new SparkException("Package Validity must be greater than 0.");
+        }
+        plan.setValidity(validity);
+        
+        double price;
+        try {
+            price = Double.parseDouble(txtPrice.getText());
+        } catch (NumberFormatException e) {
+            throw new SparkException("Price must be a number.");
+        }
+        if (price < 0) {
+            throw new SparkException("Price must be greater than 0.");
+        }
+        plan.setPrice(price);
+        
+        if(cboStatus.getSelectedIndex() == 0)
+            throw new SparkException("Select a status.");
+        plan.setStatusId(statusMap.get(String.valueOf(cboStatus.getSelectedItem())));
+ 
+        return plan;
+    }
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-
+        
         DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be cleared!");
         dlg.setVisible(true);
-
-        if(dlg.getAction() != DialogActions.CONFIRM)
-        return ;
-
         
+        if (dlg.getAction() != DialogActions.CONFIRM) {
+            return;
+        }
+        
+
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnAllowEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllowEditActionPerformed
-
+        
         DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be enabled!");
         dlg.setVisible(true);
-
-        if(dlg.getAction() != DialogActions.CONFIRM)
-        return;
+        
+        if (dlg.getAction() != DialogActions.CONFIRM) {
+            return;
+        }
 
     }//GEN-LAST:event_btnAllowEditActionPerformed
 

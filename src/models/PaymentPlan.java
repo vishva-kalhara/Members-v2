@@ -8,9 +8,9 @@ package models;
  *
  * @author vishv
  */
-public class Package {
-
-    /**
+public class PaymentPlan {
+    
+     /**
      * @return the id
      */
     public String getId() {

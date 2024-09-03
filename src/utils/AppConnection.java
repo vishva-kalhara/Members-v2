@@ -57,6 +57,15 @@ public class AppConnection {
     }
 
     public static ResultSet fetch(String query) {
+
+        if (!query.startsWith("SELECT")) {
+            throw new IllegalArgumentException("Use ResultSet utils.AppConnection.mutate()");
+        }
+
+        if (connection == null) {
+            setUpConnection();
+        }
+
         try {
             return connection.createStatement().executeQuery(query);
         } catch (SQLException e) {
@@ -67,6 +76,14 @@ public class AppConnection {
     }
 
     public static boolean mutate(String query) throws SQLException {
+
+        if (query.startsWith("SELECT")) {
+            throw new IllegalArgumentException("Use ResultSet utils.AppConnection.fetch()");
+        }
+
+        if (connection == null) {
+            setUpConnection();
+        }
 
         int result = connection.createStatement().executeUpdate(query);
 
