@@ -56,6 +56,8 @@ public class DlgEmployee extends javax.swing.JDialog {
         txtUsername.setEnabled(false);
         txtPassword.setEnabled(false);
         cboRole.setEnabled(false);
+        
+        btnAllowEdit.setEnabled(false);
     }
 
     /**
@@ -95,6 +97,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         btnSubmit.setText("Save Changes");
 
         btnSubmit.setEnabled(false);
+        btnReset.setEnabled(false);
     }
 
     private void lazyLoadFields(String empId) {
@@ -716,6 +719,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         }
 
         btnSubmit.setEnabled(true);
+        btnReset.setEnabled(true);
         txtFName.setEnabled(true);
         txtLName.setEnabled(true);
         txtMobile1.setEnabled(true);

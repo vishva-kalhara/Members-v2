@@ -27,4 +27,14 @@ public class PackageController {
                 + "'" + plan.getValidity() + "', "
                 + "'" + plan.getStatusId() + "')");
     }
+
+    public boolean updatePackage(PaymentPlan plan) throws SQLException {
+
+        return AppConnection.mutate("UPDATE `packages` SET "
+                + "`title` = '" + plan.getTitle() + "', "
+                + "`price` = '" + plan.getPrice() + "', "
+                + "`validity` = '" + plan.getValidity() + "',"
+                + "`statuses_id` = '" + plan.getStatusId() + "' "
+                + "WHERE `id` = '" + plan.getId() + "'");
+    }
 }

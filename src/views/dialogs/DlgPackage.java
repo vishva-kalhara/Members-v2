@@ -24,10 +24,11 @@ import views.layouts.AppLayout;
  * @author vishv
  */
 public class DlgPackage extends javax.swing.JDialog {
-    
+
     HashMap<String, Integer> statusMap = new HashMap();
-    
+
     private DialogTypes type;
+    private String packageId;
 
     /**
      * Creates new form DlgPackage
@@ -38,31 +39,74 @@ public class DlgPackage extends javax.swing.JDialog {
     public DlgPackage(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         setDesign();
-        
+
         this.type = DialogTypes.CREATE;
-        
+
         this.statusMap = DBData.getSubTableData("statuses", cboStatus);
     }
-    
+
+    /**
+     * Creates new form DlgPackage
+     *
+     * @param parent
+     * @param modal
+     * @param plan
+     */
+    public DlgPackage(java.awt.Frame parent, boolean modal, PaymentPlan plan) {
+        super(parent, modal);
+        initComponents();
+
+        this.packageId = plan.getId();
+
+        setDesign();
+
+        this.type = DialogTypes.UPDATE;
+
+        this.statusMap = DBData.getSubTableData("statuses", cboStatus);
+
+        lblHeading.setText("Package Details");
+        btnSubmit.setText("Save Changes");
+
+        btnReset.setEnabled(false);
+        btnAllowEdit.grabFocus();
+        btnSubmit.setEnabled(false);
+
+        loadPackageData(plan);
+
+    }
+
     private void setDesign() {
-        
+
         txtTitle.grabFocus();
-        
+
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(255, 255, 255));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-        
+
         txtTitle.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtValidity.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtPrice.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
-        
+
         btnClose.putClientProperty("JButton.buttonType", "borderless");
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
-        
+
+    }
+
+    private void loadPackageData(PaymentPlan plan) {
+        txtTitle.setText(plan.getTitle());
+        txtValidity.setText(String.valueOf(plan.getValidity()));
+        txtPrice.setText(String.valueOf(plan.getPrice()));
+        cboStatus.setSelectedItem(plan.getStatusValue());
+
+        txtTitle.setEnabled(false);
+        txtValidity.setEnabled(false);
+        txtPrice.setEnabled(false);
+        cboStatus.setEnabled(false);
+
     }
 
     /**
@@ -283,19 +327,23 @@ public class DlgPackage extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        
+
         try {
-            
+
             PaymentPlan plan = createPackageFromForm();
-            
-            if(this.type == DialogTypes.CREATE){
+
+            if (this.type == DialogTypes.CREATE) {
                 new PackageController().createPackage(plan);
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Package created success!");
+            } else if (this.type == DialogTypes.UPDATE){
+                plan.setId(this.packageId);
+                new PackageController().updatePackage(plan);
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Package updated success!");
             }
-            
+
             this.dispose();
             AppLayout.appLayout.changeForm(LayoutPages.PACKAGES);
-            
+
         } catch (SparkException | SQLException e) {
             new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {
@@ -303,15 +351,15 @@ public class DlgPackage extends javax.swing.JDialog {
             new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
-    
+
     private PaymentPlan createPackageFromForm() throws SparkException {
-        
+
         PaymentPlan plan = new PaymentPlan();
-        
+
         plan.setTitle(new Spark("Title", txtTitle.getText())
                 .required()
                 .endString());
-        
+
         int validity;
         try {
             validity = Integer.parseInt(txtValidity.getText());
@@ -322,7 +370,7 @@ public class DlgPackage extends javax.swing.JDialog {
             throw new SparkException("Package Validity must be greater than 0.");
         }
         plan.setValidity(validity);
-        
+
         double price;
         try {
             price = Double.parseDouble(txtPrice.getText());
@@ -333,35 +381,46 @@ public class DlgPackage extends javax.swing.JDialog {
             throw new SparkException("Price must be greater than 0.");
         }
         plan.setPrice(price);
-        
-        if(cboStatus.getSelectedIndex() == 0)
+
+        if (cboStatus.getSelectedIndex() == 0) {
             throw new SparkException("Select a status.");
+        }
         plan.setStatusId(statusMap.get(String.valueOf(cboStatus.getSelectedItem())));
- 
+
         return plan;
     }
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        
+
         DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be cleared!");
         dlg.setVisible(true);
-        
+
         if (dlg.getAction() != DialogActions.CONFIRM) {
             return;
         }
-        
 
+        txtTitle.setText("");
+        txtValidity.setText("");
+        txtPrice.setText("");
+        cboStatus.setSelectedIndex(0);
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnAllowEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllowEditActionPerformed
-        
+
         DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be enabled!");
         dlg.setVisible(true);
-        
+
         if (dlg.getAction() != DialogActions.CONFIRM) {
             return;
         }
 
+        btnReset.setEnabled(true);
+        btnSubmit.setEnabled(true);
+
+        txtTitle.setEnabled(true);
+        txtValidity.setEnabled(true);
+        txtPrice.setEnabled(true);
+        cboStatus.setEnabled(true);
     }//GEN-LAST:event_btnAllowEditActionPerformed
 
 

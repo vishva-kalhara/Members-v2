@@ -60,6 +60,9 @@ public class PnlEmployees extends javax.swing.JPanel {
 
     private void loadTableData(String contraints) {
 
+        btnSave.setEnabled(false);
+        btnPrint.setEnabled(false);
+
         ResultSet rs = AppConnection.fetch("SELECT * FROM employees "
                 + "INNER JOIN gender ON employees.gender_id = gender.id "
                 //                + "INNER JOIN user_roles ON employees.user_roles_id = user_roles.id "
@@ -92,12 +95,12 @@ public class PnlEmployees extends javax.swing.JPanel {
 
         } else {
             scrollPane.setViewportView(tblEmployees);
+            btnSave.setEnabled(true);
+            btnPrint.setEnabled(true);
         }
         scrollPane.repaint();
         scrollPane.revalidate();
 
-        btnPrint.setEnabled(true);
-        btnSave.setEnabled(false);
     }
 
     private void setDesign() {

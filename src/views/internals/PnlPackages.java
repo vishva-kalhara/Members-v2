@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
+import models.PaymentPlan;
 
 /**
  *
@@ -320,7 +321,17 @@ public class PnlPackages extends javax.swing.JPanel {
         if (evt.getClickCount() != 2) {
             return;
         }
+        
+        int row = tblPacakges.getSelectedRow();
 
+        PaymentPlan plan = new PaymentPlan();
+        plan.setId(String.valueOf(tblPacakges.getValueAt(row, 0)));
+        plan.setTitle(String.valueOf(tblPacakges.getValueAt(row, 1)));
+        plan.setValidity(Integer.parseInt(String.valueOf(tblPacakges.getValueAt(row, 2))));
+        plan.setPrice(Double.parseDouble(String.valueOf(tblPacakges.getValueAt(row, 3))));
+        plan.setStatusValue(String.valueOf(tblPacakges.getValueAt(row, 4)));
+        
+        new DlgPackage(AppLayout.appLayout, true, plan).setVisible(true);
     }//GEN-LAST:event_tblPacakgesMouseClicked
 
 
