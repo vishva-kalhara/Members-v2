@@ -13,6 +13,7 @@ import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import models.Application;
 import views.dialogs.DlgError;
 
 /**
@@ -20,13 +21,18 @@ import views.dialogs.DlgError;
  * @author vishv
  */
 public class FmLogin extends javax.swing.JFrame {
+    
+    private Application appData;
 
     /**
      * Creates new form FmLogin
+     * @param appData
      */
-    public FmLogin() {
+    public FmLogin(Application appData) {
         initComponents();
         setDesign();
+        
+        this.appData = appData;
     }
     
     private void setDesign() {
@@ -193,7 +199,7 @@ public class FmLogin extends javax.swing.JFrame {
                     employeeData.put("lName", rs.getString("last_name"));
                     employeeData.put("role_id", rs.getString("user_roles_id"));
                     
-                    new AppLayout(employeeData).setVisible(true);
+                    new AppLayout(this.appData, employeeData).setVisible(true);
                     this.dispose();
                 }
             } else {

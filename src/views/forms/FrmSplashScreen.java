@@ -5,22 +5,69 @@
 package views.forms;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import enums.DialogTypes;
+import utils.AppConnection;
+import java.sql.ResultSet;
+import models.Application;
+import views.dialogs.DlgConfig;
+import views.dialogs.DlgError;
+import views.layouts.AppLayout;
+
 /**
  *
  * @author vishv
  */
 public class FrmSplashScreen extends javax.swing.JFrame {
 
+    private Application appData;
+
     /**
      * Creates new form FrmSplashScreen
      */
     public FrmSplashScreen() {
         initComponents();
-        
-        timeWait();
-        
+
+        configure();
+
     }
-    
+
+    private void configure() {
+
+        try {
+            ResultSet rs = AppConnection.fetch("SELECT COUNT(*) AS count FROM `app_data` INNER JOIN available_currencies ON `app_data`.`available_currencies_id` = `available_currencies`.`id`");
+            rs.next();
+            if (rs.getInt("count") > 1) {
+                throw new Exception("Please contact the vendor!");
+            } else if (rs.getInt("count") == 1) {
+
+                Application data = new Application();
+                appData.setShopName(rs.getString("shop_name"));
+                appData.setShopMobile(rs.getString("shop_mobile"));
+                appData.setShopAddress(rs.getString("shop_address"));
+                appData.setCurrencyId(rs.getInt("available_currencies.id"));
+                appData.setCurrencyValue(rs.getString("available_currencies.value"));
+
+                this.appData = data;
+
+                timeWait();
+            } else {
+
+                DlgConfig dlg = new DlgConfig(this, true);
+                dlg.setVisible(true);
+
+                if (dlg.isCompleted()) {
+                    new DlgError(this, true,  "Please re-open the Application.", "Success", DialogTypes.SUCCESS).setVisible(true);
+                }
+
+                System.exit(0);
+
+            }
+
+        } catch (Exception e) {
+            new DlgError(AppLayout.appLayout, true, "Unhandled Error", e.getMessage()).setVisible(true);
+        }
+    }
+
     private void timeWait() {
 
         Thread thread = new Thread(new Runnable() {
@@ -29,7 +76,7 @@ public class FrmSplashScreen extends javax.swing.JFrame {
                 try {
                     Thread.sleep(10);
                     dispose();
-                    new FmLogin().setVisible(true);
+                    new FmLogin(appData).setVisible(true);
                 } catch (InterruptedException ex) {
 
                 }
@@ -37,6 +84,7 @@ public class FrmSplashScreen extends javax.swing.JFrame {
         });
         thread.start();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -53,7 +101,7 @@ public class FrmSplashScreen extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/img/splash_img_new.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/img/splash_img.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

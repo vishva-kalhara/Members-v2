@@ -10,9 +10,11 @@ import java.awt.Color;
 import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import models.Application;
 import raven.toast.Notifications;
 import views.internals.PnlDashboard;
 import views.internals.PnlEmployees;
+import views.internals.PnlMembers;
 import views.internals.PnlNoAccess;
 import views.internals.PnlPackages;
 
@@ -21,26 +23,31 @@ import views.internals.PnlPackages;
  * @author vishv
  */
 public class AppLayout extends javax.swing.JFrame {
-
-    public static AppLayout appLayout;
-    public JButton selectedButton;
     
+    public static Application appData;
+    public static AppLayout appLayout;
+    
+    public JButton selectedButton;
+
     HashMap<String, String> employeeData = new HashMap();
 
     /**
      * Creates new form AppLayout
+     *
+     * @param appData
      * @param employeeData
      */
-    public AppLayout(HashMap<String, String> employeeData) {
+    public AppLayout(Application appData, HashMap<String, String> employeeData) {
         initComponents();
 
         appLayout = this;
+        AppLayout.appData = appData;
         this.selectedButton = btnDashboard;
-        
+
         this.employeeData = employeeData;
 
         setDesign();
-        
+
         Notifications.getInstance().setJFrame(this);
         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Hello " + employeeData.get("fName"));
     }
@@ -75,25 +82,33 @@ public class AppLayout extends javax.swing.JFrame {
         selectedButton.setBackground(new Color(249, 249, 249));
         selectedButton.setForeground(new Color(38, 38, 38));
 
-        newButton.setBackground(new Color(77,119,255));
+        newButton.setBackground(new Color(77, 119, 255));
         newButton.setForeground(new Color(255, 255, 255));
 
         selectedButton = newButton;
         selectedButton.grabFocus();
     }
 
+    private boolean checkAccess() {
+
+        return (Integer.parseInt(employeeData.get("role_id")) > 3);
+    }
+
     public void changeForm(LayoutPages form) {
-        
+
 //        if(Integer.parseInt(employeeData.get("role_id")) == 1){
 //            
 //            showForm(new PnlNoAccess());
 //            return;
 //        }
-        
         switch (form) {
             case DASHBOARD:
                 changeSideBarButtons(btnDashboard);
                 showForm(new PnlDashboard());
+                return;
+            case MEMBERS:
+                changeSideBarButtons(btnMembers);
+                showForm(new PnlMembers());
                 break;
             case PACKAGES:
                 changeSideBarButtons(btnPackages);
@@ -104,6 +119,10 @@ public class AppLayout extends javax.swing.JFrame {
                 showForm(new PnlEmployees());
                 break;
 
+        }
+
+        if (checkAccess()) {
+            showForm(new PnlNoAccess());
         }
     }
 
@@ -165,6 +184,11 @@ public class AppLayout extends javax.swing.JFrame {
         btnMembers.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnMembers.setText("Members");
         btnMembers.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        btnMembers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMembersActionPerformed(evt);
+            }
+        });
 
         btnPackages.setBackground(new java.awt.Color(249, 249, 249));
         btnPackages.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
@@ -309,6 +333,10 @@ public class AppLayout extends javax.swing.JFrame {
     private void btnPackagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPackagesActionPerformed
         changeForm(LayoutPages.PACKAGES);
     }//GEN-LAST:event_btnPackagesActionPerformed
+
+    private void btnMembersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMembersActionPerformed
+        changeForm(LayoutPages.MEMBERS);
+    }//GEN-LAST:event_btnMembersActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDashboard;

@@ -19,7 +19,6 @@ import utils.DBData;
 import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.SwingUtilities;
 import raven.toast.Notifications;
 
 /**

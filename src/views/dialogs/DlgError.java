@@ -5,6 +5,7 @@
 package views.dialogs;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import enums.DialogTypes;
 import java.awt.Color;
 
 /**
@@ -12,6 +13,8 @@ import java.awt.Color;
  * @author vishv
  */
 public class DlgError extends javax.swing.JDialog {
+    
+    private DialogTypes type = DialogTypes.ERROR;
 
     /**
      * Creates new form DlgError
@@ -26,6 +29,26 @@ public class DlgError extends javax.swing.JDialog {
 
         setDesign();
 
+        lblMessage.setText("<HTML>" + msg + "</HTML>");
+    }
+
+    /**
+     * Creates new form DlgError
+     *
+     * @param parent
+     * @param modal
+     * @param msg
+     * @param title
+     * @param type
+     */
+    public DlgError(java.awt.Frame parent, boolean modal, String msg, String title, DialogTypes type) {
+        super(parent, modal);
+        initComponents();
+
+        this.type = type;
+        setDesign();
+
+        lblTitle.setText(title);
         lblMessage.setText("<HTML>" + msg + "</HTML>");
     }
 
@@ -49,7 +72,12 @@ public class DlgError extends javax.swing.JDialog {
     }
 
     private void setDesign() {
-        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(255, 66, 66));
+        
+        Color ribbonColor = new Color(255, 66, 66);
+        if(this.type == DialogTypes.SUCCESS ){
+            ribbonColor = new Color(0,178,0);
+        }
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, ribbonColor);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);

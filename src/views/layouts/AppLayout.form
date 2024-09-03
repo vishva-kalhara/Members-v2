@@ -154,6 +154,9 @@
                     <Property name="text" type="java.lang.String" value="Members"/>
                     <Property name="horizontalAlignment" type="int" value="10"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMembersActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnPackages">
                   <Properties>
