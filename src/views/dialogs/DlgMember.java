@@ -24,12 +24,12 @@ import utils.AppConnection;
  * @author vishv
  */
 public class DlgMember extends javax.swing.JDialog {
-
+    
     HashMap<String, Integer> genderMap;
     HashMap<String, Integer> statusMap;
     
     private String memberId;
-
+    
     private DialogTypes type;
 
     /**
@@ -41,15 +41,15 @@ public class DlgMember extends javax.swing.JDialog {
     public DlgMember(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
+        
         btnAllowEdit.setEnabled(false);
         this.type = DialogTypes.CREATE;
-
+        
         genderMap = DBData.getSubTableData("gender", cboGender);
         statusMap = DBData.getSubTableData("statuses", cboStatus);
-
+        
         setDesign();
-
+        
     }
 
     /**
@@ -62,11 +62,11 @@ public class DlgMember extends javax.swing.JDialog {
     public DlgMember(java.awt.Frame parent, boolean modal, Member member) {
         super(parent, modal);
         initComponents();
-
+        
         this.type = DialogTypes.UPDATE;
-
+        
         statusMap = DBData.getSubTableData("statuses", cboStatus);
-
+        
         setDesign();
         
         this.memberId = member.getId();
@@ -81,7 +81,7 @@ public class DlgMember extends javax.swing.JDialog {
         cboStatus.setSelectedItem(member.getStatusValue());
         
         loadData();
-
+        
         cboGender.setEnabled(false);
         txtFName.setEnabled(false);
         txtLName.setEnabled(false);
@@ -95,43 +95,42 @@ public class DlgMember extends javax.swing.JDialog {
         btnReset.setEnabled(false);
         
         btnAllowEdit.grabFocus();
-
+        
     }
     
-    private void loadData(){
+    private void loadData() {
         try {
-            ResultSet rs = AppConnection.fetch("SELECT `nic`, `mobile2`, `email` FROM `customers` WHERE `id` = '"+ this.memberId +"'");
+            ResultSet rs = AppConnection.fetch("SELECT `nic`, `mobile2`, `email` FROM `customers` WHERE `id` = '" + this.memberId + "'");
             rs.next();
             
-            if(!rs.getString("nic").equals("")){
+            if (!rs.getString("nic").equals("")) {
                 txtNIC.setText(rs.getString("nic"));
             }
-            if(!rs.getString("mobile2").equals("")){
+            if (!rs.getString("mobile2").equals("")) {
                 txtMobile2.setText(rs.getString("mobile2"));
             }
-            if(!rs.getString("email").equals("")){
+            if (!rs.getString("email").equals("")) {
                 txtEmail.setText(rs.getString("email"));
             }
-            
             
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
     private void setDesign() {
-
+        
         cboGender.grabFocus();
-
+        
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(255, 255, 255));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-
+        
         btnClose.putClientProperty("JButton.buttonType", "borderless");
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
-
+        
         txtFName.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtLName.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtNIC.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
@@ -439,17 +438,20 @@ public class DlgMember extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-
+        
         try {
-
+            
             Member member = createMemberFromForm();
-
+            
             if (type == DialogTypes.CREATE) {
-
+                
                 new MemberController().createMember(member);
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Member created success!");
             } else {
-
+                
+                member.setId(this.memberId);
+                member.setStatusId(statusMap.get(String.valueOf(cboStatus.getSelectedItem())));
+                new MemberController().updateMember(member);
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Member details updated success!");
             }
             
@@ -465,25 +467,25 @@ public class DlgMember extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-
+        
         DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be cleared!");
         dlg.setVisible(true);
-
+        
         if (dlg.getAction() != DialogActions.CONFIRM) {
             return;
         }
-
+        
         if (cboGender.isEnabled()) {
             cboGender.setSelectedIndex(0);
         }
-
+        
         txtFName.setText("");
         txtLName.setText("");
-
+        
         if (txtNIC.isEnabled()) {
             txtNIC.setText("");
         }
-
+        
         txtMobile1.setText("");
         txtMobile2.setText("");
         txtEmail.setText("");
@@ -491,14 +493,14 @@ public class DlgMember extends javax.swing.JDialog {
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnAllowEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllowEditActionPerformed
-
+        
         DlgConfirm dlg = new DlgConfirm(AppLayout.appLayout, true, "Once you confirm, the fields will be enabled!");
         dlg.setVisible(true);
-
+        
         if (dlg.getAction() != DialogActions.CONFIRM) {
             return;
         }
-
+        
         btnSubmit.setEnabled(true);
         btnReset.setEnabled(true);
         txtFName.setEnabled(true);
@@ -508,9 +510,10 @@ public class DlgMember extends javax.swing.JDialog {
         txtEmail.setEnabled(true);
         cboStatus.setEnabled(true);
         
-        if(txtNIC.getText().isBlank())
+        if (txtNIC.getText().isBlank()) {
             txtNIC.setEnabled(true);
-
+        }
+        
         btnAllowEdit.setEnabled(false);
         txtFName.grabFocus();
     }//GEN-LAST:event_btnAllowEditActionPerformed
@@ -547,33 +550,33 @@ public class DlgMember extends javax.swing.JDialog {
 
     private Member createMemberFromForm() throws SparkException {
         Member member = new Member();
-
+        
         if (cboGender.getSelectedIndex() == 0) {
             throw new SparkException("Select a gender.");
         }
         member.setGenderId(genderMap.get(String.valueOf(cboGender.getSelectedItem())));
-
+        
         member.setFirstName(new Spark("First Name", txtFName.getText())
                 .required()
                 .endString());
-
+        
         member.setLastName(new Spark("Last Name", txtLName.getText())
                 .required()
                 .endString());
-
+        
         if (!txtNIC.getText().isBlank()) {
             member.setNic(new Spark("NIC", txtNIC.getText())
                     .minLength(10)
                     .endString());
         }
-
+        
         member.setMobile1(new Spark("Mobile-1", txtMobile1.getText())
                 .required()
                 .minLength(10)
                 .maxLength(10)
                 .regex("^07[01235678]{1}[0-9]{7}$")
                 .endString());
-
+        
         if (!txtMobile2.getText().isBlank()) {
             member.setMobile2(new Spark("Mobile-2", txtMobile2.getText())
                     .required()
@@ -581,20 +584,21 @@ public class DlgMember extends javax.swing.JDialog {
                     .maxLength(10)
                     .regex("^07[01235678]{1}[0-9]{7}$")
                     .endString());
-
+            
         }
-
+        
         if (!txtEmail.getText().isBlank()) {
             member.setEmail(new Spark("Email", txtEmail.getText())
                     .email()
                     .endString());
         }
         
-        if(cboStatus.getSelectedIndex() == 0)
+        if (cboStatus.getSelectedIndex() == 0) {
             throw new SparkException("Select a status.");
+        }
         member.setStatusId(statusMap.get(String.valueOf(cboStatus.getSelectedItem())));
-
+        
         return member;
     }
-
+    
 }

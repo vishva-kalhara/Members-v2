@@ -48,4 +48,14 @@ public class MemberController {
                 + "'" + member.getGenderId() + "'"
                 + ")");
     }
+
+    public void updateMember(Member member) throws SQLException {
+
+        AppConnection.mutate("UPDATE `customers` SET "
+                + "`first_name` = '" + member.getFirstName() + "', "
+                + "`last_name` = '" + member.getLastName() + "', "
+                + "`mobile1` = '" + member.getMobile1() + "', "
+                + "`mobile2` = '" + member.getMobile2() + "', "
+                + "`email` = '" + member.getEmail() + "', `nic` = '"+ member.getNic() +"', `statuses_id` = '"+  "'");
+    }
 }

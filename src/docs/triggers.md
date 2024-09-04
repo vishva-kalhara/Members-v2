@@ -8,7 +8,7 @@ BEFORE INSERT ON `members_v2`.`employees`
 FOR EACH ROW
 BEGIN
 
-	DECLARE newId INT;
+    DECLARE newId INT;
     DECLARE nicCount INT;
     DECLARE usernameCount INT;
     
@@ -49,7 +49,7 @@ BEFORE INSERT ON `members_v2`.packages
 FOR EACH ROW
 BEGIN
 
-	DECLARE totalCount INT;
+    DECLARE totalCount INT;
     DECLARE titleCount INT;
     
     SELECT COUNT(*) INTO titleCount FROM `members_v2`.packages WHERE title = NEW.title;
@@ -78,7 +78,7 @@ BEFORE UPDATE ON `members_v2`.`packages`
 FOR EACH ROW
 BEGIN
 
-	DECLARE total INT;
+    DECLARE total INT;
     
     IF NEW.title != OLD.title THEN
     
@@ -104,7 +104,7 @@ BEFORE INSERT ON `members_v2`.`app_data`
 FOR EACH ROW
 BEGIN
 
-	DECLARE count INT;
+    DECLARE count INT;
     
     SELECT COUNT(*) INTO count FROM `members_v2`.`app_data`;
     
@@ -128,7 +128,17 @@ BEFORE INSERT ON `customers`
 FOR EACH ROW
 BEGIN
 
-	DECLARE total INT;
+    DECLARE total INT;
+    DECLARE nicTotal INT;
+    
+    IF NEW.nic != '' THEN
+		SELECT COUNT(*) INTO nicTotal FROM `members_v2`.`customers` WHERE `nic` = NEW.nic;
+        
+        IF nicTotal > 0 THEN
+			SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'There is already a member with the same NIC.';
+        END IF;
+	END IF;
     
     SELECT COUNT(*) INTO total FROM `members_v2`.`customers`;
     
