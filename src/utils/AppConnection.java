@@ -24,7 +24,7 @@ public class AppConnection {
         if (connection == null) {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/members", "root", "Wishva!23");
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/members_v2", "root", "Wishva!23");
 
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();

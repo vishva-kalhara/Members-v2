@@ -74,7 +74,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         this.type = DialogTypes.UPDATE;
         this.empId = employee.getId();
 
-        lazyLoadFields(employee.getId());
+        
 
         this.gendersMap = DBData.getSubTableData("gender", cboGender);
 
@@ -97,6 +97,8 @@ public class DlgEmployee extends javax.swing.JDialog {
 
         btnSubmit.setEnabled(false);
         btnReset.setEnabled(false);
+        
+        lazyLoadFields(employee.getId());
     }
 
     private void lazyLoadFields(String empId) {

@@ -28,7 +28,7 @@ public class MemberController {
             member.setNic("");
         }
 
-        return AppConnection.mutate("INSERT INTO `members` ("
+        return AppConnection.mutate("INSERT INTO `customers` ("
                 + "`first_name`, "
                 + "`last_name`, "
                 + "`mobile1`, "

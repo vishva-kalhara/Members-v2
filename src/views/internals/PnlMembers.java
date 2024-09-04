@@ -6,17 +6,25 @@ package views.internals;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.Insets;
+import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
+import utils.DBData;
 import views.dialogs.DlgMember;
 import views.layouts.AppLayout;
+import java.sql.ResultSet;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+import utils.AppConnection;
 
 /**
  *
  * @author vishv
  */
 public class PnlMembers extends javax.swing.JPanel {
+
+    HashMap<String, Integer> statusMap;
 
     /**
      * Creates new form PnlMembers
@@ -25,23 +33,9 @@ public class PnlMembers extends javax.swing.JPanel {
         initComponents();
 
         setDesign();
-    }
+        scrollPane.setViewportView(new PnlFetching());
 
-    private void setDesign() {
-        txtSearch.putClientProperty("JTextField.padding", new Insets(7, 8, 7, 10));
-        txtSearch.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search by name");
-        txtSearch.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
-
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        tblEmployees.setDefaultRenderer(Object.class, centerRenderer);
-
-        javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblEmployees.getParent().getParent();
-        scroll.setBorder(BorderFactory.createEmptyBorder());
-    }
-
-    private void filterTable() {
-
+        fetchData();
     }
 
     /**
@@ -62,7 +56,7 @@ public class PnlMembers extends javax.swing.JPanel {
         btnClearFilters = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
-        tblEmployees = new javax.swing.JTable();
+        tblMembers = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1160, 900));
@@ -143,7 +137,7 @@ public class PnlMembers extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        tblEmployees.setModel(new javax.swing.table.DefaultTableModel(
+        tblMembers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -162,13 +156,13 @@ public class PnlMembers extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblEmployees.getTableHeader().setReorderingAllowed(false);
-        tblEmployees.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblMembers.getTableHeader().setReorderingAllowed(false);
+        tblMembers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblEmployeesMouseClicked(evt);
+                tblMembersMouseClicked(evt);
             }
         });
-        scrollPane.setViewportView(tblEmployees);
+        scrollPane.setViewportView(tblMembers);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -210,10 +204,10 @@ public class PnlMembers extends javax.swing.JPanel {
         filterTable();
     }//GEN-LAST:event_btnClearFiltersActionPerformed
 
-    private void tblEmployeesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmployeesMouseClicked
+    private void tblMembersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMembersMouseClicked
 
 
-    }//GEN-LAST:event_tblEmployeesMouseClicked
+    }//GEN-LAST:event_tblMembersMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -225,7 +219,99 @@ public class PnlMembers extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane scrollPane;
-    private javax.swing.JTable tblEmployees;
+    private javax.swing.JTable tblMembers;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    private void setDesign() {
+
+        txtSearch.putClientProperty("JTextField.padding", new Insets(7, 8, 7, 10));
+        txtSearch.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search by name");
+        txtSearch.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tblMembers.setDefaultRenderer(Object.class, centerRenderer);
+
+        javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblMembers.getParent().getParent();
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+    }
+
+    private void filterTable() {
+
+        boolean isSearchPresent = !txtSearch.getText().isBlank();
+        boolean isStatusSelected = cboStatus.getSelectedIndex() != 0;
+
+        if (!isSearchPresent && !isStatusSelected) {
+            loadTable("");
+            return;
+        }
+
+        StringBuilder constraints = new StringBuilder(" WHERE ");
+        if (isSearchPresent) {
+            constraints.append(" first_name LIKE '")
+                    .append(txtSearch.getText())
+                    .append("%' OR last_name LIKE '")
+                    .append(txtSearch.getText())
+                    .append("%'")
+                    .append("");
+        }
+        
+        if(isStatusSelected){
+            if(isSearchPresent){
+                constraints.append(" AND ");
+            }
+            
+            constraints.append(" statuses_id = '")
+                    .append(statusMap.get(String.valueOf(cboStatus.getSelectedItem())))
+                    .append("'");
+        }
+        
+        loadTable(String.valueOf(constraints));
+    }
+
+    private void loadTable(String constraints) {
+        btnPrint.setEnabled(false);
+        btnSave.setEnabled(false);
+
+        try {
+            DefaultTableModel model = (DefaultTableModel) tblMembers.getModel();
+            model.setRowCount(0);
+
+            ResultSet rs = AppConnection.fetch("SELECT * FROM customers INNER JOIN gender ON customers.gender_id = gender.id INNER JOIN statuses ON customers.statuses_id = statuses.id " + constraints);
+
+            while (rs.next()) {
+                Vector<String> data = new Vector();
+                data.add(rs.getString("id"));
+                data.add(rs.getString("first_name"));
+                data.add(rs.getString("last_name"));
+                data.add(rs.getString("gender.value"));
+                data.add(rs.getString("mobile1"));
+                data.add(rs.getString("statuses.value"));
+
+                model.addRow(data);
+            }
+
+            if (model.getRowCount() == 0) {
+                scrollPane.setViewportView(new PnlNoData());
+            } else {
+                scrollPane.setViewportView(this.tblMembers);
+                btnPrint.setEnabled(true);
+                btnSave.setEnabled(true);
+            }
+        } catch (Exception e) {
+        }
+
+    }
+
+    private void fetchData() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                statusMap = DBData.getSubTableData("statuses", "Members", cboStatus);
+                loadTable("");
+            }
+        }).start();
+    }
 }
