@@ -16,6 +16,8 @@ import raven.toast.Notifications;
 import utils.DBData;
 import views.layouts.AppLayout;
 import enums.LayoutPages;
+import java.sql.ResultSet;
+import utils.AppConnection;
 
 /**
  *
@@ -25,6 +27,8 @@ public class DlgMember extends javax.swing.JDialog {
 
     HashMap<String, Integer> genderMap;
     HashMap<String, Integer> statusMap;
+    
+    private String memberId;
 
     private DialogTypes type;
 
@@ -46,6 +50,73 @@ public class DlgMember extends javax.swing.JDialog {
 
         setDesign();
 
+    }
+
+    /**
+     * Creates new form DlgMember
+     *
+     * @param parent
+     * @param modal
+     * @param member
+     */
+    public DlgMember(java.awt.Frame parent, boolean modal, Member member) {
+        super(parent, modal);
+        initComponents();
+
+        this.type = DialogTypes.UPDATE;
+
+        statusMap = DBData.getSubTableData("statuses", cboStatus);
+
+        setDesign();
+        
+        this.memberId = member.getId();
+        
+        lblHeading.setText("Member Details");
+        btnSubmit.setText("Save Changes");
+        
+        cboGender.setSelectedItem(member.getGenderValue());
+        txtFName.setText(member.getFirstName());
+        txtLName.setText(member.getLastName());
+        txtMobile1.setText(member.getMobile1());
+        cboStatus.setSelectedItem(member.getStatusValue());
+        
+        loadData();
+
+        cboGender.setEnabled(false);
+        txtFName.setEnabled(false);
+        txtLName.setEnabled(false);
+        txtMobile1.setEnabled(false);
+        txtMobile2.setEnabled(false);
+        txtNIC.setEnabled(false);
+        txtEmail.setEnabled(false);
+        cboStatus.setEnabled(false);
+        
+        btnSubmit.setEnabled(false);
+        btnReset.setEnabled(false);
+        
+        btnAllowEdit.grabFocus();
+
+    }
+    
+    private void loadData(){
+        try {
+            ResultSet rs = AppConnection.fetch("SELECT `nic`, `mobile2`, `email` FROM `customers` WHERE `id` = '"+ this.memberId +"'");
+            rs.next();
+            
+            if(!rs.getString("nic").equals("")){
+                txtNIC.setText(rs.getString("nic"));
+            }
+            if(!rs.getString("mobile2").equals("")){
+                txtMobile2.setText(rs.getString("mobile2"));
+            }
+            if(!rs.getString("email").equals("")){
+                txtEmail.setText(rs.getString("email"));
+            }
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setDesign() {
@@ -436,7 +507,12 @@ public class DlgMember extends javax.swing.JDialog {
         txtMobile2.setEnabled(true);
         txtEmail.setEnabled(true);
         cboStatus.setEnabled(true);
+        
+        if(txtNIC.getText().isBlank())
+            txtNIC.setEnabled(true);
 
+        btnAllowEdit.setEnabled(false);
+        txtFName.grabFocus();
     }//GEN-LAST:event_btnAllowEditActionPerformed
 
 

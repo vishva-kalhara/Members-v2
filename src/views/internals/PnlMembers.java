@@ -16,6 +16,7 @@ import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
+import models.Member;
 import utils.AppConnection;
 
 /**
@@ -206,7 +207,22 @@ public class PnlMembers extends javax.swing.JPanel {
 
     private void tblMembersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMembersMouseClicked
 
-
+        if(evt.getClickCount() != 2)
+            return;
+        
+        int row = tblMembers.getSelectedRow();
+        
+        Member member = new Member();
+        member.setId(String.valueOf(tblMembers.getValueAt(row, 0)));
+        member.setFirstName(String.valueOf(tblMembers.getValueAt(row, 1)));
+        member.setLastName(String.valueOf(tblMembers.getValueAt(row, 2)));
+        member.setGenderValue(String.valueOf(tblMembers.getValueAt(row, 3)));
+        member.setMobile1(String.valueOf(tblMembers.getValueAt(row, 4)));
+        member.setStatusValue(String.valueOf(tblMembers.getValueAt(row, 5)));
+        
+        new DlgMember(AppLayout.appLayout, true, member).setVisible(true);
+        
+        tblMembers.clearSelection();
     }//GEN-LAST:event_tblMembersMouseClicked
 
 
