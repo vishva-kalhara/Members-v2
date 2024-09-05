@@ -14,7 +14,7 @@ import utils.AppConnection;
  */
 public class MemberController {
 
-    public boolean createMember(Member member) throws SQLException {
+    private void sanitizeData(Member member) {
 
         if (member.getMobile2() == null) {
             member.setMobile2("");
@@ -27,6 +27,11 @@ public class MemberController {
         if (member.getNic() == null) {
             member.setNic("");
         }
+    }
+
+    public boolean createMember(Member member) throws SQLException {
+
+        sanitizeData(member);
 
         return AppConnection.mutate("INSERT INTO `customers` ("
                 + "`first_name`, "
@@ -51,11 +56,16 @@ public class MemberController {
 
     public void updateMember(Member member) throws SQLException {
 
+        sanitizeData(member);
+
         AppConnection.mutate("UPDATE `customers` SET "
                 + "`first_name` = '" + member.getFirstName() + "', "
                 + "`last_name` = '" + member.getLastName() + "', "
                 + "`mobile1` = '" + member.getMobile1() + "', "
                 + "`mobile2` = '" + member.getMobile2() + "', "
-                + "`email` = '" + member.getEmail() + "', `nic` = '"+ member.getNic() +"', `statuses_id` = '"+  "'");
+                + "`email` = '" + member.getEmail() + "', "
+                + "`nic` = '" + member.getNic() + "', "
+                + "`statuses_id` = '" + member.getStatusId() + "' "
+                + "WHERE `id` = '" + member.getId() + "'");
     }
 }

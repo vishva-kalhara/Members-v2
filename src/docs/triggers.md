@@ -150,3 +150,43 @@ END$$
 
 DELIMITER ;
 ```
+
+```
+DROP TRIGGER IF EXISTS `before_update_customer`;
+
+DELIMITER $$
+
+CREATE TRIGGER `before_update_customer`
+BEFORE UPDATE ON `members_v2`.`customers`
+FOR EACH ROW
+BEGIN
+
+	DECLARE nicTotal INT;
+    DECLARE emailTotal INT;
+    
+    IF NEW.nic != OLD.nic THEN
+    
+		SELECT COUNT(*) INTO nicTotal FROM `customers` WHERE `nic` = NEW.nic;
+        
+        IF nicTotal > 0 THEN
+            
+			SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'There is a customer with the same NIC.';
+		END IF;
+	END IF;
+    
+    IF NEW.email != OLD.email THEN
+    
+		SELECT COUNT(*) INTO emailTotal FROM `customers` WHERE `email` = NEW.email;
+        
+        IF emailTotal > 0 THEN
+			SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'There is a customer with the same Email.';
+		END IF;
+	END IF;
+
+END$$
+
+DELIMITER ;
+
+```
