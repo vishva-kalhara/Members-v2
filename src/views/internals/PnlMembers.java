@@ -294,7 +294,7 @@ public class PnlMembers extends javax.swing.JPanel {
             DefaultTableModel model = (DefaultTableModel) tblMembers.getModel();
             model.setRowCount(0);
 
-            ResultSet rs = AppConnection.fetch("SELECT * FROM customers INNER JOIN gender ON customers.gender_id = gender.id INNER JOIN statuses ON customers.statuses_id = statuses.id " + constraints);
+            ResultSet rs = AppConnection.fetch("SELECT * FROM customers INNER JOIN gender ON customers.gender_id = gender.id INNER JOIN statuses ON customers.statuses_id = statuses.id " + constraints + " ORDER BY `created_at` ASC ");
 
             while (rs.next()) {
                 Vector<String> data = new Vector();

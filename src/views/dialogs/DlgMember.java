@@ -19,6 +19,11 @@ import enums.LayoutPages;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import utils.AppConnection;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -44,6 +49,7 @@ public class DlgMember extends javax.swing.JDialog {
         initComponents();
 
         btnAllowEdit.setEnabled(false);
+        btnCard.setEnabled(false);
         this.type = DialogTypes.CREATE;
 
         genderMap = DBData.getSubTableData("gender", cboGender);
@@ -95,6 +101,7 @@ public class DlgMember extends javax.swing.JDialog {
 
         btnSubmit.setEnabled(false);
         btnReset.setEnabled(false);
+        btnCard.setEnabled(true);
 
         btnAllowEdit.grabFocus();
 
@@ -176,6 +183,7 @@ public class DlgMember extends javax.swing.JDialog {
         btnSubmit = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnAllowEdit = new javax.swing.JButton();
+        btnCard = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(706, 556));
@@ -392,6 +400,14 @@ public class DlgMember extends javax.swing.JDialog {
             }
         });
 
+        btnCard.setBackground(new java.awt.Color(250, 250, 250));
+        btnCard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/id-card.png"))); // NOI18N
+        btnCard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCardActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -401,7 +417,9 @@ public class DlgMember extends javax.swing.JDialog {
                 .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAllowEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 328, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCard, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 268, Short.MAX_VALUE)
                 .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43))
         );
@@ -411,8 +429,9 @@ public class DlgMember extends javax.swing.JDialog {
                 .addContainerGap(44, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btnReset, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
-                    .addComponent(btnSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAllowEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnAllowEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(32, 32, 32))
         );
 
@@ -524,12 +543,48 @@ public class DlgMember extends javax.swing.JDialog {
         }
 
         btnAllowEdit.setEnabled(false);
+
         txtFName.grabFocus();
     }//GEN-LAST:event_btnAllowEditActionPerformed
+
+    private void btnCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCardActionPerformed
+
+//        HashMap<String, Object> params = new HashMap();
+////        params.put("PARAM_NAME", txtFName.getName() + " " + txtLName.getName());
+//        params.put("PARAM_NAME", "Wishva Kalhara");
+//        params.put("PARAM_CODE", "cus-001");
+////        params.put("PARAM_BAR_CODE", "cus-001");
+//
+//        this.dispose();
+//        try {
+//
+//            JREmptyDataSource source = new JREmptyDataSource();
+//
+//            JasperPrint report = JasperFillManager.fillReport("src/reports/members_card_front_2.jasper", params, source);
+//            JasperViewer.viewReport(report, false);
+//        } catch (JRException e) {
+//            e.printStackTrace();
+//        }
+
+//        HashMap<String, Object> params = new HashMap<>();
+//        params.put("PARAM_NAME", "Wishva Kalhara Chandrasekara");
+//        params.put("code", "456789");
+//
+//        JREmptyDataSource dataSource = new JREmptyDataSource();
+//
+//        try {
+//            JasperPrint report = JasperFillManager.fillReport("src/reports/proect_13-3.jasper", params, dataSource);
+//            JasperViewer.viewReport(report, false);
+////            JasperPrintManager.printReport(report, false);
+//        } catch (JRException e) {
+//            e.printStackTrace();
+//        }
+    }//GEN-LAST:event_btnCardActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAllowEdit;
+    private javax.swing.JButton btnCard;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSubmit;
