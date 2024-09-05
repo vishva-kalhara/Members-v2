@@ -17,6 +17,7 @@ import views.internals.PnlEmployees;
 import views.internals.PnlMembers;
 import views.internals.PnlNoAccess;
 import views.internals.PnlPackages;
+import views.internals.PnlSubscriptions;
 
 /**
  *
@@ -106,6 +107,10 @@ public class AppLayout extends javax.swing.JFrame {
                 changeSideBarButtons(btnDashboard);
                 showForm(new PnlDashboard());
                 return;
+            case SUBSCRIPTIONS:
+                changeSideBarButtons(btnSubscriptions);
+                showForm(new PnlSubscriptions());
+                break;
             case MEMBERS:
                 changeSideBarButtons(btnMembers);
                 showForm(new PnlMembers());
@@ -179,6 +184,11 @@ public class AppLayout extends javax.swing.JFrame {
         btnSubscriptions.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnSubscriptions.setText("Subscriptions");
         btnSubscriptions.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        btnSubscriptions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubscriptionsActionPerformed(evt);
+            }
+        });
 
         btnMembers.setBackground(new java.awt.Color(249, 249, 249));
         btnMembers.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
@@ -337,6 +347,10 @@ public class AppLayout extends javax.swing.JFrame {
     private void btnMembersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMembersActionPerformed
         changeForm(LayoutPages.MEMBERS);
     }//GEN-LAST:event_btnMembersActionPerformed
+
+    private void btnSubscriptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubscriptionsActionPerformed
+        changeForm(LayoutPages.SUBSCRIPTIONS);
+    }//GEN-LAST:event_btnSubscriptionsActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDashboard;

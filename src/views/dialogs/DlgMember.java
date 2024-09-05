@@ -112,13 +112,13 @@ public class DlgMember extends javax.swing.JDialog {
             ResultSet rs = AppConnection.fetch("SELECT `nic`, `mobile2`, `email` FROM `customers` WHERE `id` = '" + this.memberId + "'");
             rs.next();
 
-            if (!rs.getString("nic").equals("")) {
+            if (rs.getString("nic") != null && !rs.getString("nic").equals("")) {
                 txtNIC.setText(rs.getString("nic"));
             }
-            if (!rs.getString("mobile2").equals("")) {
+            if (rs.getString("mobile2") != null && !rs.getString("mobile2").equals("")) {
                 txtMobile2.setText(rs.getString("mobile2"));
             }
-            if (!rs.getString("email").equals("")) {
+            if (rs.getString("email") != null && !rs.getString("email").equals("")) {
                 txtEmail.setText(rs.getString("email"));
             }
 

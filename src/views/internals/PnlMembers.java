@@ -138,6 +138,8 @@ public class PnlMembers extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
+        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         tblMembers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -164,6 +166,9 @@ public class PnlMembers extends javax.swing.JPanel {
             }
         });
         scrollPane.setViewportView(tblMembers);
+        if (tblMembers.getColumnModel().getColumnCount() > 0) {
+            tblMembers.getColumnModel().getColumn(0).setMaxWidth(70);
+        }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -294,7 +299,7 @@ public class PnlMembers extends javax.swing.JPanel {
             DefaultTableModel model = (DefaultTableModel) tblMembers.getModel();
             model.setRowCount(0);
 
-            ResultSet rs = AppConnection.fetch("SELECT * FROM customers INNER JOIN gender ON customers.gender_id = gender.id INNER JOIN statuses ON customers.statuses_id = statuses.id " + constraints + " ORDER BY `created_at` ASC ");
+            ResultSet rs = AppConnection.fetch("SELECT * FROM customers INNER JOIN gender ON customers.gender_id = gender.id INNER JOIN statuses ON customers.statuses_id = statuses.id " + constraints + " ORDER BY CAST(SUBSTRING(customers.id, 5) AS UNSIGNED);");
 
             while (rs.next()) {
                 Vector<String> data = new Vector();
