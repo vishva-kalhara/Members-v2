@@ -5,15 +5,21 @@
 package views.dialogs;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.wishva.*;
+import controllers.SubscriptionController;
 import java.awt.Color;
 import java.util.Date;
 import java.util.Vector;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
 import models.PaymentPlan;
+import models.Subscription;
 import utils.AppConnection;
 import utils.Formatter;
+import views.dialogs.DlgError;
 import views.layouts.AppLayout;
 
 /**
@@ -21,7 +27,7 @@ import views.layouts.AppLayout;
  * @author vishv
  */
 public class DlgSubscription extends javax.swing.JDialog {
-    
+
     HashMap<String, String> customerMap = new HashMap();
     HashMap<String, PaymentPlan> packagesMap = new HashMap();
 
@@ -31,27 +37,28 @@ public class DlgSubscription extends javax.swing.JDialog {
     public DlgSubscription(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         setDesign();
-        
+
         cboCustomerName.grabFocus();
         dateFrom.setDate(new Date());
-        
+        dateFrom.setMinSelectableDate(new Date());
+
         fetchData();
     }
-    
+
     private void setDesign() {
-        
+
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(255, 255, 255));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-        
+
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
         btnClose.putClientProperty("JButton.buttonType", "borderless");
         btnScan.putClientProperty("JButton.buttonType", "borderless");
-        
+
         txtCustomerId.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtCustomerId.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "cus-");
     }
@@ -236,6 +243,11 @@ public class DlgSubscription extends javax.swing.JDialog {
         btnSubmit.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnSubmit.setForeground(new java.awt.Color(255, 255, 255));
         btnSubmit.setText("Select a Package");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -276,23 +288,32 @@ public class DlgSubscription extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void cboCustomerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCustomerNameActionPerformed
-        
+
         if (cboCustomerName.getSelectedIndex() == 0) {
             txtCustomerId.setText("");
             return;
         }
-        
+
         txtCustomerId.setText(customerMap.get(String.valueOf(cboCustomerName.getSelectedItem())));
     }//GEN-LAST:event_cboCustomerNameActionPerformed
 
     private void txtCustomerIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomerIdActionPerformed
-        
+
+        String input = txtCustomerId.getText();
+        if (input.isBlank()) {
+            return;
+        }
+
         try {
-            
+
+            if (!input.startsWith("cus-") && Character.isDigit(input.charAt(0))) {
+                txtCustomerId.setText("cus-" + input);
+            }
+
             ResultSet rs = AppConnection.fetch("SELECT CONCAT(`first_name`, ' ', `last_name`) AS full_name "
                     + "FROM customers "
                     + "WHERE `id` = '" + txtCustomerId.getText() + "' AND `statuses_id` = '1'");
-            
+
             if (rs.next()) {
                 cboCustomerName.setSelectedItem(rs.getString("full_name"));
             } else {
@@ -305,15 +326,32 @@ public class DlgSubscription extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCustomerIdActionPerformed
 
     private void cboPackageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboPackageActionPerformed
-        
+
         if (cboPackage.getSelectedIndex() == 0) {
             btnSubmit.setText("Select a Package");
             return;
         }
-        
-        String price = new Formatter().addZeroToDouble(packagesMap.get(cboPackage.getSelectedItem()).getPrice());
+
+        String price = new Formatter().addZeroToDouble(packagesMap.get(String.valueOf(cboPackage.getSelectedItem())).getPrice());
         btnSubmit.setText("Issue Subscription (" + AppLayout.appData.getCurrencyValue() + " " + price + ")");
     }//GEN-LAST:event_cboPackageActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+
+        try {
+
+            Subscription subscription = getSubscriptionFromForm();
+            subscription.setPaidAmount(packagesMap.get(String.valueOf(cboPackage.getSelectedItem())).getPrice());
+            
+            new SubscriptionController().createSubscription(subscription);
+        } catch (SparkException e) {
+            new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }//GEN-LAST:event_btnSubmitActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
@@ -339,63 +377,98 @@ public class DlgSubscription extends javax.swing.JDialog {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                
+
                 loadCustomers();
                 loadPackages();
             }
         }).start();
     }
-    
+
     private void loadCustomers() {
-        
+
         try {
-            
+
             Vector<String> customers = new Vector();
             customers.add("Select");
             customerMap.put("Select", "0");
-            
+
             ResultSet rs = AppConnection.fetch("SELECT `id`, CONCAT(`first_name`, ' ', `last_name`) AS full_name "
                     + "FROM customers "
                     + "WHERE `statuses_id` = '1' "
                     + "ORDER BY `first_name` ASC");
-            
+
             while (rs.next()) {
                 String fullName = rs.getString("full_name");
                 customers.add(fullName);
                 customerMap.put(fullName, rs.getString("id"));
             }
-            
+
             cboCustomerName.setModel(new DefaultComboBoxModel<String>(customers));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private void loadPackages() {
         try {
-            
+
             Vector<String> packages = new Vector();
             packages.add("Select");
-            
+
             packagesMap.put("Select", new PaymentPlan());
-            
-            ResultSet rs = AppConnection.fetch("SELECT `id`, CONCAT(`title`, ' - ', `validity`, 'd') as displayName, `price` "
+
+            ResultSet rs = AppConnection.fetch("SELECT `id`, CONCAT(`title`, ' - ', `validity`, 'd') as displayName, `price`, `validity` "
                     + "FROM members_v2.packages "
                     + "WHERE `statuses_id` = '1';");
-            
+
             while (rs.next()) {
                 String fullName = rs.getString("displayName") + " (" + AppLayout.appData.getCurrencyValue() + rs.getString("price") + ")";
                 packages.add(fullName);
-                
+
                 PaymentPlan plan = new PaymentPlan();
                 plan.setPrice(rs.getDouble("price"));
                 plan.setId(rs.getString("id"));
+                plan.setValidity(rs.getInt("validity"));
                 packagesMap.put(fullName, plan);
             }
-            
+
             cboPackage.setModel(new DefaultComboBoxModel<>(packages));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private Subscription getSubscriptionFromForm() throws SparkException {
+
+        Subscription subscription = new Subscription();
+
+        subscription.setCustomerId(new Spark("Customer Id", txtCustomerId.getText())
+                .required()
+                .endString());
+        
+        if(cboCustomerName.getSelectedIndex() == 0)
+            throw new SparkException("Select a customer name!");
+        
+        if(!customerMap.get(String.valueOf(cboCustomerName.getSelectedItem())).equals(subscription.getCustomerId())){
+            txtCustomerId.setText("");
+            cboCustomerName.setSelectedIndex(0);
+            throw new SparkException("Select the customer again!");
+        }
+        
+        if(cboPackage.getSelectedIndex() == 0)
+            throw new SparkException("Select a package!");
+        subscription.setPackageId(packagesMap.get(String.valueOf(cboPackage.getSelectedItem())).getId());
+        
+        if(dateFrom.getDate() == null)
+            throw new SparkException("Select a start date!");
+        subscription.setStartDate(dateFrom.getDate());
+        subscription.setValidity(packagesMap.get(String.valueOf(cboPackage.getSelectedItem())).getValidity());
+        
+        return subscription;
+    }
 }
+
+
+
+
+

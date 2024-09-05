@@ -188,5 +188,21 @@ BEGIN
 END$$
 
 DELIMITER ;
+```
 
+```
+DROP TRIGGER IF EXISTS `before_insert_subscription`;
+
+DELIMITER $$
+
+CREATE TRIGGER `before_insert_subscription`
+BEFORE INSERT ON `subscriptions`
+FOR EACH ROW
+BEGIN
+
+	SET NEW.created_at = NOW();
+
+END$$
+
+DELIMITER ;
 ```

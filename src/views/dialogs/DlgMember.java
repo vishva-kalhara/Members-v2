@@ -549,22 +549,22 @@ public class DlgMember extends javax.swing.JDialog {
 
     private void btnCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCardActionPerformed
 
-//        HashMap<String, Object> params = new HashMap();
-////        params.put("PARAM_NAME", txtFName.getName() + " " + txtLName.getName());
-//        params.put("PARAM_NAME", "Wishva Kalhara");
-//        params.put("PARAM_CODE", "cus-001");
-////        params.put("PARAM_BAR_CODE", "cus-001");
-//
-//        this.dispose();
-//        try {
-//
-//            JREmptyDataSource source = new JREmptyDataSource();
-//
-//            JasperPrint report = JasperFillManager.fillReport("src/reports/members_card_front_2.jasper", params, source);
-//            JasperViewer.viewReport(report, false);
-//        } catch (JRException e) {
-//            e.printStackTrace();
-//        }
+        HashMap<String, Object> params = new HashMap();
+//        params.put("PARAM_NAME", txtFName.getName() + " " + txtLName.getName());
+        params.put("PARAM_NAME", "Wishva Kalhara");
+        params.put("PARAM_CODE", "cus-001");
+//        params.put("PARAM_BAR_CODE", "cus-001");
+
+        this.dispose();
+        try {
+
+            JREmptyDataSource source = new JREmptyDataSource();
+
+            JasperPrint report = JasperFillManager.fillReport("src/reports/members_card_front_2.jasper", params, source);
+            JasperViewer.viewReport(report, false);
+        } catch (JRException e) {
+            e.printStackTrace();
+        }
 
 //        HashMap<String, Object> params = new HashMap<>();
 //        params.put("PARAM_NAME", "Wishva Kalhara Chandrasekara");

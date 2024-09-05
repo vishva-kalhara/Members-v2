@@ -5,6 +5,8 @@
 package utils;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -15,5 +17,11 @@ public class Formatter {
     public String addZeroToDouble(double value) {
         DecimalFormat df = new DecimalFormat("#.00");
         return df.format(value);
+    }
+    
+    public String sanitizeDate(Date fullDate){
+        
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(fullDate);
     }
 }

@@ -30,7 +30,7 @@ public class AppLayout extends javax.swing.JFrame {
     
     public JButton selectedButton;
 
-    HashMap<String, String> employeeData = new HashMap();
+    public static HashMap<String, String> employeeData = new HashMap();
 
     /**
      * Creates new form AppLayout
