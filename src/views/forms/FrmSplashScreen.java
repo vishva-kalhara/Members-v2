@@ -80,7 +80,7 @@ public class FrmSplashScreen extends javax.swing.JFrame {
                 try {
                     Thread.sleep(10);
                     dispose();
-                    new FmLogin(appData).setVisible(true);
+                    new FrmAttendance(appData).setVisible(true);
                 } catch (InterruptedException ex) {
                     
                 }
