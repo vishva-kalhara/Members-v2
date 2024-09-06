@@ -57,5 +57,20 @@ public class SubscriptionController {
     
         return formatter.sanitizeDate(newDate);
     }
+    
+    public Date getStartDate(Date endDate){
+        
+        Formatter formatter = new Formatter();
+        
+        String[] parts = formatter.sanitizeDate(endDate).split("-");
+        
+        LocalDate today = LocalDate.of(Integer.parseInt(parts[0]),Integer.parseInt(parts[1]),Integer.parseInt(parts[2]));
+
+        LocalDate dateLocal = today.plusDays(1);
+
+        Date newDate = Date.from(dateLocal.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    
+        return newDate;
+    }
 }
 
