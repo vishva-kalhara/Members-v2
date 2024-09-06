@@ -316,6 +316,7 @@ public class DlgSubscription extends javax.swing.JDialog {
 
             if (rs.next()) {
                 cboCustomerName.setSelectedItem(rs.getString("full_name"));
+                cboPackage.grabFocus();
             } else {
                 cboCustomerName.setSelectedIndex(0);
                 new DlgError(AppLayout.appLayout, true, "Not Found!", "There is no active customer with the same Id.").setVisible(true);

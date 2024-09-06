@@ -16,13 +16,19 @@ import raven.toast.Notifications;
 import utils.DBData;
 import views.layouts.AppLayout;
 import enums.LayoutPages;
+import java.io.File;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import net.sf.jasperreports.engine.JRDataSource;
 import utils.AppConnection;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+
 import net.sf.jasperreports.view.JasperViewer;
 
 /**
@@ -550,20 +556,35 @@ public class DlgMember extends javax.swing.JDialog {
     private void btnCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCardActionPerformed
 
         HashMap<String, Object> params = new HashMap();
-//        params.put("PARAM_NAME", txtFName.getName() + " " + txtLName.getName());
-        params.put("PARAM_NAME", "Wishva Kalhara");
-        params.put("PARAM_CODE", "cus-001");
-//        params.put("PARAM_BAR_CODE", "cus-001");
+        params.put("PARAM_NAME", "WISHVA CHANDRASEKARA");
+        params.put("my_bar_code", "cus-8");
 
-        this.dispose();
         try {
 
-            JREmptyDataSource source = new JREmptyDataSource();
+            InputStream reportStream = getClass().getResourceAsStream("/reports/members_card_front_3.jasper");
 
-            JasperPrint report = JasperFillManager.fillReport("src/reports/members_card_front_2.jasper", params, source);
-            JasperViewer.viewReport(report, false);
-        } catch (JRException e) {
+            if (reportStream == null) {
+                System.err.println("Report not found at the specified path!");
+            } else {
+                System.out.println("Report loaded successfully.");
+
+                // Use JRLoader to load the .jasper file properly
+                JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportStream);
+
+                JREmptyDataSource source = new JREmptyDataSource();
+
+                // Fill the report with parameters and the data source
+                JasperPrint report = JasperFillManager.fillReport(jasperReport, params, source);
+
+                // View the report
+                JasperViewer.viewReport(report, false);
+            }
+            
+            this.setVisible(false);
+            
+        } catch (Exception e) {
             e.printStackTrace();
+            System.exit(0);
         }
 
 //        HashMap<String, Object> params = new HashMap<>();
@@ -578,6 +599,7 @@ public class DlgMember extends javax.swing.JDialog {
 ////            JasperPrintManager.printReport(report, false);
 //        } catch (JRException e) {
 //            e.printStackTrace();
+//        } catch (Exception e) {
 //        }
     }//GEN-LAST:event_btnCardActionPerformed
 

@@ -5,11 +5,10 @@
 package controllers;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date; 
-import models.Subscription;
+import models.Subscription; 
 import utils.AppConnection;
 import utils.Formatter;
 import views.layouts.AppLayout;
@@ -59,3 +58,4 @@ public class SubscriptionController {
         return formatter.sanitizeDate(newDate);
     }
 }
+
