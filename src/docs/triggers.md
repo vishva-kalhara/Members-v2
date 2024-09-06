@@ -206,3 +206,20 @@ END$$
 
 DELIMITER ;
 ```
+
+```
+DROP TRIGGER IF EXISTS `before_insert_attendance`;
+
+DELIMITER $$
+
+CREATE TRIGGER `before_insert_attendance`
+BEFORE INSERT ON `attendance`
+FOR EACH ROW
+BEGIN
+
+	SET NEW.marked_at = NOW();
+
+END$$
+
+DELIMITER ;
+```
