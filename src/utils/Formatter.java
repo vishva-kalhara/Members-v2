@@ -24,4 +24,10 @@ public class Formatter {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(fullDate);
     }
+
+    public String sanitizeDate(Date fullDate, String pattern){
+        
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        return format.format(fullDate);
+    }
 }

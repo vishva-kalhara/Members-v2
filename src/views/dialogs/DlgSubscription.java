@@ -8,19 +8,18 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.*;
 import controllers.SubscriptionController;
 import enums.DialogTypes;
+import enums.LayoutPages;
 import java.awt.Color;
 import java.util.Date;
 import java.util.Vector;
 import java.sql.ResultSet;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
 import models.PaymentPlan;
 import models.Subscription;
+import raven.toast.Notifications;
 import utils.AppConnection;
 import utils.Formatter;
-import views.dialogs.DlgError;
 import views.layouts.AppLayout;
 
 /**
@@ -337,7 +336,8 @@ public class DlgSubscription extends javax.swing.JDialog {
             this.dispose();
 
             new DlgError(AppLayout.appLayout, true, "Subscription Issued Success.", "Success", DialogTypes.SUCCESS).setVisible(true);
-
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Subscription issued success!");
+            AppLayout.appLayout.changeForm(LayoutPages.SUBSCRIPTIONS);
         } catch (SparkException e) {
             new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {
@@ -440,7 +440,8 @@ public class DlgSubscription extends javax.swing.JDialog {
             ResultSet rs = AppConnection.fetch("SELECT `end` "
                     + "FROM subscriptions "
                     + "WHERE `customers_id` = '" + customerId + "' "
-                    + "ORDER BY `id` DESC;");
+                    + "ORDER BY `id` DESC "
+                    + "LIMIT 1;");
 
             if (rs.next()) {
 
@@ -448,7 +449,6 @@ public class DlgSubscription extends javax.swing.JDialog {
                 Date startDate = new SubscriptionController().getStartDate(endDate);
                 dateFrom.setDate(startDate);
                 dateFrom.setMinSelectableDate(startDate);
-                System.out.println(startDate);
             } else {
                 dateFrom.setDate(new Date());
                 dateFrom.setMinSelectableDate(new Date());

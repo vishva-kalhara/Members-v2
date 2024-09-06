@@ -4,13 +4,19 @@
  */
 package views.internals;
 
-import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import views.dialogs.DlgSubscription;
 import views.dialogs.DlgSubscriptionFilters;
 import views.layouts.AppLayout;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+import utils.AppConnection;
+import utils.Formatter;
 
 /**
  *
@@ -25,15 +31,17 @@ public class PnlSubscriptions extends javax.swing.JPanel {
         initComponents();
 
         setDesign();
+
+        fetchData();
     }
 
     private void setDesign() {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        tblSuscriptions.setDefaultRenderer(Object.class, centerRenderer);
+        tblSubcriptions.setDefaultRenderer(Object.class, centerRenderer);
 
-        javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblSuscriptions.getParent().getParent();
+        javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblSubcriptions.getParent().getParent();
         scroll.setBorder(BorderFactory.createEmptyBorder());
     }
 
@@ -55,7 +63,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
         btnFilter = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
-        tblSuscriptions = new javax.swing.JTable();
+        tblSubcriptions = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1160, 900));
@@ -137,7 +145,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        tblSuscriptions.setModel(new javax.swing.table.DefaultTableModel(
+        tblSubcriptions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -145,7 +153,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Customer Id", "Package", "Starts At", "Ends At", "Paid "
+                "Issued At", "Package", "Customer Id", "Starts At", "Ends At", "Paid "
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -156,16 +164,13 @@ public class PnlSubscriptions extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblSuscriptions.getTableHeader().setReorderingAllowed(false);
-        tblSuscriptions.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblSubcriptions.getTableHeader().setReorderingAllowed(false);
+        tblSubcriptions.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblSuscriptionsMouseClicked(evt);
+                tblSubcriptionsMouseClicked(evt);
             }
         });
-        scrollPane.setViewportView(tblSuscriptions);
-        if (tblSuscriptions.getColumnModel().getColumnCount() > 0) {
-            tblSuscriptions.getColumnModel().getColumn(0).setMaxWidth(75);
-        }
+        scrollPane.setViewportView(tblSubcriptions);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -188,7 +193,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cboSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSortActionPerformed
-        filterTable();
+        loadSubscriptionData();
     }//GEN-LAST:event_cboSortActionPerformed
 
     private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
@@ -197,13 +202,13 @@ public class PnlSubscriptions extends javax.swing.JPanel {
         filterTable();
     }//GEN-LAST:event_btnClearFiltersActionPerformed
 
-    private void tblSuscriptionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSuscriptionsMouseClicked
+    private void tblSubcriptionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSubcriptionsMouseClicked
 
         if (evt.getClickCount() != 2) {
             return;
         }
 
-    }//GEN-LAST:event_tblSuscriptionsMouseClicked
+    }//GEN-LAST:event_tblSubcriptionsMouseClicked
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
 
@@ -211,7 +216,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        
+
         new DlgSubscription(AppLayout.appLayout, true).setVisible(true);
     }//GEN-LAST:event_btnNewActionPerformed
 
@@ -226,28 +231,79 @@ public class PnlSubscriptions extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane scrollPane;
-    private javax.swing.JTable tblSuscriptions;
+    private javax.swing.JTable tblSubcriptions;
     // End of variables declaration//GEN-END:variables
 
-    private void filterTable() {
+    private String filterTable() {
 
         String sortVal = String.valueOf(cboSort.getSelectedItem());
 
+        String sortQuery = "";
+
         switch (sortVal) {
             case "Issued At ASC":
+                sortQuery = "ORDER BY `created_at` ASC";
                 break;
             case "Issued At DESC":
+                sortQuery = "ORDER BY `created_at` DESC";
                 break;
             case "Package Name ASC":
+                sortQuery = "ORDER BY `title` ASC";
                 break;
             case "Package Name DESC":
+                sortQuery = "ORDER BY `title` DESC";
                 break;
             case "Paid Amount ASC":
+                sortQuery = "ORDER BY `paid_amount` ASC";
                 break;
             case "Paid Amount DESC":
+                sortQuery = "ORDER BY `paid_amount` DESC";
                 break;
             default:
-                break;
+                sortQuery = "ORDER BY `created_at` ASC";
+        }
+
+        return sortQuery;
+    }
+
+    private void fetchData() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadSubscriptionData();
+            }
+        }).start();
+    }
+
+    private void loadSubscriptionData() {
+
+        try {
+
+            DefaultTableModel model = (DefaultTableModel) tblSubcriptions.getModel();
+            model.setRowCount(0);
+
+            String sortQuery = filterTable();
+            System.out.println(sortQuery);
+
+            ResultSet rs = AppConnection.fetch("SELECT DATE_FORMAT(`created_at`, '%Y-%m-%d %H:%i') AS formatted_date , `customers_id`, `title`, `start`, `end`, `paid_amount` "
+                    + "FROM members_v2.subscriptions "
+                    + "INNER JOIN packages ON subscriptions.packages_id = packages.id " + sortQuery + ";");
+
+            Formatter formatter = new Formatter();
+
+            while (rs.next()) {
+                Vector data = new Vector();
+                data.add(rs.getString("formatted_date"));
+                data.add(rs.getString("title"));
+                data.add(rs.getString("customers_id"));
+                data.add(rs.getString("start"));
+                data.add(rs.getString("end"));
+                data.add(formatter.addZeroToDouble(rs.getDouble("paid_amount")));
+
+                model.addRow(data);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
