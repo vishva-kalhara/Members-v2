@@ -6,8 +6,10 @@
 package views.forms;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import enums.DialogTypes;
 import java.awt.Color;
 import models.Application;
+import views.dialogs.DlgSelfClose;
 
 /**
  *
@@ -35,8 +37,8 @@ public class FrmAttendance extends javax.swing.JFrame {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
         
         pnlCenter.putClientProperty(FlatClientProperties.STYLE, "arc: 999");
-        txtId.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Member ID");
-        txtId.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
+        txtCustomerId.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Member ID");
+        txtCustomerId.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
 //        txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Password");
 //        
         btnClose.putClientProperty("JButton.buttonType", "borderless");
@@ -55,7 +57,7 @@ public class FrmAttendance extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         pnlCenter = new javax.swing.JPanel();
-        txtId = new javax.swing.JTextField();
+        txtCustomerId = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnClose = new javax.swing.JButton();
@@ -69,9 +71,14 @@ public class FrmAttendance extends javax.swing.JFrame {
 
         pnlCenter.setBackground(new java.awt.Color(255, 255, 255));
 
-        txtId.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCustomerId.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCustomerId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCustomerIdActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Scan membership card or enter your ID.");
@@ -86,7 +93,7 @@ public class FrmAttendance extends javax.swing.JFrame {
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlCenterLayout.createSequentialGroup()
                 .addGap(393, 393, 393)
-                .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                .addComponent(txtCustomerId, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addGap(392, 392, 392))
             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -98,18 +105,28 @@ public class FrmAttendance extends javax.swing.JFrame {
                 .addGap(42, 42, 42)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCustomerId, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(117, 117, 117))
         );
 
         btnClose.setBackground(new java.awt.Color(244, 244, 244));
         btnClose.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnClose.setText("Close");
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
 
         btnLogin.setBackground(new java.awt.Color(77, 119, 255));
         btnLogin.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Sign In");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -128,7 +145,7 @@ public class FrmAttendance extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(pnlCenter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -152,6 +169,23 @@ public class FrmAttendance extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtCustomerIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomerIdActionPerformed
+        
+        new DlgSelfClose(this, true, DialogTypes.ERROR, "Access Denied!", "No active subscriptions.").setVisible(true);
+//        new DlgSelfClose(this, true, DialogTypes.SUCCESS, "Welcome", "Wishva Kalhara").setVisible(true);
+    }//GEN-LAST:event_txtCustomerIdActionPerformed
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        
+        this.dispose();
+    }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        
+        new FmLogin(appData).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnLoginActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
@@ -161,7 +195,7 @@ public class FrmAttendance extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel pnlCenter;
-    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtCustomerId;
     // End of variables declaration//GEN-END:variables
 
 }

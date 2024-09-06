@@ -9,5 +9,5 @@ package enums;
  * @author vishv
  */
 public enum DialogTypes {
-    CREATE, UPDATE, SUCCESS, ERROR
+    CREATE, UPDATE, SUCCESS, ERROR, WARNING
 }
