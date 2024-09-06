@@ -20,12 +20,10 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import models.Member;
 import utils.AppConnection;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -63,8 +61,8 @@ public class PnlMembers extends javax.swing.JPanel {
         txtSearch = new javax.swing.JTextField();
         cboStatus = new javax.swing.JComboBox<>();
         btnPrint = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
         btnClearFilters = new javax.swing.JButton();
+        btnView = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
         tblMembers = new javax.swing.JTable();
@@ -101,11 +99,9 @@ public class PnlMembers extends javax.swing.JPanel {
         });
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/printer_20.png"))); // NOI18N
-
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/save.png"))); // NOI18N
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnPrintActionPerformed(evt);
             }
         });
 
@@ -113,6 +109,13 @@ public class PnlMembers extends javax.swing.JPanel {
         btnClearFilters.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearFiltersActionPerformed(evt);
+            }
+        });
+
+        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/file-text.png"))); // NOI18N
+        btnView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewActionPerformed(evt);
             }
         });
 
@@ -127,10 +130,10 @@ public class PnlMembers extends javax.swing.JPanel {
                 .addComponent(cboStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnClearFilters, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 286, Short.MAX_VALUE)
                 .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnView, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
@@ -144,8 +147,8 @@ public class PnlMembers extends javax.swing.JPanel {
                     .addComponent(btnNew, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPrint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
-                    .addComponent(btnClearFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnClearFilters, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                    .addComponent(btnView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(19, 19, 19))
         );
 
@@ -227,11 +230,12 @@ public class PnlMembers extends javax.swing.JPanel {
 
     private void tblMembersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMembersMouseClicked
 
-        if(evt.getClickCount() != 2)
+        if (evt.getClickCount() != 2) {
             return;
-        
+        }
+
         int row = tblMembers.getSelectedRow();
-        
+
         Member member = new Member();
         member.setId(String.valueOf(tblMembers.getValueAt(row, 0)));
         member.setFirstName(String.valueOf(tblMembers.getValueAt(row, 1)));
@@ -239,56 +243,41 @@ public class PnlMembers extends javax.swing.JPanel {
         member.setGenderValue(String.valueOf(tblMembers.getValueAt(row, 3)));
         member.setMobile1(String.valueOf(tblMembers.getValueAt(row, 4)));
         member.setStatusValue(String.valueOf(tblMembers.getValueAt(row, 5)));
-        
+
         new DlgMember(AppLayout.appLayout, true, member).setVisible(true);
-        
+
         tblMembers.clearSelection();
     }//GEN-LAST:event_tblMembersMouseClicked
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
-        String prop2 = "Search: ";
-        if(txtSearch.getText().isBlank())
-            prop2 += "null";
-        else 
-            prop2 += txtSearch.getText();
-        
-        String dateTime = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(new Date());
-        
-        HashMap<String, Object> params = new HashMap();
-        
-        params.put("PARAM_TITLE", "Customers");
-        params.put("PARAM_PROP_1", "Filters: '"+ String.valueOf(cboStatus.getSelectedItem()) +"'");
-        params.put("PARAM_PROP_2", prop2);
-        params.put("PARAM_PROP_3", "Count: " + tblMembers.getModel().getRowCount());
-        params.put("PARAM_GENERATED_BY", "Generated by " + AppLayout.employeeData.get("id"));
-        params.put("PARAM_GENERATED_AT",  dateTime);
-        
-        params.put("PARAM_HEADER_0", "Id");
-        params.put("PARAM_HEADER_1", "First Name");
-        params.put("PARAM_HEADER_2", "Last Name");
-        params.put("PARAM_HEADER_3", "Gender");
-        params.put("PARAM_HEADER_4", "Mobile-1");
-        params.put("PARAM_HEADER_5", "Status");
-        
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+       
         try {
             
-            JRTableModelDataSource dataSource = new JRTableModelDataSource(tblMembers.getModel());
-            
-            JasperPrint report = JasperFillManager.fillReport("src/reports/members_general_report.jasper", params, dataSource);
-            JasperViewer.viewReport(report, true);
-            
+            JasperPrintManager.printReport(makePrint(), true);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }//GEN-LAST:event_btnSaveActionPerformed
+    }//GEN-LAST:event_btnPrintActionPerformed
+
+    private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
+        
+        try {
+            
+            JasperPrintManager.printReport(makePrint(), false);
+            JasperViewer.viewReport(makePrint(), false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnViewActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClearFilters;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnPrint;
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnView;
     private javax.swing.JComboBox<String> cboStatus;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -330,23 +319,23 @@ public class PnlMembers extends javax.swing.JPanel {
                     .append("%'")
                     .append("");
         }
-        
-        if(isStatusSelected){
-            if(isSearchPresent){
+
+        if (isStatusSelected) {
+            if (isSearchPresent) {
                 constraints.append(" AND ");
             }
-            
+
             constraints.append(" statuses_id = '")
                     .append(statusMap.get(String.valueOf(cboStatus.getSelectedItem())))
                     .append("'");
         }
-        
+
         loadTable(String.valueOf(constraints));
     }
 
     private void loadTable(String constraints) {
         btnPrint.setEnabled(false);
-        btnSave.setEnabled(false);
+        btnView.setEnabled(false);
 
         try {
             DefaultTableModel model = (DefaultTableModel) tblMembers.getModel();
@@ -371,9 +360,10 @@ public class PnlMembers extends javax.swing.JPanel {
             } else {
                 scrollPane.setViewportView(this.tblMembers);
                 btnPrint.setEnabled(true);
-                btnSave.setEnabled(true);
+                btnView.setEnabled(true);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -387,5 +377,39 @@ public class PnlMembers extends javax.swing.JPanel {
                 loadTable("");
             }
         }).start();
+    }
+
+    private JasperPrint makePrint() throws Exception {
+        String prop2 = "Search: ";
+        if (txtSearch.getText().isBlank()) {
+            prop2 += "null";
+        } else {
+            prop2 += txtSearch.getText();
+        }
+
+        String dateTime = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(new Date());
+
+        HashMap<String, Object> params = new HashMap();
+
+        params.put("PARAM_TITLE", "Customers");
+        params.put("PARAM_PROP_1", "Filters: '" + String.valueOf(cboStatus.getSelectedItem()) + "'");
+        params.put("PARAM_PROP_2", prop2);
+        params.put("PARAM_PROP_3", "Count: " + tblMembers.getModel().getRowCount());
+        params.put("PARAM_GENERATED_BY", "Generated by " + AppLayout.employeeData.get("id"));
+        params.put("PARAM_GENERATED_AT", dateTime);
+
+        params.put("PARAM_HEADER_0", "Id");
+        params.put("PARAM_HEADER_1", "First Name");
+        params.put("PARAM_HEADER_2", "Last Name");
+        params.put("PARAM_HEADER_3", "Gender");
+        params.put("PARAM_HEADER_4", "Mobile-1");
+        params.put("PARAM_HEADER_5", "Status");
+
+        JRTableModelDataSource dataSource = new JRTableModelDataSource(tblMembers.getModel());
+
+        JasperPrint report = JasperFillManager.fillReport("src/reports/members_general_report.jasper", params, dataSource);
+        
+
+        return report;
     }
 }

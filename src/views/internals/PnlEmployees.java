@@ -42,7 +42,7 @@ public class PnlEmployees extends javax.swing.JPanel {
         scrollPane.repaint();
         scrollPane.revalidate();
         btnPrint.setEnabled(false);
-        btnSave.setEnabled(false);
+        btnView.setEnabled(false);
 
 //        loadTableData("");
     }
@@ -60,7 +60,7 @@ public class PnlEmployees extends javax.swing.JPanel {
 
     private void loadTableData(String contraints) {
 
-        btnSave.setEnabled(false);
+        btnView.setEnabled(false);
         btnPrint.setEnabled(false);
 
         ResultSet rs = AppConnection.fetch("SELECT * FROM employees "
@@ -95,7 +95,7 @@ public class PnlEmployees extends javax.swing.JPanel {
 
         } else {
             scrollPane.setViewportView(tblEmployees);
-            btnSave.setEnabled(true);
+            btnView.setEnabled(true);
             btnPrint.setEnabled(true);
         }
         scrollPane.repaint();
@@ -161,7 +161,7 @@ public class PnlEmployees extends javax.swing.JPanel {
         txtSearch = new javax.swing.JTextField();
         cboStatus = new javax.swing.JComboBox<>();
         btnPrint = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
+        btnView = new javax.swing.JButton();
         btnClearFilters = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
@@ -202,7 +202,7 @@ public class PnlEmployees extends javax.swing.JPanel {
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/printer_20.png"))); // NOI18N
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/save.png"))); // NOI18N
+        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/file-text.png"))); // NOI18N
 
         btnClearFilters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/filter-x.png"))); // NOI18N
         btnClearFilters.addActionListener(new java.awt.event.ActionListener() {
@@ -225,7 +225,7 @@ public class PnlEmployees extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 286, Short.MAX_VALUE)
                 .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnView, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
@@ -239,7 +239,7 @@ public class PnlEmployees extends javax.swing.JPanel {
                     .addComponent(btnNew, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPrint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                    .addComponent(btnView, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                     .addComponent(btnClearFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(19, 19, 19))
         );
@@ -342,7 +342,7 @@ public class PnlEmployees extends javax.swing.JPanel {
     private javax.swing.JButton btnClearFilters;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnPrint;
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnView;
     private javax.swing.JComboBox<String> cboStatus;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

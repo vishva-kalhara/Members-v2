@@ -71,7 +71,7 @@ public class PnlPackages extends javax.swing.JPanel {
 
         btnClearFilters.setEnabled(false);
         btnPrint.setEnabled(false);
-        btnSave.setEnabled(false);
+        btnView.setEnabled(false);
 
         try {
             
@@ -102,7 +102,7 @@ public class PnlPackages extends javax.swing.JPanel {
             if (model.getRowCount() != 0) {
                 scrollPane.setViewportView(tblPacakges);
                 btnPrint.setEnabled(true);
-                btnSave.setEnabled(true);
+                btnView.setEnabled(true);
             } else {
                 scrollPane.setViewportView(new PnlNoData());
             }
@@ -161,7 +161,7 @@ public class PnlPackages extends javax.swing.JPanel {
         txtSearch = new javax.swing.JTextField();
         cboStatus = new javax.swing.JComboBox<>();
         btnPrint = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
+        btnView = new javax.swing.JButton();
         btnClearFilters = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
@@ -200,7 +200,7 @@ public class PnlPackages extends javax.swing.JPanel {
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/printer_20.png"))); // NOI18N
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/save.png"))); // NOI18N
+        btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/file-text.png"))); // NOI18N
 
         btnClearFilters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/filter-x.png"))); // NOI18N
         btnClearFilters.addActionListener(new java.awt.event.ActionListener() {
@@ -223,7 +223,7 @@ public class PnlPackages extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 286, Short.MAX_VALUE)
                 .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnView, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
@@ -237,7 +237,7 @@ public class PnlPackages extends javax.swing.JPanel {
                     .addComponent(btnNew, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPrint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                    .addComponent(btnView, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                     .addComponent(btnClearFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(19, 19, 19))
         );
@@ -339,7 +339,7 @@ public class PnlPackages extends javax.swing.JPanel {
     private javax.swing.JButton btnClearFilters;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnPrint;
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnView;
     private javax.swing.JComboBox<String> cboStatus;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

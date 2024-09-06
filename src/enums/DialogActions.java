@@ -9,5 +9,5 @@ package enums;
  * @author vishv
  */
 public enum DialogActions {
-    CONFIRM, CANCEL, RETRY
+    CONFIRM, CANCEL, RETRY, PRINT, JUST_SAVE
 }
