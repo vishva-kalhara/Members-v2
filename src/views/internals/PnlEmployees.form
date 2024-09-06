@@ -127,6 +127,9 @@
               <Image iconType="3" name="/assets/icons/printer_20.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPrintActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnView">
           <Properties>
@@ -134,6 +137,9 @@
               <Image iconType="3" name="/assets/icons/file-text.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnClearFilters">
           <Properties>

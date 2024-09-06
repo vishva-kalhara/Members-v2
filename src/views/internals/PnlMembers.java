@@ -380,12 +380,15 @@ public class PnlMembers extends javax.swing.JPanel {
     }
 
     private JasperPrint makePrint() throws Exception {
+        
         String prop2 = "Search: ";
         if (txtSearch.getText().isBlank()) {
             prop2 += "null";
         } else {
-            prop2 += txtSearch.getText();
+            prop2 += "'" + txtSearch.getText() + "'";
         }
+        
+        
 
         String dateTime = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(new Date());
 
