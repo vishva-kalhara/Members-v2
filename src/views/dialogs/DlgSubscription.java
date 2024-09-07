@@ -7,6 +7,7 @@ package views.dialogs;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.*;
 import controllers.SubscriptionController;
+import enums.DialogActions;
 import enums.DialogTypes;
 import enums.LayoutPages;
 import java.awt.Color;
@@ -332,12 +333,18 @@ public class DlgSubscription extends javax.swing.JDialog {
             Subscription subscription = getSubscriptionFromForm();
             subscription.setPaidAmount(packagesMap.get(String.valueOf(cboPackage.getSelectedItem())).getPrice());
 
-            new DlgPayment(AppLayout.appLayout, true, subscription).setVisible(true);
-            this.dispose();
+            DlgPayment dlg = new DlgPayment(AppLayout.appLayout, true, subscription);
+            dlg.setVisible(true);
+            DialogActions action = dlg.getAction();
 
-            new DlgError(AppLayout.appLayout, true, "Subscription Issued Success.", "Success", DialogTypes.SUCCESS).setVisible(true);
-            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Subscription issued success!");
-            AppLayout.appLayout.changeForm(LayoutPages.SUBSCRIPTIONS);
+            if (action == DialogActions.CONFIRM) {
+
+                this.dispose();
+                new DlgError(AppLayout.appLayout, true, "Subscription Issued Success.", "Success", DialogTypes.SUCCESS).setVisible(true);
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Subscription issued success!");
+                AppLayout.appLayout.changeForm(LayoutPages.SUBSCRIPTIONS);
+            }
+
         } catch (SparkException e) {
             new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {

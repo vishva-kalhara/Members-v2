@@ -6,6 +6,7 @@ package views.dialogs;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import controllers.SubscriptionController;
+import enums.DialogActions;
 import java.awt.Color;
 import models.Subscription;
 import views.layouts.AppLayout;
@@ -17,7 +18,8 @@ import views.layouts.AppLayout;
 public class DlgPayment extends javax.swing.JDialog {
 
     private Subscription subscription;
-
+    private DialogActions action = DialogActions.CANCEL;
+    
     /**
      * Creates new form DlgPayment
      *
@@ -250,13 +252,16 @@ public class DlgPayment extends javax.swing.JDialog {
 
             if (Double.parseDouble(txtChange.getText()) < 0) {
                 new DlgError(AppLayout.appLayout, true, "Error", "Cash is insufficient to issue the subscription.").setVisible(true);
+                
                 return;
             }
             
             new SubscriptionController().createSubscription(this.subscription);
+            this.action = DialogActions.CONFIRM;
             this.dispose();
         } catch (Exception e) {
             e.printStackTrace();
+            this.action = DialogActions.CANCEL;
         }
 
     }//GEN-LAST:event_btnSubmitActionPerformed
@@ -274,6 +279,9 @@ public class DlgPayment extends javax.swing.JDialog {
         btnSubmit.grabFocus();
     }//GEN-LAST:event_txtCashActionPerformed
 
+    public DialogActions getAction(){
+        return this.action;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
