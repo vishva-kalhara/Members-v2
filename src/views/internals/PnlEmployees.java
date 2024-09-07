@@ -5,6 +5,7 @@
 package views.internals;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import config.AppConfig;
 import java.awt.Insets;
 import javax.swing.BorderFactory;
 import utils.AppConnection;
@@ -405,7 +406,7 @@ public class PnlEmployees extends javax.swing.JPanel {
 
         JRTableModelDataSource dataSource = new JRTableModelDataSource(tblEmployees.getModel());
 
-        JasperPrint report = JasperFillManager.fillReport("src/reports/members_general_report.jasper", params, dataSource);
+        JasperPrint report = JasperFillManager.fillReport(AppConfig.getReportPath("members_general_report.jasper"), params, dataSource);
         
 
         return report;

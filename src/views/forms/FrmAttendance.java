@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import utils.AppConnection;
+import views.layouts.AppLayout;
 
 /**
  *
@@ -22,6 +23,8 @@ import utils.AppConnection;
 public class FrmAttendance extends javax.swing.JFrame {
 
     private Application appData;
+
+    private boolean isModel = false;
 
     /**
      * Creates new form FrmAttendance
@@ -34,6 +37,21 @@ public class FrmAttendance extends javax.swing.JFrame {
         this.appData = appData;
 
         setDesign();
+    }
+
+    /**
+     * Creates new form FrmAttendance
+     *
+     * @param isModel
+     */
+    public FrmAttendance(boolean isModel) {
+        initComponents();
+
+        setDesign();
+
+        this.isModel = isModel;
+
+        btnLogin.setEnabled(false);
     }
 
     private void setDesign() {
@@ -179,9 +197,10 @@ public class FrmAttendance extends javax.swing.JFrame {
         if (txtCustomerId.getText().isBlank()) {
             return;
         }
-        
-        if(!txtCustomerId.getText().startsWith("cus-"))
+
+        if (!txtCustomerId.getText().startsWith("cus-")) {
             txtCustomerId.setText("cus-" + txtCustomerId.getText());
+        }
 
         try {
 
@@ -199,7 +218,7 @@ public class FrmAttendance extends javax.swing.JFrame {
             } else {
                 new DlgSelfClose(this, true, DialogTypes.ERROR, "Access Denied!", "No active subscriptions.").setVisible(true);
             }
-            
+
             txtCustomerId.setText("");
 
         } catch (Exception e) {
@@ -209,6 +228,10 @@ public class FrmAttendance extends javax.swing.JFrame {
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
 
+        if (this.isModel) {
+
+            AppLayout.appLayout.setVisible(true);
+        }
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 

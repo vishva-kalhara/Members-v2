@@ -5,6 +5,7 @@
 package views.internals;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import config.AppConfig;
 import java.awt.Insets;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
@@ -409,7 +410,7 @@ public class PnlMembers extends javax.swing.JPanel {
 
         JRTableModelDataSource dataSource = new JRTableModelDataSource(tblMembers.getModel());
 
-        JasperPrint report = JasperFillManager.fillReport("src/reports/members_general_report.jasper", params, dataSource);
+        JasperPrint report = JasperFillManager.fillReport(AppConfig.getReportPath("members_general_report.jasper"), params, dataSource);
         
 
         return report;

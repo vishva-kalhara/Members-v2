@@ -4,6 +4,7 @@
  */
 package views.internals;
 
+import config.AppConfig;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -187,11 +189,6 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             }
         });
         tblSubcriptions.getTableHeader().setReorderingAllowed(false);
-        tblSubcriptions.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblSubcriptionsMouseClicked(evt);
-            }
-        });
         scrollPane.setViewportView(tblSubcriptions);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -221,28 +218,27 @@ public class PnlSubscriptions extends javax.swing.JPanel {
     private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
 
         cboSort.setSelectedIndex(0);
+        whereQuery = "";
+        dialog = null;
         loadSubscriptionData();
     }//GEN-LAST:event_btnClearFiltersActionPerformed
 
-    private void tblSubcriptionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSubcriptionsMouseClicked
-
-        if (evt.getClickCount() != 2) {
-            return;
-        }
-
-    }//GEN-LAST:event_tblSubcriptionsMouseClicked
-
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
 
-        if (dialog == null) {
-            this.dialog = new DlgSubscriptionFilters(AppLayout.appLayout, true);
-        }
+        try {
 
-        this.dialog.setVisible(true);
-        System.out.println(this.dialog.getQuery());
-        this.whereQuery = this.dialog.getQuery();
-        loadSubscriptionData();
-        this.dialog.newQuery();
+            if (dialog == null) {
+                this.dialog = new DlgSubscriptionFilters(AppLayout.appLayout, true);
+            }
+
+            this.dialog.setVisible(true);
+            System.out.println(this.dialog.getQuery());
+            this.whereQuery = this.dialog.getQuery();
+            loadSubscriptionData();
+            this.dialog.newQuery();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
@@ -258,6 +254,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnViewActionPerformed
 
@@ -269,6 +266,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 
@@ -399,7 +397,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
         JRTableModelDataSource dataSource = new JRTableModelDataSource(tblSubcriptions.getModel());
 
-        JasperPrint report = JasperFillManager.fillReport("src/reports/members_general_report.jasper", params, dataSource);
+        JasperPrint report = JasperFillManager.fillReport(AppConfig.getReportPath("members_general_report.jasper"), params, dataSource);
 
         return report;
     }
