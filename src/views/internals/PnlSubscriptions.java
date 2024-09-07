@@ -329,6 +329,9 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
     private void loadSubscriptionData() {
 
+        btnView.setEnabled(false);
+        btnPrint.setEnabled(false);
+
         try {
 
             DefaultTableModel model = (DefaultTableModel) tblSubcriptions.getModel();
@@ -353,6 +356,15 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
                 model.addRow(data);
             }
+
+            if (model.getRowCount() == 0) {
+                scrollPane.setViewportView(new PnlNoData());
+            } else {
+                btnView.setEnabled(true);
+                btnPrint.setEnabled(true);
+                scrollPane.setViewportView(tblSubcriptions);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
