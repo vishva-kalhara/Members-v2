@@ -53,7 +53,6 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
 
-        btnClose.putClientProperty("JButton.buttonType", "borderless");
         btnClear.putClientProperty("JButton.buttonType", "borderless");
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
 
@@ -74,7 +73,6 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        btnClose = new javax.swing.JButton();
         lblHeading = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -97,19 +95,13 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(373, 733));
         setMinimumSize(new java.awt.Dimension(373, 733));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setPreferredSize(new java.awt.Dimension(695, 80));
-
-        btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/x.png"))); // NOI18N
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCloseActionPerformed(evt);
-            }
-        });
 
         lblHeading.setFont(new java.awt.Font("Segoe UI Semibold", 0, 24)); // NOI18N
         lblHeading.setText("Advanced Filters");
@@ -121,17 +113,13 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(lblHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                    .addComponent(lblHeading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lblHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -325,16 +313,12 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        this.setVisible(false);
-    }//GEN-LAST:event_btnCloseActionPerformed
-
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
 
         try {
 
             if (cboPackage.getSelectedIndex() == 0
-                    && txtCustomerId.getText().isBlank()
+                    && cboCustomer.getSelectedIndex() == 0
                     && txtAmountFrom.getText().isBlank()
                     && txtAmountTo.getText().isBlank()
                     && dateFrom.getDate() == null
@@ -410,12 +394,13 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
         txtAmountTo.setText("");
         dateFrom.setDate(null);
         dateTo.setDate(null);
+        
+        this.setVisible(false);
     }//GEN-LAST:event_btnClearActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JComboBox<String> cboCustomer;
     private javax.swing.JComboBox<String> cboPackage;
@@ -487,17 +472,11 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
         }
     }
 
-    private void addAnd() {
-
-        if (!String.valueOf(this.query).startsWith("WHERE")) {
-
-            query.append(" AND ");
-        }
-    }
-
     private void generateQuery() {
 
-        query.append(" WHERE ");
+        query.append("WHERE ");
+        
+        boolean hasAnd = false;
 
         if (cboPackage.getSelectedIndex() != 0) {
 
@@ -505,58 +484,75 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
             query.append(" `packages_id` = '")
                     .append(packageId)
                     .append("' ");
+            
+            hasAnd = true;
         }
 
         if (cboCustomer.getSelectedIndex() != 0) {
 
-            addAnd();
+            if(hasAnd)
+                query.append(" AND ");
 
             String customerId = customersMap.get(String.valueOf(cboCustomer.getSelectedItem()));
             query.append(" `customers_id` = '")
                     .append(customerId)
                     .append("' ");
+            
+            hasAnd = true;
         }
 
         if (!txtAmountFrom.getText().isBlank()) {
 
-            addAnd();
+            if(hasAnd)
+                query.append(" AND ");
 
             String value = txtAmountFrom.getText();
             query.append(" `paid_amount` >= '")
                     .append(value)
                     .append("' ");
+            
+            hasAnd = true;
 
         }
 
         if (!txtAmountTo.getText().isBlank()) {
 
-            addAnd();
+            if(hasAnd)
+                query.append(" AND ");
 
             String value = txtAmountTo.getText();
             query.append(" `paid_amount` <= '")
                     .append(value)
                     .append("'");
+            
+            hasAnd = true;
         }
         
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if(dateFrom.getDate() != null){
             
-            addAnd();
+            if(hasAnd)
+                query.append(" AND ");
             
             Date value = dateFrom.getDate();
             query.append(" `created_at` >= '")
                     .append(formatter.format(value))
                     .append("'");
+            
+            hasAnd = true;
         }
         
         if(dateTo.getDate() != null){
             
-            addAnd();
+            if(hasAnd)
+                query.append(" AND ");
             
             Date value = dateTo.getDate();
             query.append(" `created_at` <= '")
                     .append(formatter.format(value))
-                    .append("'");
+                    .append("' ");
+            
+            hasAnd = true;
         }
     }
 

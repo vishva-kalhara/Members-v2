@@ -31,6 +31,7 @@ import utils.Formatter;
 public class PnlSubscriptions extends javax.swing.JPanel {
 
     private String search = "";
+    private String whereQuery = "";
     DlgSubscriptionFilters dialog;
 
     /**
@@ -41,7 +42,9 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
         setDesign();
 
+        cboSort.setSelectedItem("Issued At DESC");
         fetchData();
+
     }
 
     private void setDesign() {
@@ -218,7 +221,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
     private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
 
         cboSort.setSelectedIndex(0);
-        filterTable();
+        loadSubscriptionData();
     }//GEN-LAST:event_btnClearFiltersActionPerformed
 
     private void tblSubcriptionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSubcriptionsMouseClicked
@@ -237,6 +240,8 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
         this.dialog.setVisible(true);
         System.out.println(this.dialog.getQuery());
+        this.whereQuery = this.dialog.getQuery();
+        loadSubscriptionData();
         this.dialog.newQuery();
     }//GEN-LAST:event_btnFilterActionPerformed
 
@@ -281,7 +286,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
     private javax.swing.JTable tblSubcriptions;
     // End of variables declaration//GEN-END:variables
 
-    private String filterTable() {
+    private String generateSortQuery() {
 
         String sortVal = String.valueOf(cboSort.getSelectedItem());
 
@@ -329,11 +334,11 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             DefaultTableModel model = (DefaultTableModel) tblSubcriptions.getModel();
             model.setRowCount(0);
 
-            String sortQuery = filterTable();
+            String sortQuery = generateSortQuery();
 
             ResultSet rs = AppConnection.fetch("SELECT DATE_FORMAT(`created_at`, '%Y-%m-%d %H:%i') AS formatted_date , `customers_id`, `title`, `start`, `end`, `paid_amount` "
                     + "FROM members_v2.subscriptions "
-                    + "INNER JOIN packages ON subscriptions.packages_id = packages.id " + sortQuery + ";");
+                    + "INNER JOIN packages ON subscriptions.packages_id = packages.id " + this.whereQuery + " " + sortQuery + ";");
 
             Formatter formatter = new Formatter();
 
