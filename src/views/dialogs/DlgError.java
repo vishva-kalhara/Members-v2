@@ -76,6 +76,8 @@ public class DlgError extends javax.swing.JDialog {
         Color ribbonColor = new Color(255, 66, 66);
         if(this.type == DialogTypes.SUCCESS ){
             ribbonColor = new Color(0,178,0);
+        } else if (this.type == DialogTypes.WARNING){
+            ribbonColor = new Color(252, 188, 47);
         }
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, ribbonColor);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));

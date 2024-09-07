@@ -76,6 +76,8 @@ public class DlgPackage extends javax.swing.JDialog {
         btnSubmit.setEnabled(false);
 
         loadPackageData(plan);
+        
+        
 
     }
 
@@ -420,7 +422,6 @@ public class DlgPackage extends javax.swing.JDialog {
         btnSubmit.setEnabled(true);
 
         txtTitle.setEnabled(true);
-        txtValidity.setEnabled(true);
         txtPrice.setEnabled(true);
         cboStatus.setEnabled(true);
     }//GEN-LAST:event_btnAllowEditActionPerformed

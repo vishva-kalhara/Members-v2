@@ -264,7 +264,6 @@ public class PnlMembers extends javax.swing.JPanel {
         
         try {
             
-            JasperPrintManager.printReport(makePrint(), false);
             JasperViewer.viewReport(makePrint(), false);
 
         } catch (Exception e) {

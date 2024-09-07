@@ -29,8 +29,9 @@ import utils.Formatter;
  * @author vishv
  */
 public class PnlSubscriptions extends javax.swing.JPanel {
-    
+
     private String search = "";
+    DlgSubscriptionFilters dialog;
 
     /**
      * Creates new form PnlSubscriptions
@@ -230,7 +231,13 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
 
-        new DlgSubscriptionFilters(AppLayout.appLayout, true).setVisible(true);
+        if (dialog == null) {
+            this.dialog = new DlgSubscriptionFilters(AppLayout.appLayout, true);
+        }
+
+        this.dialog.setVisible(true);
+        System.out.println(this.dialog.getQuery());
+        this.dialog.newQuery();
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
@@ -239,10 +246,9 @@ public class PnlSubscriptions extends javax.swing.JPanel {
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
-        
+
         try {
-            
-            JasperPrintManager.printReport(makePrint(), false);
+
             JasperViewer.viewReport(makePrint(), false);
 
         } catch (Exception e) {
@@ -251,9 +257,9 @@ public class PnlSubscriptions extends javax.swing.JPanel {
     }//GEN-LAST:event_btnViewActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        
+
         try {
-            
+
             JasperPrintManager.printReport(makePrint(), true);
 
         } catch (Exception e) {
@@ -346,9 +352,9 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
-     private JasperPrint makePrint() throws Exception {
-        
+
+    private JasperPrint makePrint() throws Exception {
+
         String prop2 = "Search: ";
         if (search.isBlank()) {
             prop2 += "null";
@@ -377,7 +383,6 @@ public class PnlSubscriptions extends javax.swing.JPanel {
         JRTableModelDataSource dataSource = new JRTableModelDataSource(tblSubcriptions.getModel());
 
         JasperPrint report = JasperFillManager.fillReport("src/reports/members_general_report.jasper", params, dataSource);
-        
 
         return report;
     }

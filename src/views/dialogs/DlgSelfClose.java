@@ -95,7 +95,6 @@ public class DlgSelfClose extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(399, 244));
         setMinimumSize(new java.awt.Dimension(399, 244));
-        setPreferredSize(new java.awt.Dimension(399, 277));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
