@@ -13,7 +13,7 @@ import java.awt.Color;
  * @author vishv
  */
 public class DlgError extends javax.swing.JDialog {
-    
+
     private DialogTypes type = DialogTypes.ERROR;
 
     /**
@@ -72,11 +72,11 @@ public class DlgError extends javax.swing.JDialog {
     }
 
     private void setDesign() {
-        
+
         Color ribbonColor = new Color(255, 66, 66);
-        if(this.type == DialogTypes.SUCCESS ){
-            ribbonColor = new Color(0,178,0);
-        } else if (this.type == DialogTypes.WARNING){
+        if (this.type == DialogTypes.SUCCESS) {
+            ribbonColor = new Color(0, 178, 0);
+        } else if (this.type == DialogTypes.WARNING) {
             ribbonColor = new Color(252, 188, 47);
         }
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, ribbonColor);
@@ -84,6 +84,7 @@ public class DlgError extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
 
         btnClose.putClientProperty("JButton.buttonType", "roundRect");
         btnClose.putClientProperty("JButton.buttonType", "borderless");

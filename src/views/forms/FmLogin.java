@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.Spark;
 import com.wishva.SparkException;
 import java.awt.Color;
+import java.awt.Toolkit;
 import utils.AppConnection;
 import views.layouts.AppLayout;
 import java.sql.ResultSet;
@@ -33,6 +34,8 @@ public class FmLogin extends javax.swing.JFrame {
         setDesign();
         
         this.appData = appData;
+        
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/img/logo_120.png")));
     }
     
     private void setDesign() {
@@ -41,7 +44,8 @@ public class FmLogin extends javax.swing.JFrame {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-        
+                getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+
         txtEmail.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtEmail.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Email");
         txtPassword.putClientProperty(FlatClientProperties.STYLE, "arc: 10");

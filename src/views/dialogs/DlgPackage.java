@@ -43,7 +43,7 @@ public class DlgPackage extends javax.swing.JDialog {
         setDesign();
 
         this.type = DialogTypes.CREATE;
-        lblPrice.setText("Price ("+ AppLayout.appData.getCurrencyValue() +") :");
+        lblPrice.setText("Price (" + AppLayout.appData.getCurrencyValue() + ") :");
 
         this.statusMap = DBData.getSubTableData("statuses", cboStatus);
     }
@@ -64,7 +64,7 @@ public class DlgPackage extends javax.swing.JDialog {
         setDesign();
 
         this.type = DialogTypes.UPDATE;
-        lblPrice.setText("Price ("+ AppLayout.appData.getCurrencyValue() +") :");
+        lblPrice.setText("Price (" + AppLayout.appData.getCurrencyValue() + ") :");
 
         this.statusMap = DBData.getSubTableData("statuses", cboStatus);
 
@@ -76,8 +76,6 @@ public class DlgPackage extends javax.swing.JDialog {
         btnSubmit.setEnabled(false);
 
         loadPackageData(plan);
-        
-        
 
     }
 
@@ -90,7 +88,8 @@ public class DlgPackage extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        
         txtTitle.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtValidity.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtPrice.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
@@ -339,7 +338,7 @@ public class DlgPackage extends javax.swing.JDialog {
             if (this.type == DialogTypes.CREATE) {
                 new PackageController().createPackage(plan);
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Package created success!");
-            } else if (this.type == DialogTypes.UPDATE){
+            } else if (this.type == DialogTypes.UPDATE) {
                 plan.setId(this.packageId);
                 new PackageController().updatePackage(plan);
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Package updated success!");

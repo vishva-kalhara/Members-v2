@@ -142,7 +142,8 @@ public class DlgMember extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        
         btnClose.putClientProperty("JButton.buttonType", "borderless");
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
 
@@ -579,9 +580,9 @@ public class DlgMember extends javax.swing.JDialog {
                 // View the report
                 JasperViewer.viewReport(report, false);
             }
-            
+
             this.setVisible(false);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);

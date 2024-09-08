@@ -55,7 +55,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         txtUsername.setEnabled(false);
         txtPassword.setEnabled(false);
         cboRole.setEnabled(false);
-        
+
         btnAllowEdit.setEnabled(false);
     }
 
@@ -73,8 +73,6 @@ public class DlgEmployee extends javax.swing.JDialog {
 
         this.type = DialogTypes.UPDATE;
         this.empId = employee.getId();
-
-        
 
         this.gendersMap = DBData.getSubTableData("gender", cboGender);
 
@@ -97,7 +95,7 @@ public class DlgEmployee extends javax.swing.JDialog {
 
         btnSubmit.setEnabled(false);
         btnReset.setEnabled(false);
-        
+
         lazyLoadFields(employee.getId());
     }
 
@@ -165,7 +163,8 @@ public class DlgEmployee extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        
         btnClose.putClientProperty("JButton.buttonType", "borderless");
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
 
@@ -615,7 +614,7 @@ public class DlgEmployee extends javax.swing.JDialog {
                 new EmployeeController().updateEmployee(employee);
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Employee details updated success!");
             }
-            
+
             this.dispose();
 
             AppLayout.appLayout.changeForm(LayoutPages.EMPLOYEES);

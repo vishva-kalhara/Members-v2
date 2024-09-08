@@ -9,6 +9,7 @@ import enums.DialogActions;
 import javax.swing.JOptionPane;
 import utils.AppConnection;
 import views.dialogs.DlgConfirm;
+import views.dialogs.DlgFindMember;
 import views.forms.FrmAttendance;
 import views.layouts.AppLayout;
 
@@ -485,7 +486,8 @@ public class PnlDashboard extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAttendanceActionPerformed
 
     private void btnSubscriptionDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubscriptionDetailsActionPerformed
-        // TODO add your handling code here:
+       
+        new DlgFindMember(AppLayout.appLayout, true).setVisible(true);
     }//GEN-LAST:event_btnSubscriptionDetailsActionPerformed
 
     private void btnMemberDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMemberDetailsActionPerformed

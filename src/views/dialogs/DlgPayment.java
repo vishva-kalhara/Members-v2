@@ -19,7 +19,7 @@ public class DlgPayment extends javax.swing.JDialog {
 
     private Subscription subscription;
     private DialogActions action = DialogActions.CANCEL;
-    
+
     /**
      * Creates new form DlgPayment
      *
@@ -48,6 +48,7 @@ public class DlgPayment extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
 
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
         btnClose.putClientProperty("JButton.buttonType", "borderless");
@@ -252,10 +253,10 @@ public class DlgPayment extends javax.swing.JDialog {
 
             if (Double.parseDouble(txtChange.getText()) < 0) {
                 new DlgError(AppLayout.appLayout, true, "Error", "Cash is insufficient to issue the subscription.").setVisible(true);
-                
+
                 return;
             }
-            
+
             new SubscriptionController().createSubscription(this.subscription);
             this.action = DialogActions.CONFIRM;
             this.dispose();
@@ -279,7 +280,7 @@ public class DlgPayment extends javax.swing.JDialog {
         btnSubmit.grabFocus();
     }//GEN-LAST:event_txtCashActionPerformed
 
-    public DialogActions getAction(){
+    public DialogActions getAction() {
         return this.action;
     }
 

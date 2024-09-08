@@ -52,7 +52,8 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        
         btnClear.putClientProperty("JButton.buttonType", "borderless");
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
 
@@ -346,7 +347,6 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
 
             generateQuery();
             this.setVisible(false);
-            
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -394,7 +394,7 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
         txtAmountTo.setText("");
         dateFrom.setDate(null);
         dateTo.setDate(null);
-        
+
         this.setVisible(false);
     }//GEN-LAST:event_btnClearActionPerformed
 
@@ -475,7 +475,7 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
     private void generateQuery() {
 
         query.append("WHERE ");
-        
+
         boolean hasAnd = false;
 
         if (cboPackage.getSelectedIndex() != 0) {
@@ -484,74 +484,79 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
             query.append(" `packages_id` = '")
                     .append(packageId)
                     .append("' ");
-            
+
             hasAnd = true;
         }
 
         if (cboCustomer.getSelectedIndex() != 0) {
 
-            if(hasAnd)
+            if (hasAnd) {
                 query.append(" AND ");
+            }
 
             String customerId = customersMap.get(String.valueOf(cboCustomer.getSelectedItem()));
             query.append(" `customers_id` = '")
                     .append(customerId)
                     .append("' ");
-            
+
             hasAnd = true;
         }
 
         if (!txtAmountFrom.getText().isBlank()) {
 
-            if(hasAnd)
+            if (hasAnd) {
                 query.append(" AND ");
+            }
 
             String value = txtAmountFrom.getText();
             query.append(" `paid_amount` >= '")
                     .append(value)
                     .append("' ");
-            
+
             hasAnd = true;
 
         }
 
         if (!txtAmountTo.getText().isBlank()) {
 
-            if(hasAnd)
+            if (hasAnd) {
                 query.append(" AND ");
+            }
 
             String value = txtAmountTo.getText();
             query.append(" `paid_amount` <= '")
                     .append(value)
                     .append("'");
-            
+
             hasAnd = true;
         }
-        
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        if(dateFrom.getDate() != null){
-            
-            if(hasAnd)
+        if (dateFrom.getDate() != null) {
+
+            if (hasAnd) {
                 query.append(" AND ");
-            
+            }
+
             Date value = dateFrom.getDate();
             query.append(" `created_at` >= '")
                     .append(formatter.format(value))
                     .append("'");
-            
+
             hasAnd = true;
         }
-        
-        if(dateTo.getDate() != null){
-            
-            if(hasAnd)
+
+        if (dateTo.getDate() != null) {
+
+            if (hasAnd) {
                 query.append(" AND ");
-            
+            }
+
             Date value = dateTo.getDate();
             query.append(" `created_at` <= '")
                     .append(formatter.format(value))
                     .append("' ");
-            
+
             hasAnd = true;
         }
     }
@@ -560,9 +565,9 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
 
         return String.valueOf(this.query);
     }
-    
-    public void newQuery(){
-        
+
+    public void newQuery() {
+
         this.query = new StringBuilder("");
     }
 }

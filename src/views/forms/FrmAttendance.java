@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import controllers.AttendanceController;
 import enums.DialogTypes;
 import java.awt.Color;
+import java.awt.Toolkit;
 import models.Application;
 import views.dialogs.DlgSelfClose;
 import java.sql.ResultSet;
@@ -37,6 +38,8 @@ public class FrmAttendance extends javax.swing.JFrame {
         this.appData = appData;
 
         setDesign();
+        
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/img/logo_120.png")));
     }
 
     /**
@@ -60,6 +63,8 @@ public class FrmAttendance extends javax.swing.JFrame {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        
 
         pnlCenter.putClientProperty(FlatClientProperties.STYLE, "arc: 999");
         txtCustomerId.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Member ID");
@@ -87,7 +92,7 @@ public class FrmAttendance extends javax.swing.JFrame {
         btnLogin = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

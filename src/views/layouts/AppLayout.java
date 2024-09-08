@@ -7,6 +7,7 @@ package views.layouts;
 import com.formdev.flatlaf.FlatClientProperties;
 import enums.LayoutPages;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -24,10 +25,10 @@ import views.internals.PnlSubscriptions;
  * @author vishv
  */
 public class AppLayout extends javax.swing.JFrame {
-    
+
     public static Application appData;
     public static AppLayout appLayout;
-    
+
     public JButton selectedButton;
 
     public static HashMap<String, String> employeeData = new HashMap();
@@ -49,6 +50,8 @@ public class AppLayout extends javax.swing.JFrame {
 
         setDesign();
 
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/img/logo_120.png")));
+
         Notifications.getInstance().setJFrame(this);
         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Hello " + employeeData.get("fName"));
     }
@@ -62,6 +65,7 @@ public class AppLayout extends javax.swing.JFrame {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
 
         btnDashboard.putClientProperty("JButton.buttonType", "borderless");
         btnSubscriptions.putClientProperty("JButton.buttonType", "borderless");

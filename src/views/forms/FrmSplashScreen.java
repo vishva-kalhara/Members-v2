@@ -6,6 +6,7 @@ package views.forms;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import enums.DialogTypes;
+import java.awt.Toolkit;
 import utils.AppConnection;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
@@ -31,6 +32,8 @@ public class FrmSplashScreen extends javax.swing.JFrame {
 
         
         configure();
+        
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/img/logo_120.png")));
         
     }
     

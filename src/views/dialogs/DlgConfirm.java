@@ -29,12 +29,12 @@ public class DlgConfirm extends javax.swing.JDialog {
         initComponents();
 
         setDesign();
-        
+
         lblMessage.setText("<HTML>" + message + "</HTML>");
-        
+
         btnClose.grabFocus();
     }
-    
+
     /**
      * Creates new form DlgConfirm
      *
@@ -48,10 +48,10 @@ public class DlgConfirm extends javax.swing.JDialog {
         initComponents();
 
         setDesign();
-        
+
         lblTitle.setText(title);
         lblMessage.setText("<HTML>" + message + "</HTML>");
-        
+
         btnClose.grabFocus();
     }
 
@@ -61,7 +61,7 @@ public class DlgConfirm extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
         btnClose.putClientProperty("JButton.buttonType", "roundRect");
         btnClose.putClientProperty("JButton.buttonType", "borderless");
         btnConfirm.putClientProperty("JButton.buttonType", "borderless");
@@ -179,12 +179,12 @@ public class DlgConfirm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        
+
         this.action = DialogActions.CONFIRM;
         this.dispose();
     }//GEN-LAST:event_btnConfirmActionPerformed
 
-    public DialogActions getAction(){
+    public DialogActions getAction() {
         return this.action;
     }
 
