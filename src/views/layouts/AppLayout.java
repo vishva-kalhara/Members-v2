@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import models.Application;
 import raven.toast.Notifications;
+import views.internals.PnlAttendance;
 import views.internals.PnlDashboard;
 import views.internals.PnlEmployees;
 import views.internals.PnlMembers;
@@ -70,10 +71,10 @@ public class AppLayout extends javax.swing.JFrame {
 
         btnDashboard.putClientProperty("JButton.buttonType", "borderless");
         btnSubscriptions.putClientProperty("JButton.buttonType", "borderless");
+        btnAttendance.putClientProperty("JButton.buttonType", "borderless");
         btnMembers.putClientProperty("JButton.buttonType", "borderless");
         btnPackages.putClientProperty("JButton.buttonType", "borderless");
         btnEmployees.putClientProperty("JButton.buttonType", "borderless");
-        btnReports.putClientProperty("JButton.buttonType", "borderless");
         btnSettings.putClientProperty("JButton.buttonType", "borderless");
     }
 
@@ -116,6 +117,10 @@ public class AppLayout extends javax.swing.JFrame {
                 changeSideBarButtons(btnSubscriptions);
                 showForm(new PnlSubscriptions());
                 break;
+            case ATTENDANCE:
+                changeSideBarButtons(btnAttendance);
+                showForm(new PnlAttendance());
+                break;
             case MEMBERS:
                 changeSideBarButtons(btnMembers);
                 showForm(new PnlMembers());
@@ -153,14 +158,14 @@ public class AppLayout extends javax.swing.JFrame {
         btnMembers = new javax.swing.JButton();
         btnPackages = new javax.swing.JButton();
         btnEmployees = new javax.swing.JButton();
+        btnAttendance = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         btnSettings = new javax.swing.JButton();
-        btnReports = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         pnlPlaceholder = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Members");
         setMaximumSize(new java.awt.Dimension(1440, 900));
         setMinimumSize(new java.awt.Dimension(1440, 900));
@@ -226,6 +231,16 @@ public class AppLayout extends javax.swing.JFrame {
             }
         });
 
+        btnAttendance.setBackground(new java.awt.Color(249, 249, 249));
+        btnAttendance.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        btnAttendance.setText("Attendance");
+        btnAttendance.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        btnAttendance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAttendanceActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -237,7 +252,8 @@ public class AppLayout extends javax.swing.JFrame {
                     .addComponent(btnSubscriptions, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMembers, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPackages, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAttendance, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -248,12 +264,14 @@ public class AppLayout extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSubscriptions, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAttendance, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMembers, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPackages, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addContainerGap(210, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -265,28 +283,19 @@ public class AppLayout extends javax.swing.JFrame {
         btnSettings.setText("Settings");
         btnSettings.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
 
-        btnReports.setBackground(new java.awt.Color(249, 249, 249));
-        btnReports.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        btnReports.setText("Reports");
-        btnReports.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnReports, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addComponent(btnReports, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap(80, Short.MAX_VALUE)
                 .addComponent(btnSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
         );
@@ -359,12 +368,17 @@ public class AppLayout extends javax.swing.JFrame {
         changeForm(LayoutPages.SUBSCRIPTIONS);
     }//GEN-LAST:event_btnSubscriptionsActionPerformed
 
+    private void btnAttendanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttendanceActionPerformed
+        
+        changeForm(LayoutPages.ATTENDANCE);
+    }//GEN-LAST:event_btnAttendanceActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAttendance;
     private javax.swing.JButton btnDashboard;
     private javax.swing.JButton btnEmployees;
     private javax.swing.JButton btnMembers;
     private javax.swing.JButton btnPackages;
-    private javax.swing.JButton btnReports;
     private javax.swing.JButton btnSettings;
     private javax.swing.JButton btnSubscriptions;
     private javax.swing.JLabel jLabel1;
