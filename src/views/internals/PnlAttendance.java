@@ -56,7 +56,7 @@ public class PnlAttendance extends javax.swing.JPanel {
         cboCustomer = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
-        tblMembers = new javax.swing.JTable();
+        table = new javax.swing.JTable();
 
         setMaximumSize(new java.awt.Dimension(1160, 900));
         setMinimumSize(new java.awt.Dimension(1160, 900));
@@ -146,7 +146,7 @@ public class PnlAttendance extends javax.swing.JPanel {
 
         scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        tblMembers.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -165,8 +165,8 @@ public class PnlAttendance extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblMembers.getTableHeader().setReorderingAllowed(false);
-        scrollPane.setViewportView(tblMembers);
+        table.getTableHeader().setReorderingAllowed(false);
+        scrollPane.setViewportView(table);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -243,16 +243,16 @@ public class PnlAttendance extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane scrollPane;
-    private javax.swing.JTable tblMembers;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 
     private void setDesign() {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        tblMembers.setDefaultRenderer(Object.class, centerRenderer);
+        table.setDefaultRenderer(Object.class, centerRenderer);
 
-        javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblMembers.getParent().getParent();
+        javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) table.getParent().getParent();
         scroll.setBorder(BorderFactory.createEmptyBorder());
     }
 
@@ -308,24 +308,85 @@ public class PnlAttendance extends javax.swing.JPanel {
         }
     }
 
+    private String getWhereClause() {
+
+        StringBuilder clause = new StringBuilder(" WHERE ");
+
+        if (cboCustomer.getSelectedIndex() == 0 && cboPackage.getSelectedIndex() == 0) {
+            return "";
+        }
+
+        boolean hasPackage = cboPackage.getSelectedIndex() != 0;
+        if (hasPackage) {
+
+            clause.append(" `packages_id` = '")
+                    .append(packagesMap.get(String.valueOf(cboPackage.getSelectedItem())))
+                    .append("'");
+        }
+
+        if (cboCustomer.getSelectedIndex() != 0) {
+
+            if (hasPackage) {
+                clause.append(" AND ");
+            }
+
+            clause.append(" `customers_id` = '")
+                    .append(customerMap.get(String.valueOf(cboCustomer.getSelectedItem())))
+                    .append("'");
+        }
+
+        return String.valueOf(clause);
+    }
+
+    private String getSortClause() {
+
+        StringBuilder clause = new StringBuilder(" ORDER BY `marked_at` ");
+
+        if (String.valueOf(cboSort.getSelectedItem()).equals("Marked At DESC")) {
+            clause.append("DESC");
+        } else {
+            clause.append("ASC");
+        }
+
+        return String.valueOf(clause);
+    }
+
     private void loadTableData() {
+
+        scrollPane.setViewportView(new PnlFetching());
+        btnView.setEnabled(false);
+        btnPrint.setEnabled(false);
 
         try {
 
-            ResultSet rs = AppConnection.fetch("SELECT `marked_at`, `customers_id`, CONCAT(`customers`.`first_name`, ' ', `customers`.`last_name`) AS full_name, `packages`.`title` FROM `attendance` INNER JOIN `subscriptions` ON `attendance`.`subscriptions_id` = `subscriptions`.`id` INNER JOIN `customers` ON `customers_id` = `customers`.`id` INNER JOIN `packages` ON `packages_id` = `packages`.`id`;");
+            ResultSet rs = AppConnection.fetch("SELECT `marked_at`, `customers_id`, CONCAT(`customers`.`first_name`, ' ', `customers`.`last_name`) AS full_name, `packages`.`title` "
+                    + "FROM `attendance` "
+                    + "INNER JOIN `subscriptions` ON `attendance`.`subscriptions_id` = `subscriptions`.`id` "
+                    + "INNER JOIN `customers` ON `customers_id` = `customers`.`id` INNER JOIN `packages` ON `packages_id` = `packages`.`id` "
+                    + getWhereClause()
+                    + getSortClause()
+                    + ";");
 
-            DefaultTableModel model = (DefaultTableModel) tblMembers.getModel();
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.setRowCount(0);
 
             while (rs.next()) {
                 Vector<String> data = new Vector();
-                
+
                 data.add(rs.getString("marked_at"));
                 data.add(rs.getString("customers_id"));
                 data.add(rs.getString("full_name"));
                 data.add(rs.getString("packages.title"));
-                
+
                 model.addRow(data);
+            }
+
+            if (table.getRowCount() == 0) {
+                scrollPane.setViewportView(new PnlNoData());
+            } else {
+                scrollPane.setViewportView(table);
+                btnView.setEnabled(true);
+                btnPrint.setEnabled(true);
             }
 
         } catch (Exception e) {
