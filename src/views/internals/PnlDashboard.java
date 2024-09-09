@@ -7,6 +7,8 @@ package views.internals;
 import com.formdev.flatlaf.FlatClientProperties;
 import enums.DialogActions;
 import java.awt.Component;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import utils.AppConnection;
 import views.dialogs.DlgConfirm;
@@ -27,6 +29,31 @@ public class PnlDashboard extends javax.swing.JPanel {
         initComponents();
 
         setDesign();
+
+        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+        lblTime.setText(now);
+
+        showClock();
+    }
+
+    private void showClock() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    Thread.sleep(1000);
+                    while (true) {
+
+                        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+                        lblTime.setText(now);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void setDesign() {
@@ -38,7 +65,6 @@ public class PnlDashboard extends javax.swing.JPanel {
         pnlCard6.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard7.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard8.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
-
 
         btnAttendance.putClientProperty("JButton.buttonType", "borderless");
         btnSubscriptionDetails.putClientProperty("JButton.buttonType", "borderless");
@@ -58,6 +84,7 @@ public class PnlDashboard extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        lblTime = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         pnlCard3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -98,6 +125,11 @@ public class PnlDashboard extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 24)); // NOI18N
         jLabel1.setText("Hello, Wishva Kalhara");
 
+        lblTime.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        lblTime.setForeground(new java.awt.Color(153, 153, 153));
+        lblTime.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblTime.setText("jLabel16");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -105,14 +137,18 @@ public class PnlDashboard extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(43, 43, 43)
                 .addComponent(jLabel1)
-                .addContainerGap(879, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 449, Short.MAX_VALUE)
+                .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -568,6 +604,7 @@ public class PnlDashboard extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblTime;
     private javax.swing.JPanel pnlCard1;
     private javax.swing.JPanel pnlCard2;
     private javax.swing.JPanel pnlCard3;
