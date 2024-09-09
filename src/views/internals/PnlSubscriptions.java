@@ -233,8 +233,14 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             }
 
             this.dialog.setVisible(true);
-            System.out.println(this.dialog.getQuery());
             this.whereQuery = this.dialog.getQuery();
+            System.out.println(this.whereQuery);
+            String[] parts = whereQuery.split("`");
+            
+            for(int i = 1; i < parts.length; i = i + 2){
+                
+                System.out.println(parts[i]);
+            }
             loadSubscriptionData();
             this.dialog.newQuery();
         } catch (Exception e) {

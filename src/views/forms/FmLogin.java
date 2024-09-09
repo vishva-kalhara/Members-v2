@@ -22,35 +22,37 @@ import views.dialogs.DlgError;
  * @author vishv
  */
 public class FmLogin extends javax.swing.JFrame {
-    
+
     private Application appData;
 
     /**
      * Creates new form FmLogin
+     *
      * @param appData
      */
     public FmLogin(Application appData) {
         initComponents();
         setDesign();
-        
+
         this.appData = appData;
-        
+
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/img/logo_120.png")));
     }
-    
+
     private void setDesign() {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_BACKGROUND, new Color(255, 255, 255));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_FOREGROUND, new Color(0, 0, 0));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-                getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_TITLE, false);
 
         txtEmail.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtEmail.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Email");
         txtPassword.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
         txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Password");
-        
+
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
         btnClose.putClientProperty("JButton.buttonType", "borderless");
     }
@@ -74,6 +76,7 @@ public class FmLogin extends javax.swing.JFrame {
         btnClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Members - Sign In");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -178,9 +181,9 @@ public class FmLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        
+
         try {
-            
+
             String username = new Spark("Email", txtEmail.getText())
                     .required()
                     .endString();
@@ -188,28 +191,28 @@ public class FmLogin extends javax.swing.JFrame {
                     .required()
                     .minLength(8)
                     .endString();
-            
+
             ResultSet rs = AppConnection.execute("SELECT * FROM employees WHERE `username` = '" + username + "' AND `password` = '" + password + "'");
             if (rs.next()) {
-                
+
                 if (!rs.getString("statuses_id").equals("1")) {
                     new DlgError(this, true, "Unauthorized!", "You have no longer access to use the system.").setVisible(true);
                 } else {
-                    
+
                     HashMap<String, String> employeeData = new HashMap();
-                    
+
                     employeeData.put("id", rs.getString("id"));
                     employeeData.put("fName", rs.getString("first_name"));
                     employeeData.put("lName", rs.getString("last_name"));
                     employeeData.put("role_id", rs.getString("user_roles_id"));
-                    
+
                     new AppLayout(this.appData, employeeData).setVisible(true);
                     this.dispose();
                 }
             } else {
                 new DlgError(this, true, "Unauthorized!", "Username or password is incorrect.").setVisible(true);
             }
-            
+
         } catch (SparkException e) {
             //            JOptionPane.showMessageDialog(this, e.getMessage(), e.title, JOptionPane.WARNING_MESSAGE);
             new DlgError(this, true, e.getMessage(), e.title).setVisible(true);

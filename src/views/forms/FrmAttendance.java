@@ -64,6 +64,7 @@ public class FrmAttendance extends javax.swing.JFrame {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_TITLE, false);
         
 
         pnlCenter.putClientProperty(FlatClientProperties.STYLE, "arc: 999");
@@ -93,6 +94,7 @@ public class FrmAttendance extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Mark Attendance");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

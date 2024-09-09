@@ -6,6 +6,7 @@ package views.internals;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import enums.DialogActions;
+import java.awt.Component;
 import javax.swing.JOptionPane;
 import utils.AppConnection;
 import views.dialogs.DlgConfirm;
@@ -37,6 +38,7 @@ public class PnlDashboard extends javax.swing.JPanel {
         pnlCard6.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard7.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard8.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
+
 
         btnAttendance.putClientProperty("JButton.buttonType", "borderless");
         btnSubscriptionDetails.putClientProperty("JButton.buttonType", "borderless");
@@ -138,7 +140,9 @@ public class PnlDashboard extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 30)); // NOI18N
         jLabel3.setText("156 Active");
 
-        jLabel4.setText("+ 5% vs Last month");
+        jLabel4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 52, 0));
+        jLabel4.setText("- 5% vs Last month");
 
         javax.swing.GroupLayout pnlCard3Layout = new javax.swing.GroupLayout(pnlCard3);
         pnlCard3.setLayout(pnlCard3Layout);
@@ -174,6 +178,8 @@ public class PnlDashboard extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Segoe UI Semibold", 0, 30)); // NOI18N
         jLabel6.setText("LKR  21,300.00");
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(24, 142, 0));
         jLabel7.setText("+ 26% vs Last month");
 
         javax.swing.GroupLayout pnlCard1Layout = new javax.swing.GroupLayout(pnlCard1);
@@ -210,6 +216,8 @@ public class PnlDashboard extends javax.swing.JPanel {
         jLabel9.setFont(new java.awt.Font("Segoe UI Semibold", 0, 30)); // NOI18N
         jLabel9.setText("The One Month");
 
+        jLabel10.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(24, 142, 0));
         jLabel10.setText("+ 15% vs Last Month");
 
         javax.swing.GroupLayout pnlCard2Layout = new javax.swing.GroupLayout(pnlCard2);
@@ -480,13 +488,13 @@ public class PnlDashboard extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAttendanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttendanceActionPerformed
-        
+
         new FrmAttendance(true).setVisible(true);
         AppLayout.appLayout.setVisible(false);
     }//GEN-LAST:event_btnAttendanceActionPerformed
 
     private void btnSubscriptionDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubscriptionDetailsActionPerformed
-       
+
         new DlgFindMember(AppLayout.appLayout, true).setVisible(true);
     }//GEN-LAST:event_btnSubscriptionDetailsActionPerformed
 
@@ -499,7 +507,7 @@ public class PnlDashboard extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAttendanceDetailsActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        
+
         try {
 
             DlgConfirm dialog = new DlgConfirm(AppLayout.appLayout, true, "Confirm Exit!", "Sure you want to sign out.");

@@ -53,7 +53,7 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
-        
+
         btnClear.putClientProperty("JButton.buttonType", "borderless");
         btnSubmit.putClientProperty("JButton.buttonType", "borderless");
 
@@ -474,6 +474,8 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
 
     private void generateQuery() {
 
+        HashMap<String, String> reportData = new HashMap();
+
         query.append("WHERE ");
 
         boolean hasAnd = false;
@@ -485,7 +487,10 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
                     .append(packageId)
                     .append("' ");
 
+            reportData.put("packageData", "(Filter) Package: " + String.valueOf(cboPackage.getSelectedItem()));
             hasAnd = true;
+        } else {
+            reportData.put("packageData", "(Filter) Package: Not Applied");
         }
 
         if (cboCustomer.getSelectedIndex() != 0) {
@@ -499,10 +504,14 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
                     .append(customerId)
                     .append("' ");
 
+            reportData.put("customerData", "(Filter) Member Details: " + String.valueOf(cboCustomer.getSelectedItem()));
             hasAnd = true;
+        } else {
+            reportData.put("customerData", "(Filter) Member Details: Not Applied");
         }
 
-        if (!txtAmountFrom.getText().isBlank()) {
+        boolean hasFromPrice = !txtAmountFrom.getText().isBlank();
+        if (hasFromPrice) {
 
             if (hasAnd) {
                 query.append(" AND ");
@@ -513,11 +522,13 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
                     .append(value)
                     .append("' ");
 
+            reportData.put("customerData", "(Filter) Paid amount: " + String.valueOf(cboCustomer.getSelectedItem()));
             hasAnd = true;
 
         }
 
-        if (!txtAmountTo.getText().isBlank()) {
+        boolean hasToPrice = !txtAmountTo.getText().isBlank();
+        if (hasToPrice) {
 
             if (hasAnd) {
                 query.append(" AND ");
@@ -530,9 +541,20 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
 
             hasAnd = true;
         }
+        
+        if(hasFromPrice && hasToPrice){
+            reportData.put("customerData", "(Filter) Paid amount: " + AppLayout.appData.getCurrencyValue() + txtAmountFrom.getText() + " to " + AppLayout.appData.getCurrencyValue() + txtAmountTo.getText());
+        } else if(hasFromPrice && !hasToPrice){
+            reportData.put("customerData", "(Filter) Paid amount: " + AppLayout.appData.getCurrencyValue() + txtAmountFrom.getText() + " to MAX");
+        } else if (!hasFromPrice && hasToPrice) {
+            reportData.put("customerData", "(Filter) Paid amount: " + AppLayout.appData.getCurrencyValue() + "0.00 to " + AppLayout.appData.getCurrencyValue() + txtAmountTo.getText());
+        } else {
+            reportData.put("customerData", "(Filter) Paid amount: Not Applied");
+        }
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        if (dateFrom.getDate() != null) {
+        boolean hasFromDate = dateFrom.getDate() != null;
+        if (hasFromDate) {
 
             if (hasAnd) {
                 query.append(" AND ");
@@ -545,8 +567,9 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
 
             hasAnd = true;
         }
-
-        if (dateTo.getDate() != null) {
+        
+        boolean hasToDate = dateTo.getDate() != null;
+        if (hasToDate) {
 
             if (hasAnd) {
                 query.append(" AND ");
@@ -556,8 +579,16 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
             query.append(" `created_at` <= '")
                     .append(formatter.format(value))
                     .append("' ");
-
-            hasAnd = true;
+        }
+        
+        if(hasFromDate && hasToDate){
+            reportData.put("customerData", "(Filter) Issued Date: " + txtAmountFrom.getText() + " to " + AppLayout.appData.getCurrencyValue() + txtAmountTo.getText());
+        } else if(hasFromDate && !hasToDate){
+            reportData.put("customerData", "(Filter) Issued Date: " + txtAmountFrom.getText() + " to MAX");
+        } else if (!hasFromDate && hasToDate) {
+            reportData.put("customerData", "(Filter) Issued Date: " + "0.00 to " + AppLayout.appData.getCurrencyValue() + txtAmountTo.getText());
+        } else {
+            reportData.put("customerData", "(Filter) Issued Date: Not Applied");
         }
     }
 

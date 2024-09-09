@@ -66,6 +66,7 @@ public class AppLayout extends javax.swing.JFrame {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_TITLE, false);
 
         btnDashboard.putClientProperty("JButton.buttonType", "borderless");
         btnSubscriptions.putClientProperty("JButton.buttonType", "borderless");
@@ -160,6 +161,7 @@ public class AppLayout extends javax.swing.JFrame {
         pnlPlaceholder = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Members");
         setMaximumSize(new java.awt.Dimension(1440, 900));
         setMinimumSize(new java.awt.Dimension(1440, 900));
         setResizable(false);
