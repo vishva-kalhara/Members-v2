@@ -16,7 +16,7 @@ import views.layouts.AppLayout;
  * @author vishv
  */
 public class AppConnection {
-
+    
     private static Connection connection;
 
     private static void setUpConnection() {

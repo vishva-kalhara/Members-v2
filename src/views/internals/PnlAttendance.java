@@ -370,7 +370,7 @@ public class PnlAttendance extends javax.swing.JPanel {
 
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.setRowCount(0);
-
+            
             while (rs.next()) {
                 Vector<String> data = new Vector();
 
@@ -381,7 +381,7 @@ public class PnlAttendance extends javax.swing.JPanel {
 
                 model.addRow(data);
             }
-
+            
             if (table.getRowCount() == 0) {
                 scrollPane.setViewportView(new PnlNoData());
             } else {
