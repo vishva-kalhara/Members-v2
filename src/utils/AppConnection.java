@@ -58,7 +58,7 @@ public class AppConnection {
 
     public static ResultSet fetch(String query) {
 
-        if (!query.startsWith("SELECT")) {
+        if (!query.startsWith("SELECT") && !query.startsWith("CALL")) {
             throw new IllegalArgumentException("Use ResultSet utils.AppConnection.mutate()");
         }
 
