@@ -5,6 +5,7 @@
 package views.internals;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import controllers.DashboardController;
 import enums.DialogActions;
 import enums.LayoutPages;
 import java.text.SimpleDateFormat;
@@ -14,7 +15,6 @@ import utils.AppConnection;
 import views.dialogs.DlgConfirm;
 import views.forms.FrmAttendance;
 import views.layouts.AppLayout;
-import java.sql.ResultSet;
 import javax.swing.JPanel;
 import utils.Formatter;
 
@@ -25,12 +25,16 @@ import utils.Formatter;
 public class PnlDashboard extends javax.swing.JPanel {
 
     private JPanel panel;
+    
+    private DashboardController controller;
 
     /**
      * Creates new form PnlDashboard
      */
     public PnlDashboard() {
         initComponents();
+        
+        this.controller = new DashboardController();
 
         setDesign();
 
@@ -68,15 +72,13 @@ public class PnlDashboard extends javax.swing.JPanel {
     private void loadProfitCardData() {
         try {
             
-            Date today = new Date();
+            String[] data = controller.getProfitCardData();
             
-            String yr = new SimpleDateFormat("yyyy").format(today);
-            String month = new SimpleDateFormat("MM").format(today);
-
-            ResultSet rs = AppConnection.fetch("CALL get_profit_of_yr_and_month("+ yr +", "+ month +");");
-            if (rs.next()) {
-                lblProfit.setText(AppLayout.appData.getCurrencyValue() + " " + new Formatter().addZeroToDouble(rs.getDouble("monthlyTotal")));
-            }
+            if(Double.parseDouble(data[0]) != 0.0){
+                lblProfit.setText(AppLayout.appData.getCurrencyValue() + " " + data[0]);
+                lblProfitSub.setText("+ " + data[1] + "% vs Last month");
+            } else
+                lblProfit.setText("N/A");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,7 +139,7 @@ public class PnlDashboard extends javax.swing.JPanel {
         pnlCard1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         lblProfit = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        lblProfitSub = new javax.swing.JLabel();
         pnlCard2 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -220,9 +222,9 @@ public class PnlDashboard extends javax.swing.JPanel {
         lblProfit.setFont(new java.awt.Font("Segoe UI Semibold", 0, 30)); // NOI18N
         lblProfit.setText("LKR 21,300.00");
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(24, 142, 0));
-        jLabel7.setText("+ 26% vs Last month");
+        lblProfitSub.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        lblProfitSub.setForeground(new java.awt.Color(24, 142, 0));
+        lblProfitSub.setText("+ 26% vs Last month");
 
         javax.swing.GroupLayout pnlCard1Layout = new javax.swing.GroupLayout(pnlCard1);
         pnlCard1.setLayout(pnlCard1Layout);
@@ -232,7 +234,7 @@ public class PnlDashboard extends javax.swing.JPanel {
                 .addGap(26, 26, 26)
                 .addGroup(pnlCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblProfitSub, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblProfit, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
@@ -244,7 +246,7 @@ public class PnlDashboard extends javax.swing.JPanel {
                 .addGap(31, 31, 31)
                 .addComponent(lblProfit)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
+                .addComponent(lblProfitSub)
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
@@ -636,10 +638,10 @@ public class PnlDashboard extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblProfit;
+    private javax.swing.JLabel lblProfitSub;
     private javax.swing.JLabel lblTime;
     private javax.swing.JPanel pnlCard1;
     private javax.swing.JPanel pnlCard2;
