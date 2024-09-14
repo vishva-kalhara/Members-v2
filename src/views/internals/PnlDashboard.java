@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import controllers.DashboardController;
 import enums.DialogActions;
 import enums.LayoutPages;
+import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -16,16 +17,15 @@ import views.dialogs.DlgConfirm;
 import views.forms.FrmAttendance;
 import views.layouts.AppLayout;
 import javax.swing.JPanel;
-import utils.Formatter;
 
 /**
  *
  * @author vishv
  */
 public class PnlDashboard extends javax.swing.JPanel {
-    
+
     private JPanel panel;
-    
+
     private DashboardController controller;
 
     /**
@@ -33,33 +33,36 @@ public class PnlDashboard extends javax.swing.JPanel {
      */
     public PnlDashboard() {
         initComponents();
-        
+
         this.controller = new DashboardController();
-        
+
         setDesign();
-        
+
         this.panel = this;
-        
+
         this.removeAll();
         this.add(new PnlFetching(), java.awt.BorderLayout.CENTER);
         this.repaint();
         this.revalidate();
-        
+
+        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+        lblTime.setText(now);
+
         fetchData();
-        
+
     }
-    
+
     private void fetchData() {
-        
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                
+
                 showClock();
-                
+
                 loadProfitCardData();
                 loadMostSoldPackageData();
-                
+
                 panel.removeAll();
                 panel.add(pnlHeader, java.awt.BorderLayout.NORTH);
                 panel.add(pnlCenter, java.awt.BorderLayout.CENTER);
@@ -69,53 +72,55 @@ public class PnlDashboard extends javax.swing.JPanel {
             }
         }).start();
     }
-    
+
     private void loadMostSoldPackageData() {
         try {
             String[] data = controller.getMostSoldPackageCardData();
-            
+
             lblPackageTitle.setText(data[0]);
-            
+
             double perccentage = Double.parseDouble(data[1]);
-            
+
             if (perccentage > 0.0) {
                 lblPackageSub.setText("+ " + perccentage + " more subscrptions sold than others");
+                lblPackageSub.setForeground(new Color(24, 142, 0));
             } else {
                 lblPackageSub.setText("N/A");
+                lblPackageSub.setForeground(new Color(153, 153, 153));
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private void loadProfitCardData() {
         try {
-            
+
             String[] data = controller.getProfitCardData();
-            
+
             if (Double.parseDouble(data[0]) != 0.0) {
                 lblProfit.setText(AppLayout.appData.getCurrencyValue() + " " + data[0]);
                 lblProfitSub.setText("+ " + data[1] + "% vs Last month");
             } else {
                 lblProfit.setText("N/A");
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private void showClock() {
-        
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    
+
                     Thread.sleep(1000);
                     while (true) {
-                        
+
                         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
                         lblTime.setText(now);
                     }
@@ -125,7 +130,7 @@ public class PnlDashboard extends javax.swing.JPanel {
             }
         }).start();
     }
-    
+
     private void setDesign() {
         pnlCard1.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard2.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
@@ -135,7 +140,7 @@ public class PnlDashboard extends javax.swing.JPanel {
         pnlCard6.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard7.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard8.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
-        
+
         btnAttendance.putClientProperty("JButton.buttonType", "borderless");
         btnSubscriptionDetails.putClientProperty("JButton.buttonType", "borderless");
         btnMemberDetails.putClientProperty("JButton.buttonType", "borderless");
@@ -282,7 +287,7 @@ public class PnlDashboard extends javax.swing.JPanel {
         lblPackageTitle.setText("The One Month");
 
         lblPackageSub.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        lblPackageSub.setForeground(new java.awt.Color(24, 142, 0));
+        lblPackageSub.setForeground(new java.awt.Color(153, 153, 153));
         lblPackageSub.setText("+ 15% vs Last Month");
 
         javax.swing.GroupLayout pnlCard2Layout = new javax.swing.GroupLayout(pnlCard2);
@@ -602,36 +607,36 @@ public class PnlDashboard extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAttendanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttendanceActionPerformed
-        
+
         new FrmAttendance(true).setVisible(true);
         AppLayout.appLayout.setVisible(false);
     }//GEN-LAST:event_btnAttendanceActionPerformed
 
     private void btnSubscriptionDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubscriptionDetailsActionPerformed
-        
+
         AppLayout.appLayout.changeForm(LayoutPages.SUBSCRIPTIONS);
     }//GEN-LAST:event_btnSubscriptionDetailsActionPerformed
 
     private void btnMemberDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMemberDetailsActionPerformed
-        
+
         AppLayout.appLayout.changeForm(LayoutPages.MEMBERS);
     }//GEN-LAST:event_btnMemberDetailsActionPerformed
 
     private void btnAttendanceDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttendanceDetailsActionPerformed
-        
+
         AppLayout.appLayout.changeForm(LayoutPages.ATTENDANCE);
     }//GEN-LAST:event_btnAttendanceDetailsActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        
+
         try {
-            
+
             DlgConfirm dialog = new DlgConfirm(AppLayout.appLayout, true, "Confirm Exit!", "Sure you want to sign out.");
             dialog.setVisible(true);
             DialogActions action = dialog.getAction();
-            
+
             if (action == DialogActions.CONFIRM) {
-                
+
                 AppConnection.closeConnection();
                 System.exit(0);
             }
