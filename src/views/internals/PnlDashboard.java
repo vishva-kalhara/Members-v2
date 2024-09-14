@@ -23,7 +23,7 @@ import utils.Formatter;
  * @author vishv
  */
 public class PnlDashboard extends javax.swing.JPanel {
-
+    
     private JPanel panel;
     
     private DashboardController controller;
@@ -35,30 +35,31 @@ public class PnlDashboard extends javax.swing.JPanel {
         initComponents();
         
         this.controller = new DashboardController();
-
+        
         setDesign();
-
+        
         this.panel = this;
-
+        
         this.removeAll();
         this.add(new PnlFetching(), java.awt.BorderLayout.CENTER);
         this.repaint();
         this.revalidate();
-
+        
         fetchData();
-
+        
     }
-
+    
     private void fetchData() {
-
+        
         new Thread(new Runnable() {
             @Override
             public void run() {
-
+                
                 showClock();
-
+                
                 loadProfitCardData();
-
+                loadMostSoldPackageData();
+                
                 panel.removeAll();
                 panel.add(pnlHeader, java.awt.BorderLayout.NORTH);
                 panel.add(pnlCenter, java.awt.BorderLayout.CENTER);
@@ -68,33 +69,53 @@ public class PnlDashboard extends javax.swing.JPanel {
             }
         }).start();
     }
-
+    
+    private void loadMostSoldPackageData() {
+        try {
+            String[] data = controller.getMostSoldPackageCardData();
+            
+            lblPackageTitle.setText(data[0]);
+            
+            double perccentage = Double.parseDouble(data[1]);
+            
+            if (perccentage > 0.0) {
+                lblPackageSub.setText("+ " + perccentage + " more subscrptions sold than others");
+            } else {
+                lblPackageSub.setText("N/A");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void loadProfitCardData() {
         try {
             
             String[] data = controller.getProfitCardData();
             
-            if(Double.parseDouble(data[0]) != 0.0){
+            if (Double.parseDouble(data[0]) != 0.0) {
                 lblProfit.setText(AppLayout.appData.getCurrencyValue() + " " + data[0]);
                 lblProfitSub.setText("+ " + data[1] + "% vs Last month");
-            } else
+            } else {
                 lblProfit.setText("N/A");
-
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
     private void showClock() {
-
+        
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-
+                    
                     Thread.sleep(1000);
                     while (true) {
-
+                        
                         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
                         lblTime.setText(now);
                     }
@@ -104,7 +125,7 @@ public class PnlDashboard extends javax.swing.JPanel {
             }
         }).start();
     }
-
+    
     private void setDesign() {
         pnlCard1.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard2.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
@@ -114,7 +135,7 @@ public class PnlDashboard extends javax.swing.JPanel {
         pnlCard6.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard7.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard8.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
-
+        
         btnAttendance.putClientProperty("JButton.buttonType", "borderless");
         btnSubscriptionDetails.putClientProperty("JButton.buttonType", "borderless");
         btnMemberDetails.putClientProperty("JButton.buttonType", "borderless");
@@ -142,8 +163,8 @@ public class PnlDashboard extends javax.swing.JPanel {
         lblProfitSub = new javax.swing.JLabel();
         pnlCard2 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        lblPackageTitle = new javax.swing.JLabel();
+        lblPackageSub = new javax.swing.JLabel();
         pnlHeader = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblTime = new javax.swing.JLabel();
@@ -257,12 +278,12 @@ public class PnlDashboard extends javax.swing.JPanel {
         jLabel8.setForeground(new java.awt.Color(102, 102, 102));
         jLabel8.setText("Most sold package");
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI Semibold", 0, 30)); // NOI18N
-        jLabel9.setText("The One Month");
+        lblPackageTitle.setFont(new java.awt.Font("Segoe UI Semibold", 0, 30)); // NOI18N
+        lblPackageTitle.setText("The One Month");
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(24, 142, 0));
-        jLabel10.setText("+ 15% vs Last Month");
+        lblPackageSub.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        lblPackageSub.setForeground(new java.awt.Color(24, 142, 0));
+        lblPackageSub.setText("+ 15% vs Last Month");
 
         javax.swing.GroupLayout pnlCard2Layout = new javax.swing.GroupLayout(pnlCard2);
         pnlCard2.setLayout(pnlCard2Layout);
@@ -272,8 +293,8 @@ public class PnlDashboard extends javax.swing.JPanel {
                 .addGap(26, 26, 26)
                 .addGroup(pnlCard2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel8)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblPackageTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                    .addComponent(lblPackageSub, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         pnlCard2Layout.setVerticalGroup(
@@ -282,9 +303,9 @@ public class PnlDashboard extends javax.swing.JPanel {
                 .addGap(25, 25, 25)
                 .addComponent(jLabel8)
                 .addGap(31, 31, 31)
-                .addComponent(jLabel9)
+                .addComponent(lblPackageTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
+                .addComponent(lblPackageSub)
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
@@ -581,36 +602,36 @@ public class PnlDashboard extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAttendanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttendanceActionPerformed
-
+        
         new FrmAttendance(true).setVisible(true);
         AppLayout.appLayout.setVisible(false);
     }//GEN-LAST:event_btnAttendanceActionPerformed
 
     private void btnSubscriptionDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubscriptionDetailsActionPerformed
-
+        
         AppLayout.appLayout.changeForm(LayoutPages.SUBSCRIPTIONS);
     }//GEN-LAST:event_btnSubscriptionDetailsActionPerformed
 
     private void btnMemberDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMemberDetailsActionPerformed
-
+        
         AppLayout.appLayout.changeForm(LayoutPages.MEMBERS);
     }//GEN-LAST:event_btnMemberDetailsActionPerformed
 
     private void btnAttendanceDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttendanceDetailsActionPerformed
-
+        
         AppLayout.appLayout.changeForm(LayoutPages.ATTENDANCE);
     }//GEN-LAST:event_btnAttendanceDetailsActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-
+        
         try {
-
+            
             DlgConfirm dialog = new DlgConfirm(AppLayout.appLayout, true, "Confirm Exit!", "Sure you want to sign out.");
             dialog.setVisible(true);
             DialogActions action = dialog.getAction();
-
+            
             if (action == DialogActions.CONFIRM) {
-
+                
                 AppConnection.closeConnection();
                 System.exit(0);
             }
@@ -628,7 +649,6 @@ public class PnlDashboard extends javax.swing.JPanel {
     private javax.swing.JButton btnMemberDetails;
     private javax.swing.JButton btnSubscriptionDetails;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -639,7 +659,8 @@ public class PnlDashboard extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblPackageSub;
+    private javax.swing.JLabel lblPackageTitle;
     private javax.swing.JLabel lblProfit;
     private javax.swing.JLabel lblProfitSub;
     private javax.swing.JLabel lblTime;
