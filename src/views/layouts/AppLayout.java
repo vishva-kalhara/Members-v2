@@ -19,6 +19,7 @@ import views.internals.PnlEmployees;
 import views.internals.PnlMembers;
 import views.internals.PnlNoAccess;
 import views.internals.PnlPackages;
+import views.internals.PnlSettings;
 import views.internals.PnlSubscriptions;
 
 /**
@@ -132,6 +133,10 @@ public class AppLayout extends javax.swing.JFrame {
             case EMPLOYEES:
                 changeSideBarButtons(btnEmployees);
                 showForm(new PnlEmployees());
+                break;
+            case SETTINGS:
+                changeSideBarButtons(btnSettings);
+                showForm(new PnlSettings());
                 break;
 
         }
@@ -271,7 +276,7 @@ public class AppLayout extends javax.swing.JFrame {
                 .addComponent(btnPackages, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(210, Short.MAX_VALUE))
+                .addContainerGap(219, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -282,6 +287,11 @@ public class AppLayout extends javax.swing.JFrame {
         btnSettings.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
         btnSettings.setText("Settings");
         btnSettings.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        btnSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSettingsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -297,7 +307,7 @@ public class AppLayout extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(80, Short.MAX_VALUE)
                 .addComponent(btnSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
+                .addGap(26, 26, 26))
         );
 
         jPanel3.add(jPanel5, java.awt.BorderLayout.PAGE_END);
@@ -372,6 +382,10 @@ public class AppLayout extends javax.swing.JFrame {
         
         changeForm(LayoutPages.ATTENDANCE);
     }//GEN-LAST:event_btnAttendanceActionPerformed
+
+    private void btnSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettingsActionPerformed
+        changeForm(LayoutPages.SETTINGS);
+    }//GEN-LAST:event_btnSettingsActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAttendance;

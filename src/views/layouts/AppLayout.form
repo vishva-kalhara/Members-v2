@@ -111,7 +111,7 @@
                           <Component id="btnPackages" min="-2" pref="54" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="btnEmployees" min="-2" pref="54" max="-2" attributes="0"/>
-                          <EmptySpace pref="210" max="32767" attributes="0"/>
+                          <EmptySpace pref="219" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -239,7 +239,7 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace pref="80" max="32767" attributes="0"/>
                           <Component id="btnSettings" min="-2" pref="54" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -256,6 +256,9 @@
                     <Property name="text" type="java.lang.String" value="Settings"/>
                     <Property name="horizontalAlignment" type="int" value="10"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSettingsActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

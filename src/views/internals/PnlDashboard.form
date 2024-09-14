@@ -91,8 +91,8 @@
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel3" alignment="0" pref="288" max="32767" attributes="0"/>
-                          <Component id="jLabel4" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lblCustomersActive" alignment="0" pref="288" max="32767" attributes="0"/>
+                          <Component id="lblCustomersNew" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace pref="34" max="32767" attributes="0"/>
                   </Group>
@@ -104,9 +104,9 @@
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblCustomersActive" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblCustomersNew" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="31" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -127,7 +127,7 @@
                 <Property name="text" type="java.lang.String" value="Members"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel3">
+            <Component class="javax.swing.JLabel" name="lblCustomersActive">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Semibold" size="30" style="0"/>
@@ -135,7 +135,7 @@
                 <Property name="text" type="java.lang.String" value="156 Active"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel4">
+            <Component class="javax.swing.JLabel" name="lblCustomersNew">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Semibold" size="16" style="0"/>

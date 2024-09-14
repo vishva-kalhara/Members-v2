@@ -72,32 +72,54 @@ public class DashboardController {
             data[1] = "N/A";
             return data;
         }
-        
+
         String packageId = rsPackageId.getString("packages_id");
-        ResultSet rsPacakgeTitle = AppConnection.fetch("SELECT `title` FROM packages WHERE `packages`.`id` = '"+ packageId +"'");
-        
-        if(!rsPacakgeTitle.next()){
+        ResultSet rsPacakgeTitle = AppConnection.fetch("SELECT `title` FROM packages WHERE `packages`.`id` = '" + packageId + "'");
+
+        if (!rsPacakgeTitle.next()) {
             return data;
         }
-        
+
         String packageTitle = rsPacakgeTitle.getString("title");
-        
+
         Date today = new Date();
         int yr = Integer.parseInt(new SimpleDateFormat("yyyy").format(today));
         int month = Integer.parseInt(new SimpleDateFormat("MM").format(today));
-        
-        ResultSet rsCountThis = AppConnection.fetch("CALL get_count_of_package('"+ packageId +"', 1, "+ yr +", "+ month +")");
+
+        ResultSet rsCountThis = AppConnection.fetch("CALL get_count_of_package('" + packageId + "', 1, " + yr + ", " + month + ")");
         rsCountThis.next();
         int countThis = rsCountThis.getInt("count");
-        
-        ResultSet rsCountOthers = AppConnection.fetch("CALL get_count_of_package('"+ packageId +"', 0, "+ yr +", "+ month +")");
+
+        ResultSet rsCountOthers = AppConnection.fetch("CALL get_count_of_package('" + packageId + "', 0, " + yr + ", " + month + ")");
         rsCountOthers.next();
         int countOthers = rsCountOthers.getInt("count");
-        
+
         double percentage = (((countThis / countOthers) * 100) - 100);
-        
+
         data[0] = packageTitle;
         data[1] = String.valueOf(percentage);
+
+        return data;
+    }
+
+    public int[] getCustomerCardData() throws Exception {
+
+        int[] data = new int[2];
+
+        ResultSet rsTotalActive = AppConnection.fetch("SELECT COUNT(*) AS count FROM `customers` WHERE `statuses_id` = '1'");
+        rsTotalActive.next();
+
+        Date today = new Date();
+        int yr = Integer.parseInt(new SimpleDateFormat("yyyy").format(today));
+        int month = Integer.parseInt(new SimpleDateFormat("MM").format(today));
+
+        ResultSet rsThis = AppConnection.fetch("SELECT COUNT(*) AS count FROM `customers` WHERE "
+                + "YEAR(`created_at`) = '" + yr + "' AND "
+                + "MONTH(`created_at`) = '" + month + "'");
+        rsThis.next();
+
+        data[0] = rsTotalActive.getInt("count");
+        data[1] = rsThis.getInt("count");
 
         return data;
     }

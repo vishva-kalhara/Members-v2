@@ -62,6 +62,7 @@ public class PnlDashboard extends javax.swing.JPanel {
 
                 loadProfitCardData();
                 loadMostSoldPackageData();
+                loadCustomerData();
 
                 panel.removeAll();
                 panel.add(pnlHeader, java.awt.BorderLayout.NORTH);
@@ -71,6 +72,24 @@ public class PnlDashboard extends javax.swing.JPanel {
                 panel.revalidate();
             }
         }).start();
+    }
+    
+    private void loadCustomerData(){
+        try {
+            
+            int[] data = controller.getCustomerCardData();
+            
+            lblCustomersActive.setText( data[0] +" Active");
+            lblCustomersNew.setText("+ " + data[1] + " new Members");
+            
+            if(data[1] > 1) 
+                lblCustomersNew.setForeground(new Color(24, 142, 0));
+            else
+                lblCustomersNew.setForeground(new Color(153, 153, 153));
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadMostSoldPackageData() {
@@ -160,8 +179,8 @@ public class PnlDashboard extends javax.swing.JPanel {
         pnlCenter = new javax.swing.JPanel();
         pnlCard3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblCustomersActive = new javax.swing.JLabel();
+        lblCustomersNew = new javax.swing.JLabel();
         pnlCard1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         lblProfit = new javax.swing.JLabel();
@@ -207,12 +226,12 @@ public class PnlDashboard extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
         jLabel2.setText("Members");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 30)); // NOI18N
-        jLabel3.setText("156 Active");
+        lblCustomersActive.setFont(new java.awt.Font("Segoe UI Semibold", 0, 30)); // NOI18N
+        lblCustomersActive.setText("156 Active");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 52, 0));
-        jLabel4.setText("- 5% vs Last month");
+        lblCustomersNew.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        lblCustomersNew.setForeground(new java.awt.Color(255, 52, 0));
+        lblCustomersNew.setText("- 5% vs Last month");
 
         javax.swing.GroupLayout pnlCard3Layout = new javax.swing.GroupLayout(pnlCard3);
         pnlCard3.setLayout(pnlCard3Layout);
@@ -222,8 +241,8 @@ public class PnlDashboard extends javax.swing.JPanel {
                 .addGap(26, 26, 26)
                 .addGroup(pnlCard3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblCustomersActive, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                    .addComponent(lblCustomersNew, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         pnlCard3Layout.setVerticalGroup(
@@ -232,9 +251,9 @@ public class PnlDashboard extends javax.swing.JPanel {
                 .addGap(25, 25, 25)
                 .addComponent(jLabel2)
                 .addGap(31, 31, 31)
-                .addComponent(jLabel3)
+                .addComponent(lblCustomersActive)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addComponent(lblCustomersNew)
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
@@ -660,10 +679,10 @@ public class PnlDashboard extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel lblCustomersActive;
+    private javax.swing.JLabel lblCustomersNew;
     private javax.swing.JLabel lblPackageSub;
     private javax.swing.JLabel lblPackageTitle;
     private javax.swing.JLabel lblProfit;
