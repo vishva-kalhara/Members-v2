@@ -58,7 +58,7 @@ public class FrmSplashScreen extends javax.swing.JFrame {
                 timeWait();
             } else {
                 
-                DlgConfig dlg = new DlgConfig(this, true);
+                DlgConfig dlg = new DlgConfig(this, true, DialogTypes.CREATE);
                 dlg.setVisible(true);
                 
                 if (dlg.isCompleted()) {

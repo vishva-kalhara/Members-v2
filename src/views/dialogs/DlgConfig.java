@@ -9,13 +9,12 @@ import com.wishva.Spark;
 import com.wishva.SparkException;
 import controllers.ApplicationController;
 import enums.DialogActions;
+import enums.DialogTypes;
 import java.awt.Color;
 import java.util.HashMap;
 import models.Application;
 import utils.DBData;
 import views.layouts.AppLayout;
-import java.sql.SQLException;
-import utils.AppConnection;
 
 /**
  *
@@ -32,14 +31,40 @@ public class DlgConfig extends javax.swing.JDialog {
      *
      * @param parent
      * @param modal
+     * @param type
      */
-    public DlgConfig(java.awt.Frame parent, boolean modal) {
+    public DlgConfig(java.awt.Frame parent, boolean modal, DialogTypes type) {
         super(parent, modal);
         initComponents();
 
         setDesign();
 
+        if (type != DialogTypes.CREATE && type != DialogTypes.UPDATE) {
+            throw new IllegalArgumentException("This dialog can only be a CREATE or UPDATE");
+        }
+
         currencyMap = DBData.getSubTableData("available_currencies", cboCurrency);
+
+        if (type == DialogTypes.UPDATE) {
+            loadFormData();
+            btnComplete.setText("Update Details");
+        }
+    }
+
+    private void loadFormData() {
+
+        try {
+
+            Application app = new ApplicationController().getAppConfig();
+            
+            txtName.setText(app.getShopName());
+            txtMobile.setText(app.getShopMobile());
+            txtAddress.setText(app.getShopAddress());
+            cboCurrency.setSelectedItem(app.getCurrencyValue());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setDesign() {
@@ -51,7 +76,7 @@ public class DlgConfig extends javax.swing.JDialog {
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_CLOSE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_MAXIMIZE, false);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICONIFFY, false);
-getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
         btnClose.putClientProperty("JButton.buttonType", "borderless");
         btnComplete.putClientProperty("JButton.buttonType", "borderless");
 
