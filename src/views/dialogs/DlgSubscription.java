@@ -6,6 +6,7 @@ package views.dialogs;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.*;
+import config.AppConfig;
 import controllers.SubscriptionController;
 import enums.DialogActions;
 import enums.DialogTypes;
@@ -18,6 +19,11 @@ import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
 import models.PaymentPlan;
 import models.Subscription;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import raven.toast.Notifications;
 import utils.AppConnection;
 import utils.Formatter;
@@ -29,8 +35,10 @@ import views.layouts.AppLayout;
  */
 public class DlgSubscription extends javax.swing.JDialog {
 
-    HashMap<String, String> customerMap = new HashMap();
-    HashMap<String, PaymentPlan> packagesMap = new HashMap();
+    private HashMap<String, String> customerMap = new HashMap();
+    private HashMap<String, PaymentPlan> packagesMap = new HashMap();
+    
+    private DialogActions action = DialogActions.CANCEL;
 
     /**
      * Creates new form DlgSubscription
@@ -344,6 +352,11 @@ public class DlgSubscription extends javax.swing.JDialog {
                 new DlgError(AppLayout.appLayout, true, "Subscription Issued Success.", "Success", DialogTypes.SUCCESS).setVisible(true);
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Subscription issued success!");
                 AppLayout.appLayout.changeForm(LayoutPages.SUBSCRIPTIONS);
+                
+                this.action = DialogActions.CONFIRM;
+                
+                JasperPrint report = new SubscriptionController().generateInvoice(subscription);
+                JasperViewer.viewReport(report, false);
             }
 
         } catch (SparkException e) {
@@ -499,4 +512,11 @@ public class DlgSubscription extends javax.swing.JDialog {
 
         return subscription;
     }
+    
+    public DialogActions getAction(){
+        
+        return this.action;
+    }
+    
+    
 }

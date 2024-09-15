@@ -249,6 +249,10 @@ public class DlgPayment extends javax.swing.JDialog {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
 
+        if (txtCash.getText().isBlank()) {
+            return;
+        }
+
         try {
 
             if (Double.parseDouble(txtChange.getText()) < 0) {
@@ -257,22 +261,31 @@ public class DlgPayment extends javax.swing.JDialog {
                 return;
             }
 
-            new SubscriptionController().createSubscription(this.subscription);
+//            new SubscriptionController().createSubscription(this.subscription);
             this.action = DialogActions.CONFIRM;
             this.dispose();
         } catch (Exception e) {
             e.printStackTrace();
             this.action = DialogActions.CANCEL;
         }
-
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void txtCashKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCashKeyReleased
 
-        double cash = Double.parseDouble((String) txtCash.getText());
-        double total = Double.parseDouble((String) txtTotal.getText());
+        if (txtCash.getText().isBlank()) {
+            return;
+        }
 
-        txtChange.setValue(cash - total);
+        try {
+
+            double cash = Double.parseDouble((String) txtCash.getText());
+            double total = Double.parseDouble((String) txtTotal.getText());
+
+            txtChange.setValue(cash - total);
+        } catch (NumberFormatException e) {
+            new DlgError(AppLayout.appLayout, true, "Validation Error", "Accepts only numbers.").setVisible(true);
+            txtCash.setText("");
+        }
     }//GEN-LAST:event_txtCashKeyReleased
 
     private void txtCashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCashActionPerformed
