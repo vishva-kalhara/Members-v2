@@ -1,1 +1,1 @@
-param1 = makeSoundOnAttendance
+param1 = isPrintOnIssueingSubscription

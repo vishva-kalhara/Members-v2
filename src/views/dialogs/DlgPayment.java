@@ -261,7 +261,7 @@ public class DlgPayment extends javax.swing.JDialog {
                 return;
             }
 
-//            new SubscriptionController().createSubscription(this.subscription);
+            new SubscriptionController().createSubscription(this.subscription);
             this.action = DialogActions.CONFIRM;
             this.dispose();
         } catch (Exception e) {

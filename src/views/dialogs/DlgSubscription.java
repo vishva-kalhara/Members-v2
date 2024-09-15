@@ -19,11 +19,8 @@ import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
 import models.PaymentPlan;
 import models.Subscription;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.view.JasperViewer;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import raven.toast.Notifications;
 import utils.AppConnection;
 import utils.Formatter;
@@ -38,7 +35,6 @@ public class DlgSubscription extends javax.swing.JDialog {
     private HashMap<String, String> customerMap = new HashMap();
     private HashMap<String, PaymentPlan> packagesMap = new HashMap();
     
-    private DialogActions action = DialogActions.CANCEL;
 
     /**
      * Creates new form DlgSubscription
@@ -353,10 +349,8 @@ public class DlgSubscription extends javax.swing.JDialog {
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_CENTER, "Subscription issued success!");
                 AppLayout.appLayout.changeForm(LayoutPages.SUBSCRIPTIONS);
                 
-                this.action = DialogActions.CONFIRM;
-                
                 JasperPrint report = new SubscriptionController().generateInvoice(subscription);
-                JasperViewer.viewReport(report, false);
+                JasperPrintManager.printReport(report, true);
             }
 
         } catch (SparkException e) {
@@ -511,12 +505,5 @@ public class DlgSubscription extends javax.swing.JDialog {
         subscription.setValidity(packagesMap.get(String.valueOf(cboPackage.getSelectedItem())).getValidity());
 
         return subscription;
-    }
-    
-    public DialogActions getAction(){
-        
-        return this.action;
-    }
-    
-    
+    }  
 }

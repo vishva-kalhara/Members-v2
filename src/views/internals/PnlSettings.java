@@ -6,8 +6,6 @@ package views.internals;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import enums.DialogTypes;
-import java.awt.Color;
-import javax.swing.BorderFactory;
 import views.dialogs.DlgConfig;
 import views.layouts.AppLayout;
 
@@ -32,7 +30,6 @@ public class PnlSettings extends javax.swing.JPanel {
         pnlCard2.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard3.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
         pnlCard4.putClientProperty(FlatClientProperties.STYLE, "arc: 24");
-//        btnConfiguration.putClientProperty("JButton.buttonType", "borderless");
     }
 
     /**
@@ -52,7 +49,7 @@ public class PnlSettings extends javax.swing.JPanel {
         btnBackup = new javax.swing.JButton();
         pnlCard1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        btnAppSettings = new javax.swing.JButton();
+        btnShopDetails = new javax.swing.JButton();
         pnlCard4 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         btnConfiguration = new javax.swing.JButton();
@@ -135,11 +132,11 @@ public class PnlSettings extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         jLabel4.setText("Shop Details");
 
-        btnAppSettings.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
-        btnAppSettings.setText("Manage");
-        btnAppSettings.addActionListener(new java.awt.event.ActionListener() {
+        btnShopDetails.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        btnShopDetails.setText("Manage");
+        btnShopDetails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAppSettingsActionPerformed(evt);
+                btnShopDetailsActionPerformed(evt);
             }
         });
 
@@ -151,7 +148,7 @@ public class PnlSettings extends javax.swing.JPanel {
                 .addGap(34, 34, 34)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAppSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnShopDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
         );
         pnlCard1Layout.setVerticalGroup(
@@ -160,7 +157,7 @@ public class PnlSettings extends javax.swing.JPanel {
                 .addGap(22, 22, 22)
                 .addGroup(pnlCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAppSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnShopDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -229,10 +226,10 @@ public class PnlSettings extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAppSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAppSettingsActionPerformed
-        
+    private void btnShopDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShopDetailsActionPerformed
+
         new DlgConfig(AppLayout.appLayout, true, DialogTypes.UPDATE).setVisible(true);
-    }//GEN-LAST:event_btnAppSettingsActionPerformed
+    }//GEN-LAST:event_btnShopDetailsActionPerformed
 
     private void btnBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackupActionPerformed
         // TODO add your handling code here:
@@ -248,10 +245,10 @@ public class PnlSettings extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAppSettings;
     private javax.swing.JButton btnBackup;
     private javax.swing.JButton btnConfiguration;
     private javax.swing.JButton btnRestore;
+    private javax.swing.JButton btnShopDetails;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel4;
