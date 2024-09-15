@@ -8,7 +8,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 import enums.LayoutPages;
 import java.awt.Color;
 import java.awt.Toolkit;
-import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import models.Application;
@@ -105,11 +104,6 @@ public class AppLayout extends javax.swing.JFrame {
 
     public void changeForm(LayoutPages form) {
 
-//        if(Integer.parseInt(employeeData.get("role_id")) == 1){
-//            
-//            showForm(new PnlNoAccess());
-//            return;
-//        }
         switch (form) {
             case DASHBOARD:
                 changeSideBarButtons(btnDashboard);

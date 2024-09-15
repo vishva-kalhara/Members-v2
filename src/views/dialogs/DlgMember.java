@@ -20,10 +20,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import net.sf.jasperreports.engine.JRDataSource;
 import utils.AppConnection;
 import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -538,6 +536,7 @@ public class DlgMember extends javax.swing.JDialog {
 
         btnSubmit.setEnabled(true);
         btnReset.setEnabled(true);
+        btnCard.setEnabled(false);
         txtFName.setEnabled(true);
         txtLName.setEnabled(true);
         txtMobile1.setEnabled(true);
@@ -557,8 +556,8 @@ public class DlgMember extends javax.swing.JDialog {
     private void btnCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCardActionPerformed
 
         HashMap<String, Object> params = new HashMap();
-        params.put("PARAM_NAME", "WISHVA CHANDRASEKARA");
-        params.put("my_bar_code", "cus-8");
+        params.put("PARAM_NAME", txtFName.getText() + " " + txtLName.getText());
+        params.put("my_bar_code",  this.memberId);
 
         try {
 
