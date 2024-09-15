@@ -6,7 +6,6 @@ package views.dialogs;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.wishva.*;
-import config.AppConfig;
 import controllers.SubscriptionController;
 import enums.DialogActions;
 import enums.DialogTypes;
@@ -20,7 +19,6 @@ import javax.swing.DefaultComboBoxModel;
 import models.PaymentPlan;
 import models.Subscription;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
 import raven.toast.Notifications;
 import utils.AppConnection;
 import utils.Formatter;

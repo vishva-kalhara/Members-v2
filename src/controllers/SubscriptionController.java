@@ -102,11 +102,11 @@ public class SubscriptionController {
             String paidAmount = AppLayout.appData.getCurrencyValue() + " " + new Formatter().addZeroToDouble(subscription.getPaidAmount());
 
             HashMap<String, Object> params = new HashMap();
-            params.put("shopName", "TSK Gym");
-            params.put("shopMobile", "+31 2260118");
-            params.put("shopAddress", "Negombo rd, Dankotuwa");
+            params.put("shopName", AppLayout.appData.getShopName());
+            params.put("shopMobile", AppLayout.appData.getShopMobile());
+            params.put("shopAddress", AppLayout.appData.getShopAddress());
             params.put("issuedDateTime", issedDate);
-            params.put("issuedBy", "This need to be changed");
+            params.put("issuedBy", "Issued by " + AppLayout.employeeData.getId());
             params.put("customer", rsCustomerName.getString("full_name"));
             params.put("package", rsPackageName.getString("package_title"));
             params.put("validFrom", startDate);
