@@ -12,6 +12,7 @@ import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import models.Application;
+import models.Employee;
 import raven.toast.Notifications;
 import views.internals.PnlAttendance;
 import views.internals.PnlDashboard;
@@ -33,7 +34,7 @@ public class AppLayout extends javax.swing.JFrame {
 
     public JButton selectedButton;
 
-    public static HashMap<String, String> employeeData = new HashMap();
+    public static Employee employeeData;
 
     /**
      * Creates new form AppLayout
@@ -41,21 +42,21 @@ public class AppLayout extends javax.swing.JFrame {
      * @param appData
      * @param employeeData
      */
-    public AppLayout(Application appData, HashMap<String, String> employeeData) {
+    public AppLayout(Application appData, Employee employeeData) {
         initComponents();
 
         appLayout = this;
         AppLayout.appData = appData;
         this.selectedButton = btnDashboard;
 
-        this.employeeData = employeeData;
+        AppLayout.employeeData = employeeData;
 
         setDesign();
 
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/img/logo_120.png")));
 
         Notifications.getInstance().setJFrame(this);
-        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Hello " + employeeData.get("fName"));
+        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Hello " + employeeData.getFName());
     }
 
     private void setDesign() {
@@ -99,7 +100,7 @@ public class AppLayout extends javax.swing.JFrame {
 
     private boolean checkAccess() {
 
-        return (Integer.parseInt(employeeData.get("role_id")) > 3);
+        return (employeeData.getRoleId() > 3);
     }
 
     public void changeForm(LayoutPages form) {
@@ -113,11 +114,11 @@ public class AppLayout extends javax.swing.JFrame {
             case DASHBOARD:
                 changeSideBarButtons(btnDashboard);
                 showForm(new PnlDashboard());
-                return;
+                break;
             case SUBSCRIPTIONS:
                 changeSideBarButtons(btnSubscriptions);
                 showForm(new PnlSubscriptions());
-                break;
+                return;
             case ATTENDANCE:
                 changeSideBarButtons(btnAttendance);
                 showForm(new PnlAttendance());
@@ -125,7 +126,7 @@ public class AppLayout extends javax.swing.JFrame {
             case MEMBERS:
                 changeSideBarButtons(btnMembers);
                 showForm(new PnlMembers());
-                break;
+                return;
             case PACKAGES:
                 changeSideBarButtons(btnPackages);
                 showForm(new PnlPackages());

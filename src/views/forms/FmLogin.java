@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import models.Application;
+import models.Employee;
 import views.dialogs.DlgError;
 
 /**
@@ -198,7 +199,14 @@ public class FmLogin extends javax.swing.JFrame {
                 if (!rs.getString("statuses_id").equals("1")) {
                     new DlgError(this, true, "Unauthorized!", "You have no longer access to use the system.").setVisible(true);
                 } else {
-
+                    
+                    Employee employee = new Employee();
+                    employee.setId(rs.getString("id"));
+                    employee.setFName(rs.getString("first_name"));
+                    employee.setLName(rs.getString("last_name"));
+                    employee.setRoleId(rs.getInt("user_roles_id"));
+                    
+                    
                     HashMap<String, String> employeeData = new HashMap();
 
                     employeeData.put("id", rs.getString("id"));
@@ -206,7 +214,7 @@ public class FmLogin extends javax.swing.JFrame {
                     employeeData.put("lName", rs.getString("last_name"));
                     employeeData.put("role_id", rs.getString("user_roles_id"));
 
-                    new AppLayout(this.appData, employeeData).setVisible(true);
+                    new AppLayout(this.appData, employee).setVisible(true);
                     this.dispose();
                 }
             } else {

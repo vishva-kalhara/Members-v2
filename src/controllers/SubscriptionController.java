@@ -28,7 +28,7 @@ public class SubscriptionController {
 
     public void createSubscription(Subscription subscription) throws SQLException {
 
-        subscription.setEmployeeId(AppLayout.employeeData.get("id"));
+        subscription.setEmployeeId(AppLayout.employeeData.getId());
 
         String endDate = getEndDate(subscription.getStartDate(), subscription.getValidity());
 

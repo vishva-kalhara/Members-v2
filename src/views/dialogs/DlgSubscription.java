@@ -350,7 +350,7 @@ public class DlgSubscription extends javax.swing.JDialog {
                 AppLayout.appLayout.changeForm(LayoutPages.SUBSCRIPTIONS);
                 
                 JasperPrint report = new SubscriptionController().generateInvoice(subscription);
-                JasperPrintManager.printReport(report, true);
+//                JasperPrintManager.printReport(report, true);
             }
 
         } catch (SparkException e) {
