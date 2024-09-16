@@ -381,7 +381,7 @@ public class PnlAttendance extends javax.swing.JPanel {
 
                 model.addRow(data);
             }
-            
+
             if (table.getRowCount() == 0) {
                 scrollPane.setViewportView(new PnlNoData());
             } else {
