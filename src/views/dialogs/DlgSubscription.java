@@ -19,6 +19,7 @@ import javax.swing.DefaultComboBoxModel;
 import models.PaymentPlan;
 import models.Subscription;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import raven.toast.Notifications;
 import utils.AppConnection;
 import utils.Formatter;
@@ -348,6 +349,7 @@ public class DlgSubscription extends javax.swing.JDialog {
                 AppLayout.appLayout.changeForm(LayoutPages.SUBSCRIPTIONS);
                 
                 JasperPrint report = new SubscriptionController().generateInvoice(subscription);
+                JasperViewer.viewReport(report, false);
 //                JasperPrintManager.printReport(report, true);
             }
 
