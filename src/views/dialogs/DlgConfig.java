@@ -26,7 +26,11 @@ public class DlgConfig extends javax.swing.JDialog {
 
     private DialogActions action = DialogActions.CANCEL;
 
+    private DialogTypes type;
+
     private HashMap<String, Integer> currencyMap;
+
+    private ApplicationController controller;
 
     /**
      * Creates new form DlgConfig
@@ -45,6 +49,9 @@ public class DlgConfig extends javax.swing.JDialog {
             throw new IllegalArgumentException("This dialog can only be a CREATE or UPDATE");
         }
 
+        this.type = type;
+        this.controller = new ApplicationController();
+
         currencyMap = DBData.getSubTableData("available_currencies", cboCurrency);
 
         if (type == DialogTypes.UPDATE) {
@@ -57,15 +64,15 @@ public class DlgConfig extends javax.swing.JDialog {
 
         try {
 
-            Application app = new ApplicationController().getAppConfig();
-            
+            Application app = controller.getAppConfig();
+
             txtName.setText(app.getShopName());
             txtMobile.setText(app.getShopMobile());
             txtAddress.setText(app.getShopAddress());
             cboCurrency.setSelectedItem(app.getCurrencyValue());
-            
+
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -300,8 +307,14 @@ public class DlgConfig extends javax.swing.JDialog {
             }
             appData.setCurrencyId(currencyMap.get(String.valueOf(cboCurrency.getSelectedItem())));
 
-            if (!new ApplicationController().createAppConfig(appData)) {
-                return;
+            if (this.type == DialogTypes.CREATE) {
+                if (!controller.createAppConfig(appData)) {
+                    return;
+                }
+            } else {
+                if (!controller.updateAppConfig(appData)) {
+                    return;
+                }
             }
 
             this.action = DialogActions.CONFIRM;
@@ -310,7 +323,7 @@ public class DlgConfig extends javax.swing.JDialog {
         } catch (SparkException e) {
             new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
             new DlgError(AppLayout.appLayout, true, "Unhandled Error", e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnCompleteActionPerformed
