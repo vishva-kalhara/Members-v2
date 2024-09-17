@@ -94,7 +94,7 @@ public class DashboardController {
         rsCountOthers.next();
         int countOthers = rsCountOthers.getInt("count");
 
-        double percentage = (((countThis / countOthers) * 100) - 100);
+        int percentage = countThis - countOthers;
 
         data[0] = packageTitle;
         data[1] = String.valueOf(percentage);

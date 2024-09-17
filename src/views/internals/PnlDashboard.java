@@ -100,10 +100,10 @@ public class PnlDashboard extends javax.swing.JPanel {
 
             lblPackageTitle.setText(data[0]);
 
-            double perccentage = Double.parseDouble(data[1]);
+            int perccentage = Integer.parseInt(data[1]);
 
-            if (perccentage > 0.0) {
-                lblPackageSub.setText("+ " + perccentage + " more subscrptions sold than others");
+            if (perccentage > 0) {
+                lblPackageSub.setText("+ " + perccentage + " more subscriptions");
                 lblPackageSub.setForeground(new Color(24, 142, 0));
             } else {
                 lblPackageSub.setText("N/A");
