@@ -8,7 +8,9 @@ import com.formdev.flatlaf.FlatClientProperties;
 import controllers.SubscriptionController;
 import enums.DialogActions;
 import java.awt.Color;
+import java.util.logging.Level;
 import models.Subscription;
+import views.forms.FrmSplashScreen;
 import views.layouts.AppLayout;
 
 /**
@@ -265,7 +267,7 @@ public class DlgPayment extends javax.swing.JDialog {
             this.action = DialogActions.CONFIRM;
             this.dispose();
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             this.action = DialogActions.CANCEL;
         }
     }//GEN-LAST:event_btnSubmitActionPerformed

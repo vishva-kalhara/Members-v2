@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import enums.LayoutPages;
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import models.Application;
@@ -34,6 +35,7 @@ public class AppLayout extends javax.swing.JFrame {
     public JButton selectedButton;
 
     public static Employee employeeData;
+    
 
     /**
      * Creates new form AppLayout

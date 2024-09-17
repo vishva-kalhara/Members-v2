@@ -8,7 +8,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.logging.Level;
 import views.dialogs.DlgError;
+import views.forms.FrmSplashScreen;
 import views.layouts.AppLayout;
 
 /**
@@ -27,7 +29,7 @@ public class AppConnection {
                 connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/members_v2", "root", "Wishva!23");
 
             } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+                FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             }
         }
     }
@@ -48,7 +50,7 @@ public class AppConnection {
         } catch (SQLException e) {
             if (!e.getSQLState().equals("45000")) {
 
-                e.printStackTrace();
+                FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             } else {
                 new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
             }
@@ -69,7 +71,7 @@ public class AppConnection {
         try {
             return connection.createStatement().executeQuery(query);
         } catch (SQLException e) {
-            e.printStackTrace();
+           FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
             return null;
         }

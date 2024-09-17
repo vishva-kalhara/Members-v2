@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import views.forms.FrmSplashScreen;
 
 /**
  *
@@ -29,7 +31,7 @@ public class DBData {
                 map.put(rs.getString("value"), rs.getInt("id"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
 
         return map;
@@ -50,7 +52,7 @@ public class DBData {
                 data.add(rs.getString("value"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
         
         DefaultComboBoxModel model = new DefaultComboBoxModel(data);
@@ -75,7 +77,7 @@ public class DBData {
                 data.add(rs.getString("value") + " " + suffix);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
         
         DefaultComboBoxModel model = new DefaultComboBoxModel(data);

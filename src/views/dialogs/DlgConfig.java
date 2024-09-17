@@ -12,8 +12,10 @@ import enums.DialogActions;
 import enums.DialogTypes;
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.logging.Level;
 import models.Application;
 import utils.DBData;
+import views.forms.FrmSplashScreen;
 import views.layouts.AppLayout;
 
 /**
@@ -63,7 +65,7 @@ public class DlgConfig extends javax.swing.JDialog {
             cboCurrency.setSelectedItem(app.getCurrencyValue());
             
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 
@@ -308,7 +310,7 @@ public class DlgConfig extends javax.swing.JDialog {
         } catch (SparkException e) {
             new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             new DlgError(AppLayout.appLayout, true, "Unhandled Error", e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnCompleteActionPerformed

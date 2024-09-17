@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +28,7 @@ import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import utils.DBData;
+import views.forms.FrmSplashScreen;
 
 /**
  *
@@ -95,7 +97,7 @@ public class PnlEmployees extends javax.swing.JPanel {
                 model.addRow(data);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
 
         if (tblEmployees.getModel().getRowCount() == 0) {
@@ -362,7 +364,7 @@ public class PnlEmployees extends javax.swing.JPanel {
             JasperViewer.viewReport(makePrint(), false);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_btnViewActionPerformed
 
@@ -373,7 +375,7 @@ public class PnlEmployees extends javax.swing.JPanel {
             JasperPrintManager.printReport(makePrint(), true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 

@@ -14,6 +14,7 @@ import views.dialogs.DlgSelfClose;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 import utils.AppConnection;
 import views.layouts.AppLayout;
 
@@ -229,7 +230,7 @@ public class FrmAttendance extends javax.swing.JFrame {
             txtCustomerId.setText("");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_txtCustomerIdActionPerformed
 

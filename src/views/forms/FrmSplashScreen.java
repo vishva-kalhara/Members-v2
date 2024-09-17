@@ -7,8 +7,13 @@ package views.forms;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import enums.DialogTypes;
 import java.awt.Toolkit;
+import java.io.IOException;
 import utils.AppConnection;
 import java.sql.ResultSet;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.swing.JOptionPane;
 import models.Application;
 import views.dialogs.DlgConfig;
@@ -19,8 +24,10 @@ import views.dialogs.DlgError;
  * @author vishv
  */
 public class FrmSplashScreen extends javax.swing.JFrame {
-    
+
     private Application appData;
+
+    public static Logger logger = Logger.getLogger("DigiLibrary");
 
     /**
      * Creates new form FrmSplashScreen
@@ -28,55 +35,56 @@ public class FrmSplashScreen extends javax.swing.JFrame {
     public FrmSplashScreen() {
         initComponents();
         
+        setUpLogger();
+
         this.appData = new Application();
 
-        
         configure();
-        
+
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/img/logo_120.png")));
-        
+
     }
-    
+
     private void configure() {
-        
+
         try {
             ResultSet rsCount = AppConnection.fetch("SELECT COUNT(*) AS count FROM `app_data`");
             rsCount.next();
             if (rsCount.getInt("count") > 1) {
                 throw new Exception("Please contact the vendor!");
             } else if (rsCount.getInt("count") == 1) {
-                
+
                 ResultSet rs = AppConnection.fetch("SELECT * FROM `app_data` INNER JOIN available_currencies ON `app_data`.`available_currencies_id` = `available_currencies`.`id`");
                 rs.next();
-                
+
                 appData.setShopName(rs.getString("shop_name"));
                 appData.setShopMobile(rs.getString("shop_mobile"));
                 appData.setShopAddress(rs.getString("shop_address"));
                 appData.setCurrencyId(rs.getInt("available_currencies.id"));
                 appData.setCurrencyValue(rs.getString("available_currencies.value"));
-                
+
                 timeWait();
             } else {
-                
+
                 DlgConfig dlg = new DlgConfig(this, true, DialogTypes.CREATE);
                 dlg.setVisible(true);
-                
+
                 if (dlg.isCompleted()) {
                     new DlgError(this, true, "Please re-open the Application.", "Success", DialogTypes.SUCCESS).setVisible(true);
                 }
-                
+
                 System.exit(0);
-                
+
             }
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Unhandled Exception Occured!", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
-    
+
     private void timeWait() {
-        
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -85,11 +93,25 @@ public class FrmSplashScreen extends javax.swing.JFrame {
                     dispose();
                     new FrmAttendance(appData).setVisible(true);
                 } catch (InterruptedException ex) {
-                    
+
                 }
             }
         });
         thread.start();
+    }
+
+    private void setUpLogger() {
+        try {
+
+            FileHandler handler = new FileHandler("app.log", true);
+            handler.setFormatter(new SimpleFormatter());
+
+            logger.addHandler(handler);
+
+        } catch (IOException | SecurityException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Vector;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import models.PaymentPlan;
 import models.Subscription;
@@ -23,6 +24,7 @@ import net.sf.jasperreports.view.JasperViewer;
 import raven.toast.Notifications;
 import utils.AppConnection;
 import utils.Formatter;
+import views.forms.FrmSplashScreen;
 import views.layouts.AppLayout;
 
 /**
@@ -315,7 +317,7 @@ public class DlgSubscription extends javax.swing.JDialog {
                 new DlgError(AppLayout.appLayout, true, "Not Found!", "There is no active customer with the same Id.").setVisible(true);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_txtCustomerIdActionPerformed
 
@@ -356,7 +358,7 @@ public class DlgSubscription extends javax.swing.JDialog {
         } catch (SparkException e) {
             new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
 
 
@@ -411,9 +413,9 @@ public class DlgSubscription extends javax.swing.JDialog {
                 customerMap.put(fullName, rs.getString("id"));
             }
 
-            cboCustomerName.setModel(new DefaultComboBoxModel<String>(customers));
+            cboCustomerName.setModel(new DefaultComboBoxModel<>(customers));
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 
@@ -442,7 +444,7 @@ public class DlgSubscription extends javax.swing.JDialog {
 
             cboPackage.setModel(new DefaultComboBoxModel<>(packages));
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 
@@ -471,7 +473,7 @@ public class DlgSubscription extends javax.swing.JDialog {
 
             dateFrom.setEnabled(true);
         } catch (Exception e) {
-            e.printStackTrace();
+           FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 

@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -25,6 +26,7 @@ import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import utils.AppConnection;
 import utils.Formatter;
+import views.forms.FrmSplashScreen;
 
 /**
  *
@@ -246,6 +248,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             this.dialog.newQuery();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_btnFilterActionPerformed
 
@@ -261,7 +264,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             JasperViewer.viewReport(makePrint(), false);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnViewActionPerformed
@@ -273,7 +276,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             JasperPrintManager.printReport(makePrint(), true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnPrintActionPerformed
@@ -375,7 +378,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 

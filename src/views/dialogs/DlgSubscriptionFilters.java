@@ -13,8 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import views.forms.FrmSplashScreen;
 import views.layouts.AppLayout;
 
 /**
@@ -355,6 +357,7 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
             this.setVisible(false);
 
         } catch (Exception e) {
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
 
@@ -387,7 +390,7 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_txtCustomerIdActionPerformed
 
@@ -454,7 +457,7 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
             cboPackage.setModel(new DefaultComboBoxModel<>(data));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 
@@ -474,7 +477,7 @@ public class DlgSubscriptionFilters extends javax.swing.JDialog {
             cboCustomer.setModel(new DefaultComboBoxModel<>(data));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 

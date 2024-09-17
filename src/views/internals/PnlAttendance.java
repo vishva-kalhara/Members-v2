@@ -15,12 +15,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import views.forms.FrmSplashScreen;
 import views.layouts.AppLayout;
 
 /**
@@ -200,7 +202,7 @@ public class PnlAttendance extends javax.swing.JPanel {
             JasperPrintManager.printReport(generateReport(), true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 
@@ -219,7 +221,7 @@ public class PnlAttendance extends javax.swing.JPanel {
             JasperViewer.viewReport(generateReport(), false);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }//GEN-LAST:event_btnViewActionPerformed
 
@@ -284,7 +286,7 @@ public class PnlAttendance extends javax.swing.JPanel {
             cboPackage.setModel(new DefaultComboBoxModel<>(data));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -305,7 +307,7 @@ public class PnlAttendance extends javax.swing.JPanel {
             cboCustomer.setModel(new DefaultComboBoxModel<>(data));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -370,7 +372,7 @@ public class PnlAttendance extends javax.swing.JPanel {
 
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.setRowCount(0);
-            
+
             while (rs.next()) {
                 Vector<String> data = new Vector();
 
@@ -391,7 +393,7 @@ public class PnlAttendance extends javax.swing.JPanel {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -418,13 +420,13 @@ public class PnlAttendance extends javax.swing.JPanel {
             params.put("PARAM_HEADER_1", "Member Id");
             params.put("PARAM_HEADER_2", "Member Name");
             params.put("PARAM_HEADER_3", "Package");
-            
+
             JRTableModelDataSource source = new JRTableModelDataSource(table.getModel());
-            
+
             return JasperFillManager.fillReport(AppConfig.getReportPath("members_attendance.jasper"), params, source);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
             return null;
         }
     }

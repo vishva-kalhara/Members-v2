@@ -14,6 +14,7 @@ import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.logging.Level;
 import models.Application;
 import models.Employee;
 import views.dialogs.DlgError;
@@ -227,7 +228,8 @@ public class FmLogin extends javax.swing.JFrame {
         } catch (SQLException e) {
             new DlgError(this, true, e.getMessage()).setVisible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
 

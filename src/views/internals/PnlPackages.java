@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
+import java.util.logging.Level;
 import javax.swing.table.DefaultTableModel;
 import models.PaymentPlan;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -27,6 +28,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.view.JasperViewer;
+import views.forms.FrmSplashScreen;
 
 /**
  *
@@ -119,7 +121,7 @@ public class PnlPackages extends javax.swing.JPanel {
             btnClearFilters.setEnabled(true);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 
@@ -359,7 +361,7 @@ public class PnlPackages extends javax.swing.JPanel {
             JasperViewer.viewReport(makePrint(), false);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_btnViewActionPerformed
 
@@ -370,7 +372,7 @@ public class PnlPackages extends javax.swing.JPanel {
             JasperPrintManager.printReport(makePrint(), true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 

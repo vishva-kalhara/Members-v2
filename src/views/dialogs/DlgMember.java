@@ -19,6 +19,7 @@ import views.layouts.AppLayout;
 import enums.LayoutPages;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import utils.AppConnection;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -26,6 +27,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import net.sf.jasperreports.view.JasperViewer;
+import views.forms.FrmSplashScreen;
 
 /**
  *
@@ -125,7 +127,7 @@ public class DlgMember extends javax.swing.JDialog {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 
@@ -492,7 +494,7 @@ public class DlgMember extends javax.swing.JDialog {
                 new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
@@ -568,7 +570,7 @@ public class DlgMember extends javax.swing.JDialog {
             JasperViewer.viewReport(report, false);
 
         } catch (JRException e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
 
 //        HashMap<String, Object> params = new HashMap<>();
@@ -620,7 +622,7 @@ public class DlgMember extends javax.swing.JDialog {
 
     private Member createMemberFromForm() throws SparkException {
         Member member = new Member();
-
+ 
         if (cboGender.getSelectedIndex() == 0) {
             throw new SparkException("Select a gender.");
         }

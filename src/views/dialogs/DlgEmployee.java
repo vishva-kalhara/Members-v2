@@ -19,7 +19,9 @@ import utils.DBData;
 import views.layouts.AppLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import raven.toast.Notifications;
+import views.forms.FrmSplashScreen;
 
 /**
  *
@@ -144,7 +146,7 @@ public class DlgEmployee extends javax.swing.JDialog {
                     cboRole.setEnabled(false);
 
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
                     dispose();
                 }
 //                    }
@@ -622,7 +624,7 @@ public class DlgEmployee extends javax.swing.JDialog {
         } catch (SparkException | SQLException e) {
             new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed

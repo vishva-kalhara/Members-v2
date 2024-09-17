@@ -11,12 +11,14 @@ import enums.LayoutPages;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import utils.AppConnection;
 import views.dialogs.DlgConfirm;
 import views.forms.FrmAttendance;
 import views.layouts.AppLayout;
 import javax.swing.JPanel;
+import views.forms.FrmSplashScreen;
 
 /**
  *
@@ -88,7 +90,7 @@ public class PnlDashboard extends javax.swing.JPanel {
                 lblCustomersNew.setForeground(new Color(153, 153, 153));
             
         } catch (Exception e) {
-            e.printStackTrace();
+           FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 
@@ -109,7 +111,7 @@ public class PnlDashboard extends javax.swing.JPanel {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 
@@ -126,7 +128,7 @@ public class PnlDashboard extends javax.swing.JPanel {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }
 
@@ -144,7 +146,7 @@ public class PnlDashboard extends javax.swing.JPanel {
                         lblTime.setText(now);
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                   FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
                 }
             }
         }).start();
@@ -661,7 +663,7 @@ public class PnlDashboard extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
         }
     }//GEN-LAST:event_btnExitActionPerformed
 

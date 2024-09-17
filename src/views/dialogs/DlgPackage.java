@@ -14,9 +14,11 @@ import enums.LayoutPages;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.logging.Level;
 import models.PaymentPlan;
 import raven.toast.Notifications;
 import utils.DBData;
+import views.forms.FrmSplashScreen;
 import views.layouts.AppLayout;
 
 /**
@@ -350,7 +352,7 @@ public class DlgPackage extends javax.swing.JDialog {
         } catch (SparkException | SQLException e) {
             new DlgError(AppLayout.appLayout, true, "Validation Error", e.getMessage()).setVisible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
             new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
