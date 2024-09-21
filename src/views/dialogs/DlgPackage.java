@@ -43,6 +43,8 @@ public class DlgPackage extends javax.swing.JDialog {
         initComponents();
 
         setDesign();
+        
+        btnAllowEdit.setEnabled(false);
 
         this.type = DialogTypes.CREATE;
         lblPrice.setText("Price (" + AppLayout.appData.getCurrencyValue() + ") :");

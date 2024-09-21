@@ -14,6 +14,7 @@ public class AttendanceController {
     
     public boolean markAttendance(int subscriptionId) throws SQLException {
         
-        return AppConnection.mutate("INSERT INTO `attendance` (subscriptions_id) VALUES ('"+ subscriptionId +"')");
+        return AppConnection.mutate("INSERT INTO `attendance` ("
+                + "subscriptions_id) VALUES ('"+ subscriptionId +"')");
     } 
 }
