@@ -5,6 +5,7 @@
 package views.internals;
 
 import config.AppConfig;
+import java.io.InputStream;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.view.JasperViewer;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -423,7 +424,8 @@ public class PnlAttendance extends javax.swing.JPanel {
 
             JRTableModelDataSource source = new JRTableModelDataSource(table.getModel());
 
-            return JasperFillManager.fillReport(AppConfig.getReportPath("members_attendance.jasper"), params, source);
+            InputStream stream = this.getClass().getResourceAsStream("/reports/members_attendance.jasper");
+            return JasperFillManager.fillReport(stream, params, source);
 
         } catch (Exception e) {
             FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);

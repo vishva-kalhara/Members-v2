@@ -7,6 +7,7 @@ package views.internals;
 import com.formdev.flatlaf.FlatClientProperties;
 import config.AppConfig;
 import java.awt.Insets;
+import java.io.InputStream;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -84,7 +85,7 @@ public class PnlPackages extends javax.swing.JPanel {
         btnView.setEnabled(false);
 
         try {
-            
+
             DefaultTableModel model = (DefaultTableModel) tblPacakges.getModel();
             model.setRowCount(0);
 
@@ -121,7 +122,7 @@ public class PnlPackages extends javax.swing.JPanel {
             btnClearFilters.setEnabled(true);
 
         } catch (SQLException e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -153,7 +154,7 @@ public class PnlPackages extends javax.swing.JPanel {
                     .append(txtSearch.getText())
                     .append("%'");
         }
-        
+
         fetchTableData(String.valueOf(constraints));
     }
 
@@ -341,7 +342,7 @@ public class PnlPackages extends javax.swing.JPanel {
         if (evt.getClickCount() != 2) {
             return;
         }
-        
+
         int row = tblPacakges.getSelectedRow();
 
         PaymentPlan plan = new PaymentPlan();
@@ -350,34 +351,34 @@ public class PnlPackages extends javax.swing.JPanel {
         plan.setValidity(Integer.parseInt(String.valueOf(tblPacakges.getValueAt(row, 2))));
         plan.setPrice(Double.parseDouble(String.valueOf(tblPacakges.getValueAt(row, 3))));
         plan.setStatusValue(String.valueOf(tblPacakges.getValueAt(row, 4)));
-        
+
         new DlgPackage(AppLayout.appLayout, true, plan).setVisible(true);
     }//GEN-LAST:event_tblPacakgesMouseClicked
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
-        
+
         try {
-            
+
             JasperViewer.viewReport(makePrint(), false);
 
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }//GEN-LAST:event_btnViewActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        
+
         try {
-            
+
             JasperPrintManager.printReport(makePrint(), true);
 
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private JasperPrint makePrint() throws Exception {
-        
+
         String prop2 = "Search: ";
         if (txtSearch.getText().isBlank()) {
             prop2 += "null";
@@ -405,8 +406,8 @@ public class PnlPackages extends javax.swing.JPanel {
 
         JRTableModelDataSource dataSource = new JRTableModelDataSource(tblPacakges.getModel());
 
-        JasperPrint report = JasperFillManager.fillReport(AppConfig.getReportPath("members_general_report.jasper"), params, dataSource);
-        
+        InputStream stream = this.getClass().getResourceAsStream("/reports/members_general_report.jasper");
+        JasperPrint report = JasperFillManager.fillReport(stream, params, dataSource);
 
         return report;
     }

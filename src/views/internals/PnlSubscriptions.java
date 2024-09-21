@@ -5,6 +5,7 @@
 package views.internals;
 
 import config.AppConfig;
+import java.io.InputStream;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -248,7 +249,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             this.dialog.newQuery();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }//GEN-LAST:event_btnFilterActionPerformed
 
@@ -264,7 +265,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             JasperViewer.viewReport(makePrint(), false);
 
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnViewActionPerformed
@@ -276,7 +277,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             JasperPrintManager.printReport(makePrint(), true);
 
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnPrintActionPerformed
@@ -378,7 +379,7 @@ public class PnlSubscriptions extends javax.swing.JPanel {
             }
 
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -406,7 +407,9 @@ public class PnlSubscriptions extends javax.swing.JPanel {
 
         JRTableModelDataSource dataSource = new JRTableModelDataSource(tblSubcriptions.getModel());
 
-        JasperPrint report = JasperFillManager.fillReport(AppConfig.getReportPath("members_advanced_subscriptions.jasper"), params, dataSource);
+        InputStream stream = this.getClass().getResourceAsStream("/reports/members_advanced_subscriptions.jasper");
+
+        JasperPrint report = JasperFillManager.fillReport(stream, params, dataSource);
 
         return report;
     }

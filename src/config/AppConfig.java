@@ -8,6 +8,7 @@ package config;
  *
  * @author vishv
  */
+@Deprecated
 public class AppConfig {
     
     private static final String REPORT_PATH = "src/reports/";

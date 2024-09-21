@@ -17,6 +17,7 @@ import raven.toast.Notifications;
 import utils.DBData;
 import views.layouts.AppLayout;
 import enums.LayoutPages;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -127,7 +128,7 @@ public class DlgMember extends javax.swing.JDialog {
             }
 
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -494,7 +495,7 @@ public class DlgMember extends javax.swing.JDialog {
                 new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
             }
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
             new DlgError(AppLayout.appLayout, true, e.getMessage()).setVisible(true);
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
@@ -565,28 +566,14 @@ public class DlgMember extends javax.swing.JDialog {
 
             JREmptyDataSource source = new JREmptyDataSource();
 
-            JasperPrint report = JasperFillManager.fillReport(AppConfig.getReportPath("members_card_front_3.jasper"), params, source);
+            InputStream stream = this.getClass().getResourceAsStream("/reports/members_card_front_3.jasper");
+            JasperPrint report = JasperFillManager.fillReport(stream, params, source);
 
             JasperViewer.viewReport(report, false);
 
         } catch (JRException e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
-
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("PARAM_NAME", "Wishva Kalhara Chandrasekara");
-//        params.put("code", "456789");
-//
-//        JREmptyDataSource dataSource = new JREmptyDataSource();
-//
-//        try {
-//            JasperPrint report = JasperFillManager.fillReport("src/reports/proect_13-3.jasper", params, dataSource);
-//            JasperViewer.viewReport(report, false);
-////            JasperPrintManager.printReport(report, false);
-//        } catch (JRException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//        }
     }//GEN-LAST:event_btnCardActionPerformed
 
 
@@ -622,7 +609,7 @@ public class DlgMember extends javax.swing.JDialog {
 
     private Member createMemberFromForm() throws SparkException {
         Member member = new Member();
- 
+
         if (cboGender.getSelectedIndex() == 0) {
             throw new SparkException("Select a gender.");
         }

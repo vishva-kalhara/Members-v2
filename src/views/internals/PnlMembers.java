@@ -7,6 +7,7 @@ package views.internals;
 import com.formdev.flatlaf.FlatClientProperties;
 import config.AppConfig;
 import java.awt.Insets;
+import java.io.InputStream;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -34,7 +35,7 @@ import views.forms.FrmSplashScreen;
  * @author vishv
  */
 public class PnlMembers extends javax.swing.JPanel {
-    
+
     HashMap<String, Integer> statusMap;
 
     /**
@@ -42,10 +43,10 @@ public class PnlMembers extends javax.swing.JPanel {
      */
     public PnlMembers() {
         initComponents();
-        
+
         setDesign();
         scrollPane.setViewportView(new PnlFetching());
-        
+
         fetchData();
     }
 
@@ -215,7 +216,7 @@ public class PnlMembers extends javax.swing.JPanel {
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        
+
         filterTable();
     }//GEN-LAST:event_txtSearchActionPerformed
 
@@ -224,20 +225,20 @@ public class PnlMembers extends javax.swing.JPanel {
     }//GEN-LAST:event_cboStatusActionPerformed
 
     private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
-        
+
         txtSearch.setText("");
         cboStatus.setSelectedIndex(0);
         filterTable();
     }//GEN-LAST:event_btnClearFiltersActionPerformed
 
     private void tblMembersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMembersMouseClicked
-        
+
         if (evt.getClickCount() != 2) {
             return;
         }
-        
+
         int row = tblMembers.getSelectedRow();
-        
+
         Member member = new Member();
         member.setId(String.valueOf(tblMembers.getValueAt(row, 0)));
         member.setFirstName(String.valueOf(tblMembers.getValueAt(row, 1)));
@@ -245,31 +246,31 @@ public class PnlMembers extends javax.swing.JPanel {
         member.setGenderValue(String.valueOf(tblMembers.getValueAt(row, 3)));
         member.setMobile1(String.valueOf(tblMembers.getValueAt(row, 4)));
         member.setStatusValue(String.valueOf(tblMembers.getValueAt(row, 5)));
-        
+
         new DlgMember(AppLayout.appLayout, true, member).setVisible(true);
-        
+
         tblMembers.clearSelection();
     }//GEN-LAST:event_tblMembersMouseClicked
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        
+
         try {
-            
+
             JasperPrintManager.printReport(makePrint(), true);
-            
+
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
-        
+
         try {
-            
+
             JasperViewer.viewReport(makePrint(), false);
-            
+
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
     }//GEN-LAST:event_btnViewActionPerformed
 
@@ -288,29 +289,29 @@ public class PnlMembers extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void setDesign() {
-        
+
         txtSearch.putClientProperty("JTextField.padding", new Insets(7, 8, 7, 10));
         txtSearch.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search by name");
         txtSearch.putClientProperty(FlatClientProperties.STYLE, "arc: 10");
-        
+
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         tblMembers.setDefaultRenderer(Object.class, centerRenderer);
-        
+
         javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tblMembers.getParent().getParent();
         scroll.setBorder(BorderFactory.createEmptyBorder());
     }
-    
+
     private void filterTable() {
-        
+
         boolean isSearchPresent = !txtSearch.getText().isBlank();
         boolean isStatusSelected = cboStatus.getSelectedIndex() != 0;
-        
+
         if (!isSearchPresent && !isStatusSelected) {
             loadTable("");
             return;
         }
-        
+
         StringBuilder constraints = new StringBuilder(" WHERE ");
         if (isSearchPresent) {
             constraints.append(" first_name LIKE '")
@@ -320,24 +321,24 @@ public class PnlMembers extends javax.swing.JPanel {
                     .append("%'")
                     .append("");
         }
-        
+
         if (isStatusSelected) {
             if (isSearchPresent) {
                 constraints.append(" AND ");
             }
-            
+
             constraints.append(" statuses_id = '")
                     .append(statusMap.get(String.valueOf(cboStatus.getSelectedItem())))
                     .append("'");
         }
-        
+
         loadTable(String.valueOf(constraints));
     }
-    
+
     private void loadTable(String constraints) {
         btnPrint.setEnabled(false);
         btnView.setEnabled(false);
-        
+
         if (AppLayout.employeeData.getRoleId() > 3) {
             scrollPane.setViewportView(new PnlNoAccess());
             txtSearch.setEnabled(false);
@@ -345,13 +346,13 @@ public class PnlMembers extends javax.swing.JPanel {
             btnClearFilters.setEnabled(false);
             return;
         }
-        
+
         try {
             DefaultTableModel model = (DefaultTableModel) tblMembers.getModel();
             model.setRowCount(0);
-            
+
             ResultSet rs = AppConnection.fetch("SELECT * FROM customers INNER JOIN gender ON customers.gender_id = gender.id INNER JOIN statuses ON customers.statuses_id = statuses.id " + constraints + " ORDER BY CAST(SUBSTRING(customers.id, 5) AS UNSIGNED);");
-            
+
             while (rs.next()) {
                 Vector<String> data = new Vector();
                 data.add(rs.getString("id"));
@@ -360,10 +361,10 @@ public class PnlMembers extends javax.swing.JPanel {
                 data.add(rs.getString("gender.value"));
                 data.add(rs.getString("mobile1"));
                 data.add(rs.getString("statuses.value"));
-                
+
                 model.addRow(data);
             }
-            
+
             if (model.getRowCount() == 0) {
                 scrollPane.setViewportView(new PnlNoData());
             } else {
@@ -372,54 +373,55 @@ public class PnlMembers extends javax.swing.JPanel {
                 btnView.setEnabled(true);
             }
         } catch (Exception e) {
-            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage() ,e);
+            FrmSplashScreen.logger.log(Level.WARNING, e.getMessage(), e);
         }
-        
+
     }
-    
+
     private void fetchData() {
-        
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 statusMap = DBData.getSubTableData("statuses", "Members", cboStatus);
                 loadTable("");
-                
+
             }
         }).start();
     }
-    
+
     private JasperPrint makePrint() throws Exception {
-        
+
         String prop2 = "Search: ";
         if (txtSearch.getText().isBlank()) {
             prop2 += "null";
         } else {
             prop2 += "'" + txtSearch.getText() + "'";
         }
-        
+
         String dateTime = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(new Date());
-        
+
         HashMap<String, Object> params = new HashMap();
-        
+
         params.put("PARAM_TITLE", "Customers");
         params.put("PARAM_PROP_1", "Filters: '" + String.valueOf(cboStatus.getSelectedItem()) + "'");
         params.put("PARAM_PROP_2", prop2);
         params.put("PARAM_PROP_3", "Count: " + tblMembers.getModel().getRowCount());
         params.put("PARAM_GENERATED_BY", "Generated by " + AppLayout.employeeData.getId());
         params.put("PARAM_GENERATED_AT", dateTime);
-        
+
         params.put("PARAM_HEADER_0", "Id");
         params.put("PARAM_HEADER_1", "First Name");
         params.put("PARAM_HEADER_2", "Last Name");
         params.put("PARAM_HEADER_3", "Gender");
         params.put("PARAM_HEADER_4", "Mobile-1");
         params.put("PARAM_HEADER_5", "Status");
-        
+
         JRTableModelDataSource dataSource = new JRTableModelDataSource(tblMembers.getModel());
-        
-        JasperPrint report = JasperFillManager.fillReport(AppConfig.getReportPath("members_general_report.jasper"), params, dataSource);
-        
+
+        InputStream stream = this.getClass().getResourceAsStream("/reports/members_general_report.jasper");
+        JasperPrint report = JasperFillManager.fillReport(stream, params, dataSource);
+
         return report;
     }
 }
