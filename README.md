@@ -4,9 +4,9 @@ The Membership Management System is a Java Swing-based desktop application desig
 
 The system includes functionality for managing members, subscriptions, packages, employees, and attendance. It caters to three key actors: Business Admin/Owner, Front Desk Personnel, and Registered Members, each with specific roles and permissions.
 
--   [📃 Project Docs](https://drive.google.com/file/d/15uRPXzvG9TnXLSdyzpTpYAJhTpsFiMTm/view?usp=sharing)
--   [🔨 Triggers Docs](https://github.com/vishva-kalhara/Members-v2/blob/master/docs/triggers.md)
--   [📖 Stored Procedures Docs](https://github.com/vishva-kalhara/Members-v2/blob/master/docs/stored_procedures.md)
+-   [Project Docs](https://drive.google.com/file/d/15uRPXzvG9TnXLSdyzpTpYAJhTpsFiMTm/view?usp=sharing)
+-   [Triggers Docs](https://github.com/vishva-kalhara/Members-v2/blob/master/docs/triggers.md)
+-   [Stored Procedures Docs](https://github.com/vishva-kalhara/Members-v2/blob/master/docs/stored_procedures.md)
 
 ![alt text](./docs/image.png)
 
