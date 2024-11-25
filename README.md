@@ -60,7 +60,7 @@ The system includes distinct use case diagrams for each actor, clearly showing t
 
 # License
 
-Queue Up is an Open Source SaaS. [Licensed as MIT](https://github.com/vishva-kalhara/Members-v2/blob/master/LICENSE)
+This project is licensed under [Licensed as MIT](https://github.com/vishva-kalhara/Members-v2/blob/master/LICENSE)
 
 # Contribution
 
